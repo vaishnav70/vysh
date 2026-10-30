@@ -9,6 +9,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Caveat:wght@600;700&family=Cinzel:wght@400;500;600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=Marcellus&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
 <style>
   :root{
     --paper:#f4f1ea;
@@ -502,11 +504,17 @@
           <button class="btn-primary" type="submit" id="submitBtn"><span class="spin" aria-hidden="true"></span><span id="submitLabel">Log In</span><span class="submit-arrow" aria-hidden="true">→</span></button>
 
           <div class="divider">Or continue with</div>
-          <div class="social-row">
-            <button type="button" class="social-btn" data-social="Google" aria-label="Continue with Google"><span class="g-letter" aria-hidden="true">G</span></button>
-            <button type="button" class="social-btn" data-social="Apple" aria-label="Continue with Apple"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M16.7 12.9c0-2.4 2-3.6 2.1-3.7-1.1-1.7-2.9-1.9-3.5-1.9-1.5-.2-2.9.9-3.7.9-.8 0-1.9-.9-3.2-.9-1.6 0-3.1 1-4 2.4-1.7 2.9-.4 7.3 1.2 9.7.8 1.2 1.8 2.5 3 2.4 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.2 2.9-2.4.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.6-1-2.7-3.8ZM14.2 5.6c.7-.8 1.1-1.9 1-3-1 0-2.1.6-2.8 1.4-.6.7-1.2 1.9-1 3 1 .1 2.1-.6 2.8-1.4Z"/></svg></button>
-            <button type="button" class="social-btn" data-social="Phone" aria-label="Continue with phone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg></button>
+          <div class="social-stack">
+            <button type="button" class="btn-social btn-social-google" data-social="Google" id="googleBtn">
+              <span class="btn-social-icon" aria-hidden="true"><svg viewBox="0 0 24 24"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.2H12v4.3h6.5c-.1 1.1-.8 2.7-2.4 3.8l3.7 2.9c2.3-2.1 3.7-5.2 3.7-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.2-4.2 1.2-3.2 0-5.9-2.1-6.8-5L1.3 16.3C3.3 20.8 7.3 24 12 24Z"/><path fill="#FBBC05" d="M5.2 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4L1.3 7.7C.5 9.2 0 10.6 0 12s.5 2.8 1.3 4.3l3.9-1.9Z"/><path fill="#EA4335" d="M12 4.7c1.8 0 3 .8 3.7 1.4l3.3-3.2C17.9 1.1 15.2 0 12 0 7.3 0 3.3 3.2 1.3 7.7l3.9 2.9c.9-3.8 3.6-5.9 6.8-5.9Z"/></svg></span>
+              <span>Continue with Google</span>
+            </button>
+            <button type="button" class="btn-social btn-social-facebook" data-social="Facebook" id="facebookBtn">
+              <span class="btn-social-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M13.5 21.9v-7.4h2.5l.4-2.9h-2.9V9.7c0-.8.2-1.4 1.4-1.4h1.6V5.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2H7.8v2.9h2.5v7.4a10 10 0 0 0 3.2 0Z"/></svg></span>
+              <span>Continue with Facebook</span>
+            </button>
           </div>
+          <p class="social-note">Sign in with Google or Facebook — you’ll pick your account on the next step. No password needed.</p>
 
           <p class="account-line"><span id="accountPrompt">Don't have an account?</span><button type="button" class="account-toggle" id="signUpToggle">Sign Up</button></p>
 
@@ -546,7 +554,7 @@
         <div class="search-results" id="globalSearchResults" hidden></div>
       </form>
       <div class="head-actions">
-        <span class="hello" id="helloText">Hi, Guest</span>
+        <span class="hello" id="helloText">Hi, Guest</span><span class="auth-badge" id="authBadge" hidden></span>
         <button class="icon-btn" type="button" id="replayBtn" title="Replay the intro animation">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg>
           Intro
@@ -762,6 +770,21 @@
         <button type="button" class="link-btn" id="replayFoot">Replay intro</button>
       </nav>
       <p class="foot-note">Season 01 — The Neutral Edit</p>
+      <div class="foot-pay" aria-label="Payment methods we accept">
+        <span class="pay-strip-label">We accept</span>
+        <span class="pay-chip pay-chip-upi">UPI</span>
+        <span class="pay-chip pay-chip-phonepe">PhonePe</span>
+        <span class="pay-chip">Google Pay</span>
+        <span class="pay-chip">Paytm</span>
+        <span class="pay-chip">BHIM UPI</span>
+        <span class="pay-chip">Visa</span>
+        <span class="pay-chip">Mastercard</span>
+        <span class="pay-chip">RuPay</span>
+        <span class="pay-chip">Net Banking</span>
+        <span class="pay-chip">Wallets</span>
+        <span class="pay-chip">EMI</span>
+        <span class="pay-chip">Cash on Delivery</span>
+      </div>
     </div>
   </footer>
 </div>
@@ -3106,12 +3129,345 @@
   <div class="drawer-items" id="drawerItems"></div>
   <p class="drawer-empty" id="drawerEmpty">Your bag is empty.<br />Add a piece from the collection.</p>
   <div class="drawer-foot">
+    <div class="drawer-totals" id="drawerTotals" hidden>
+      <div class="dt-row"><span>Subtotal</span><strong id="drawerSubtotal">—</strong></div>
+      <div class="dt-row dt-ship"><span>Shipping</span><strong>Free</strong></div>
+      <div class="dt-row dt-total"><span>Total</span><strong id="drawerTotal">—</strong></div>
+    </div>
+    <button class="btn-solid drawer-checkout" type="button" id="checkoutBtn">Proceed to Checkout →</button>
+    <div class="pay-strip" aria-label="Payment methods we accept">
+      <span class="pay-strip-label">We accept</span>
+      <span class="pay-chip pay-chip-upi">UPI</span>
+      <span class="pay-chip pay-chip-phonepe">PhonePe</span>
+      <span class="pay-chip">Google Pay</span>
+      <span class="pay-chip">Paytm</span>
+      <span class="pay-chip">Cards</span>
+      <span class="pay-chip">Net Banking</span>
+      <span class="pay-chip">Wallets</span>
+      <span class="pay-chip">EMI</span>
+      <span class="pay-chip">COD</span>
+    </div>
     <button class="btn-solid drawer-copy" type="button" id="copyBagBtn">Copy my bag list</button>
     <p class="drawer-note">Sizes are held as selected. This bag lives on this page, in this visit.</p>
   </div>
 </aside>
 
 <div class="toast" id="toast" role="status"></div>
+
+<!-- ================= SOCIAL SIGN-IN SHEET (Google / Facebook) ================= -->
+<div class="social-scrim" id="socialScrim" hidden>
+  <div class="social-sheet" role="dialog" aria-modal="true" aria-labelledby="socialSheetTitle">
+    <button type="button" class="social-close" id="socialClose" aria-label="Close sign-in">✕</button>
+    <div class="social-sheet-head">
+      <span class="social-sheet-logo" id="socialSheetLogo" aria-hidden="true"></span>
+      <h3 id="socialSheetTitle">Choose an account</h3>
+      <p id="socialSheetSub">to continue to <strong>VYSH</strong></p>
+    </div>
+    <div class="social-accounts" id="socialAccounts">
+      <button type="button" class="social-account" data-demo-name="Alex Morgan" data-demo-email="alex.morgan@gmail.com">
+        <span class="social-avatar" style="background:#5d6751">A</span>
+        <span class="social-account-txt"><strong>Alex Morgan</strong><small>alex.morgan@gmail.com</small></span>
+        <span class="social-demo-tag">Demo</span>
+      </button>
+      <button type="button" class="social-account" data-demo-name="Sam Rivera" data-demo-email="sam.rivera@gmail.com">
+        <span class="social-avatar" style="background:#8a6d3b">S</span>
+        <span class="social-account-txt"><strong>Sam Rivera</strong><small>sam.rivera@gmail.com</small></span>
+        <span class="social-demo-tag">Demo</span>
+      </button>
+    </div>
+    <div class="social-or"><span>or use another account</span></div>
+    <form id="socialForm" novalidate>
+      <label class="social-field"><span>Your name</span><input id="socialName" type="text" autocomplete="name" placeholder="Full name" /></label>
+      <label class="social-field"><span id="socialEmailLabel">Email address</span><input id="socialEmail" type="email" autocomplete="email" placeholder="you@example.com" /></label>
+      <p class="social-err" id="socialErr" role="alert"></p>
+      <button type="submit" class="social-continue" id="socialContinue"><span class="spin" aria-hidden="true"></span><span id="socialContinueLabel">Continue</span></button>
+    </form>
+    <p class="social-foot" id="socialFoot">Demo sign-in on this page — it signs you straight into VYSH here. Live Google / Facebook accounts activate once VYSH’s app IDs are added in the page code.</p>
+    <button type="button" class="social-cancel" id="socialCancel">Cancel</button>
+  </div>
+</div>
+
+<!-- ================= CHECKOUT / PAYMENT ================= -->
+<div class="checkout-scrim" id="checkoutScrim" hidden>
+  <div class="checkout-sheet" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <button type="button" class="checkout-close" id="checkoutClose" aria-label="Close checkout">✕</button>
+
+    <div id="checkoutMain">
+      <div class="checkout-head">
+        <p class="checkout-eyebrow">VYSH · Secure Checkout</p>
+        <h3 id="checkoutTitle">Payment</h3>
+        <p class="checkout-sub">Choose how you want to pay. All major Indian payment systems are supported.</p>
+        <div class="checkout-secure">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="5" y="10.5" width="14" height="9.5" rx="2"/><path d="M8 10.5V7.8a4 4 0 0 1 8 0v2.7"/></svg>
+          <span>256-bit encrypted · PCI-DSS ready flow</span>
+        </div>
+      </div>
+
+      <div class="checkout-grid">
+        <div class="checkout-methods" role="radiogroup" aria-label="Payment method">
+
+          <!-- UPI -->
+          <div class="pay-method on" data-method="upi">
+            <button type="button" class="pay-method-head" data-pay-head="upi" role="radio" aria-checked="true">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>UPI</strong><small>PhonePe, Google Pay, Paytm, BHIM &amp; more — instant</small></span>
+              <span class="pay-badge">Recommended</span>
+            </button>
+            <div class="pay-panel" data-pay-panel="upi">
+              <p class="pay-panel-label">Pay using any UPI app</p>
+              <div class="upi-apps" id="upiApps">
+                <button type="button" class="upi-app on" data-upi-app="PhonePe"><span class="upi-app-icon" style="background:#5f259f">Pe</span><span>PhonePe</span></button>
+                <button type="button" class="upi-app" data-upi-app="Google Pay"><span class="upi-app-icon" style="background:#fff;border:1px solid #d9d3c4;color:#4285F4;font-weight:800">G</span><span>Google Pay</span></button>
+                <button type="button" class="upi-app" data-upi-app="Paytm"><span class="upi-app-icon" style="background:#00b9f1">pay</span><span>Paytm</span></button>
+                <button type="button" class="upi-app" data-upi-app="BHIM UPI"><span class="upi-app-icon" style="background:#ed752e">B</span><span>BHIM UPI</span></button>
+                <button type="button" class="upi-app" data-upi-app="Amazon Pay"><span class="upi-app-icon" style="background:#ff9900;color:#111">a</span><span>Amazon Pay</span></button>
+                <button type="button" class="upi-app" data-upi-app="WhatsApp Pay"><span class="upi-app-icon" style="background:#25d366;color:#fff">W</span><span>WhatsApp Pay</span></button>
+              </div>
+              <div class="pay-or"><span>or pay with your UPI ID / VPA</span></div>
+              <label class="pay-field"><span>UPI ID</span>
+                <span class="pay-field-row"><input id="upiIdInput" type="text" inputmode="email" autocomplete="off" placeholder="yourname@okhdfcbank, @ybl, @paytm…" /><button type="button" class="pay-verify" id="upiVerifyBtn">Verify</button></span>
+              </label>
+              <p class="pay-hint" id="upiHint">Pick an app above to get a collect request, or enter your UPI ID — e.g. name@okaxis, name@ybl (PhonePe), name@okhdfcbank (Google Pay).</p>
+            </div>
+          </div>
+
+          <!-- CARDS -->
+          <div class="pay-method" data-method="card">
+            <button type="button" class="pay-method-head" data-pay-head="card" role="radio" aria-checked="false">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>Credit / Debit Card</strong><small>Visa, Mastercard, RuPay, Amex</small></span>
+            </button>
+            <div class="pay-panel" data-pay-panel="card" hidden>
+              <label class="pay-field"><span>Card number</span><input id="cardNumInput" type="text" inputmode="numeric" autocomplete="cc-number" placeholder="1234 5678 9012 3456" maxlength="23" /></label>
+              <label class="pay-field"><span>Name on card</span><input id="cardNameInput" type="text" autocomplete="cc-name" placeholder="Full name as on card" /></label>
+              <div class="pay-field-row2">
+                <label class="pay-field"><span>Expiry</span><input id="cardExpInput" type="text" inputmode="numeric" autocomplete="cc-exp" placeholder="MM / YY" maxlength="7" /></label>
+                <label class="pay-field"><span>CVV</span><input id="cardCvvInput" type="password" inputmode="numeric" autocomplete="cc-csc" placeholder="•••" maxlength="4" /></label>
+              </div>
+              <p class="pay-hint">Your card details stay in this checkout — VYSH never stores your CVV.</p>
+            </div>
+          </div>
+
+          <!-- NET BANKING -->
+          <div class="pay-method" data-method="netbanking">
+            <button type="button" class="pay-method-head" data-pay-head="netbanking" role="radio" aria-checked="false">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>Net Banking</strong><small>All major Indian banks</small></span>
+            </button>
+            <div class="pay-panel" data-pay-panel="netbanking" hidden>
+              <p class="pay-panel-label">Choose your bank</p>
+              <div class="bank-grid" id="bankGrid">
+                <button type="button" class="bank-chip" data-bank="State Bank of India">SBI</button>
+                <button type="button" class="bank-chip" data-bank="HDFC Bank">HDFC Bank</button>
+                <button type="button" class="bank-chip" data-bank="ICICI Bank">ICICI Bank</button>
+                <button type="button" class="bank-chip" data-bank="Axis Bank">Axis Bank</button>
+                <button type="button" class="bank-chip" data-bank="Kotak Mahindra Bank">Kotak</button>
+                <button type="button" class="bank-chip" data-bank="Punjab National Bank">PNB</button>
+                <button type="button" class="bank-chip" data-bank="Bank of Baroda">Bank of Baroda</button>
+                <button type="button" class="bank-chip" data-bank="Canara Bank">Canara Bank</button>
+              </div>
+              <label class="pay-field"><span>All banks</span>
+                <select id="bankSelect">
+                  <option value="">Select your bank…</option>
+                  <option>State Bank of India</option><option>HDFC Bank</option><option>ICICI Bank</option><option>Axis Bank</option><option>Kotak Mahindra Bank</option><option>Punjab National Bank</option><option>Bank of Baroda</option><option>Canara Bank</option><option>Union Bank of India</option><option>Bank of India</option><option>Central Bank of India</option><option>Indian Bank</option><option>IDFC First Bank</option><option>Yes Bank</option><option>Federal Bank</option><option>IndusInd Bank</option><option>RBL Bank</option><option>UCO Bank</option><option>Bank of Maharashtra</option><option>Punjab &amp; Sind Bank</option>
+                </select>
+              </label>
+              <p class="pay-hint" id="bankHint">You’ll be redirected to your bank’s secure page to approve the payment.</p>
+            </div>
+          </div>
+
+          <!-- WALLETS -->
+          <div class="pay-method" data-method="wallet">
+            <button type="button" class="pay-method-head" data-pay-head="wallet" role="radio" aria-checked="false">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>Wallets</strong><small>PhonePe Wallet, Paytm Wallet &amp; more</small></span>
+            </button>
+            <div class="pay-panel" data-pay-panel="wallet" hidden>
+              <div class="wallet-list" id="walletList">
+                <button type="button" class="wallet-chip on" data-wallet="PhonePe Wallet"><span class="upi-app-icon" style="background:#5f259f">Pe</span><span>PhonePe Wallet</span></button>
+                <button type="button" class="wallet-chip" data-wallet="Paytm Wallet"><span class="upi-app-icon" style="background:#00b9f1">pay</span><span>Paytm Wallet</span></button>
+                <button type="button" class="wallet-chip" data-wallet="Amazon Pay"><span class="upi-app-icon" style="background:#ff9900;color:#111">a</span><span>Amazon Pay</span></button>
+                <button type="button" class="wallet-chip" data-wallet="Mobikwik"><span class="upi-app-icon" style="background:#005eb8">M</span><span>Mobikwik</span></button>
+                <button type="button" class="wallet-chip" data-wallet="Freecharge"><span class="upi-app-icon" style="background:#e40046">F</span><span>Freecharge</span></button>
+                <button type="button" class="wallet-chip" data-wallet="JioMoney"><span class="upi-app-icon" style="background:#0a2885">J</span><span>JioMoney</span></button>
+              </div>
+              <p class="pay-hint">You’ll confirm the payment inside your wallet app.</p>
+            </div>
+          </div>
+
+          <!-- EMI / PAY LATER -->
+          <div class="pay-method" data-method="emi">
+            <button type="button" class="pay-method-head" data-pay-head="emi" role="radio" aria-checked="false">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>EMI / Pay Later</strong><small>Card EMI, Simpl, LazyPay, ZestMoney</small></span>
+            </button>
+            <div class="pay-panel" data-pay-panel="emi" hidden>
+              <div class="emi-list" id="emiList">
+                <button type="button" class="emi-chip on" data-emi="3 months · No-cost EMI"><strong>3 months</strong><span>No-cost EMI on cards</span></button>
+                <button type="button" class="emi-chip" data-emi="6 months · No-cost EMI"><strong>6 months</strong><span>No-cost EMI on cards</span></button>
+                <button type="button" class="emi-chip" data-emi="Pay Later"><strong>Pay Later</strong><span>Simpl / LazyPay — pay next month</span></button>
+              </div>
+              <p class="pay-hint">EMI eligibility is checked by your bank / provider at the next step.</p>
+            </div>
+          </div>
+
+          <!-- COD -->
+          <div class="pay-method" data-method="cod">
+            <button type="button" class="pay-method-head" data-pay-head="cod" role="radio" aria-checked="false">
+              <span class="pay-radio" aria-hidden="true"></span>
+              <span class="pay-method-txt"><strong>Cash on Delivery</strong><small>Pay in cash or UPI when your order arrives</small></span>
+            </button>
+            <div class="pay-panel" data-pay-panel="cod" hidden>
+              <p class="pay-hint" style="margin:0">No advance payment needed. Please keep exact change ready — our delivery partner also accepts UPI at your door.</p>
+            </div>
+          </div>
+
+          <p class="pay-err" id="payErr" role="alert"></p>
+        </div>
+
+        <aside class="checkout-summary" aria-label="Order summary">
+          <h4>Order summary</h4>
+          <div class="co-items" id="coItems"></div>
+          <div class="co-rows">
+            <div class="co-row"><span>Subtotal</span><strong id="coSubtotal">—</strong></div>
+            <div class="co-row"><span>Shipping</span><strong>Free</strong></div>
+            <div class="co-row co-total"><span>Total</span><strong id="coTotal">—</strong></div>
+          </div>
+          <button type="button" class="pay-now-btn" id="payNowBtn"><span class="spin" aria-hidden="true"></span><span id="payNowLabel">Pay with PhonePe</span></button>
+          <p class="pay-demo-note">Demo checkout on this page — choosing a method walks through the full payment flow here, but no real money moves and no live gateway (Razorpay / PhonePe PG / Stripe) is connected yet. Add a gateway’s keys in the page code to take live payments.</p>
+          <div class="co-accept">
+            <span>UPI</span><span>PhonePe</span><span>Google Pay</span><span>Paytm</span><span>Visa</span><span>Mastercard</span><span>RuPay</span><span>Net Banking</span><span>Wallets</span><span>EMI</span>
+          </div>
+        </aside>
+      </div>
+    </div>
+
+    <div id="checkoutSuccess" hidden>
+      <div class="co-success">
+        <div class="co-success-mark" aria-hidden="true">✓</div>
+        <h3>Order placed!</h3>
+        <p class="co-success-id">Order ID <strong id="coOrderId">VYSH-0000</strong></p>
+        <p id="coSuccessMsg">Thank you — your payment method was recorded and your pieces are being packed.</p>
+        <p class="co-success-note">This is the demo checkout, so no charge was made. A live order would confirm by email &amp; SMS and start dispatch from here.</p>
+        <button type="button" class="pay-now-btn" id="coContinueBtn">Continue shopping</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  /* ============ BAG TOTALS + PAYMENT STRIP ============ */
+  .drawer-totals{border:1px solid var(--line);border-radius:12px;padding:12px 14px;margin-bottom:12px;background:var(--card)}
+  .dt-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:3px 0;font-size:14px;color:var(--ink-soft)}
+  .dt-row strong{color:var(--ink);font-weight:600;text-align:right}
+  .dt-ship strong{color:#3e7d3a}
+  .dt-total{border-top:1px solid var(--line);margin-top:7px;padding-top:9px;font-size:15.5px}
+  .dt-total strong{font-size:16.5px}
+  .drawer-checkout{width:100%;text-align:center;margin-bottom:12px}
+  .drawer-checkout:disabled{opacity:.45;cursor:not-allowed}
+  .pay-strip{display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;margin:2px 0 12px}
+  .pay-strip-label{width:100%;text-align:center;font-size:10px;letter-spacing:.26em;text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+  .pay-chip{border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;padding:5px 11px;font-size:11px;font-weight:600;letter-spacing:.02em}
+  .pay-chip-upi{background:#1a6b4a;border-color:#1a6b4a;color:#fff}
+  .pay-chip-phonepe{background:#5f259f;border-color:#5f259f;color:#fff}
+  .drawer-copy{width:100%;text-align:center;background:transparent !important;color:var(--ink) !important;border:1px solid var(--line) !important}
+  .bag-item .bi-price{font-weight:600;color:var(--ink);font-size:13.5px;white-space:nowrap}
+
+  /* ============ CHECKOUT SHEET ============ */
+  .checkout-scrim{position:fixed;inset:0;z-index:130;background:rgba(12,11,9,.55);display:flex;align-items:flex-start;justify-content:center;overflow-y:auto;padding:22px 14px 34px}
+  .checkout-scrim[hidden]{display:none}
+  .checkout-sheet{position:relative;width:min(980px,100%);background:var(--paper);color:var(--ink);border-radius:20px;box-shadow:var(--shadow);padding:30px clamp(18px,3.4vw,36px) 34px;margin:auto 0}
+  .checkout-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:15px}
+  .checkout-close:hover{border-color:var(--ink)}
+  .checkout-eyebrow{margin:0 0 6px;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:var(--accent);font-weight:600}
+  .checkout-head h3{font-family:"Marcellus",serif;font-weight:400;font-size:32px;margin:0 0 6px}
+  .checkout-sub{margin:0;color:var(--muted);font-size:14.5px;max-width:56ch;line-height:1.55}
+  .checkout-secure{display:inline-flex;align-items:center;gap:7px;margin-top:12px;border:1px solid var(--line);background:var(--card);border-radius:999px;padding:6px 13px;font-size:12px;color:var(--ink-soft)}
+  .checkout-secure svg{width:15px;height:15px}
+  .checkout-grid{display:grid;grid-template-columns:1.55fr .95fr;gap:26px;margin-top:24px;align-items:start}
+  .pay-method{border:1px solid var(--line);border-radius:14px;background:var(--card);margin-bottom:12px;overflow:hidden}
+  .pay-method.on{border-color:var(--ink)}
+  .pay-method-head{width:100%;display:flex;align-items:center;gap:12px;background:none;border:0;padding:16px;text-align:left;color:var(--ink)}
+  .pay-radio{width:20px;height:20px;flex:none;border-radius:50%;border:2px solid var(--line);position:relative}
+  .pay-method.on .pay-radio{border-color:var(--ink)}
+  .pay-method.on .pay-radio::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--ink)}
+  .pay-method-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+  .pay-method-txt strong{font-size:15.5px;font-weight:600}
+  .pay-method-txt small{font-size:12.5px;color:var(--muted);line-height:1.4}
+  .pay-badge{flex:none;background:#1a6b4a;color:#fff;font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:5px 10px}
+  .pay-panel{border-top:1px solid var(--line);padding:16px}
+  .pay-panel-label{margin:0 0 11px;font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--muted);font-weight:600}
+  .upi-apps{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+  .upi-app{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:11px;padding:10px 11px;font-size:13px;font-weight:500;text-align:left}
+  .upi-app:hover{border-color:var(--ink)}
+  .upi-app.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+  .upi-app-icon{width:30px;height:30px;flex:none;border-radius:8px;display:inline-flex;align-items:center;justify-content:center;color:#fff;font-size:11px;font-weight:700;letter-spacing:-.02em}
+  .pay-or{display:flex;align-items:center;gap:12px;color:var(--muted);font-size:11px;letter-spacing:.14em;text-transform:uppercase;margin:16px 0 12px}
+  .pay-or::before,.pay-or::after{content:"";flex:1;height:1px;background:var(--line)}
+  .pay-field{display:block;margin-bottom:12px}
+  .pay-field>span{display:block;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);font-weight:600;margin-bottom:7px}
+  .pay-field input,.pay-field select{width:100%;padding:13px 14px;font-size:15px;font-weight:300;background:var(--paper);color:var(--ink);border:1px solid var(--line);border-radius:10px;outline:none;font-family:inherit}
+  .pay-field input:focus,.pay-field select:focus{border-color:var(--ink)}
+  .pay-field-row{display:flex;gap:9px}
+  .pay-field-row input{flex:1;min-width:0}
+  .pay-verify{flex:none;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:10px;padding:0 18px;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase}
+  .pay-verify:hover{background:var(--ink);color:var(--paper)}
+  .pay-field-row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .pay-hint{margin:4px 0 0;font-size:12.5px;color:var(--muted);line-height:1.55}
+  .pay-hint.ok{color:#3e7d3a;font-weight:500}
+  .pay-hint.bad{color:var(--error);font-weight:500}
+  .bank-grid{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+  .bank-chip{border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:999px;padding:9px 15px;font-size:13px;font-weight:500}
+  .bank-chip:hover{border-color:var(--ink)}
+  .bank-chip.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .wallet-list{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+  .wallet-chip{display:flex;align-items:center;gap:9px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:11px;padding:10px 11px;font-size:13px;font-weight:500;text-align:left}
+  .wallet-chip:hover{border-color:var(--ink)}
+  .wallet-chip.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+  .emi-list{display:grid;gap:9px}
+  .emi-chip{display:flex;flex-direction:column;gap:2px;border:1px solid var(--line);background:var(--paper);color:var(--ink);border-radius:11px;padding:12px 14px;text-align:left}
+  .emi-chip strong{font-size:14.5px;font-weight:600}
+  .emi-chip span{font-size:12.5px;color:var(--muted)}
+  .emi-chip.on{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+  .pay-err{display:none;color:var(--error);font-size:13.5px;font-weight:500;margin:2px 0 10px;line-height:1.5}
+  .pay-err.show{display:block}
+  .checkout-summary{border:1px solid var(--line);border-radius:14px;background:var(--card);padding:20px;position:sticky;top:0}
+  .checkout-summary h4{margin:0 0 12px;font-family:"Marcellus",serif;font-weight:400;font-size:19px}
+  .co-items{max-height:220px;overflow-y:auto}
+  .co-item{display:flex;gap:11px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
+  .co-item img{width:42px;height:52px;object-fit:cover;object-position:top;border-radius:5px;flex:none}
+  .co-item .co-name{font-size:13.5px;font-weight:500;margin:0;line-height:1.35}
+  .co-item .co-meta{font-size:12px;color:var(--muted);margin:2px 0 0}
+  .co-item .co-price{margin-left:auto;font-size:13.5px;font-weight:600;white-space:nowrap}
+  .co-rows{padding-top:10px}
+  .co-row{display:flex;justify-content:space-between;gap:12px;padding:3px 0;font-size:14px;color:var(--ink-soft)}
+  .co-row strong{color:var(--ink);font-weight:600;text-align:right}
+  .co-total{border-top:1px solid var(--line);margin-top:8px;padding-top:10px;font-size:15.5px}
+  .pay-now-btn{width:100%;margin-top:16px;border:0;border-radius:11px;padding:16px;background:var(--ink);color:var(--paper);font-size:14px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:10px}
+  .pay-now-btn:hover{opacity:.88}
+  .pay-now-btn:disabled{opacity:.5;cursor:wait}
+  .pay-now-btn .spin{width:16px;height:16px;border-radius:50%;display:none;border:2px solid currentColor;border-top-color:transparent;animation:spin .7s linear infinite}
+  .pay-now-btn.loading .spin{display:block}
+  .pay-demo-note{font-size:12px;color:var(--muted);line-height:1.6;margin:13px 0 0}
+  .co-accept{display:flex;flex-wrap:wrap;gap:6px;margin-top:13px}
+  .co-accept span{border:1px solid var(--line);border-radius:6px;padding:4px 8px;font-size:10.5px;font-weight:600;color:var(--ink-soft)}
+  .co-success{text-align:center;padding:26px 8px 10px}
+  .co-success-mark{width:74px;height:74px;margin:0 auto 18px;border-radius:50%;background:#1a6b4a;color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center}
+  .co-success h3{font-family:"Marcellus",serif;font-weight:400;font-size:30px;margin:0 0 8px}
+  .co-success-id{font-size:14.5px;color:var(--ink-soft);margin:0 0 10px}
+  .co-success p{color:var(--muted);line-height:1.65;max-width:48ch;margin:0 auto 10px;font-size:14.5px}
+  .co-success .pay-now-btn{max-width:320px;margin:18px auto 0}
+  .foot-pay{width:100%;display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+  .foot-pay .pay-strip-label{width:auto;margin:0 6px 0 0;text-align:left}
+  @media (max-width:820px){
+    .checkout-grid{grid-template-columns:1fr}
+    .checkout-summary{position:static}
+    .upi-apps{grid-template-columns:1fr 1fr}
+    .wallet-list{grid-template-columns:1fr}
+    .checkout-scrim{padding:10px 8px 20px}
+    .checkout-sheet{border-radius:16px}
+  }
+</style>
 
 <style>
   .story-grid{display:grid;grid-template-columns:1fr 1fr;gap:44px;align-items:center}
@@ -3521,6 +3877,101 @@
 </style>
 
 <style>
+  /* ============ SOCIAL SIGN-IN — Google & Facebook ============ */
+  .social-stack{display:flex;flex-direction:column;gap:11px}
+  .btn-social{
+    width:100%;min-height:52px;border-radius:999px;padding:12px 18px;
+    display:flex;align-items:center;justify-content:center;gap:12px;
+    font-size:14.5px;font-weight:600;letter-spacing:.01em;
+    transition:transform .15s ease, box-shadow .2s ease, background .2s ease, opacity .2s ease;
+  }
+  .btn-social:active{transform:scale(.985)}
+  .btn-social:disabled{opacity:.65;cursor:wait}
+  .btn-social .btn-social-icon{width:22px;height:22px;flex:none;display:flex;align-items:center;justify-content:center}
+  .btn-social .btn-social-icon svg{width:22px;height:22px}
+  .btn-social-google{background:#fff;color:#1f1f1f;border:1px solid #c3ccd3;box-shadow:0 2px 8px rgba(10,16,22,.06)}
+  .btn-social-google:hover{border-color:#0b0c0d;box-shadow:0 6px 18px rgba(10,16,22,.10)}
+  .btn-social-facebook{background:#1877F2;color:#fff;border:1px solid #1877F2}
+  .btn-social-facebook:hover{background:#1663cc;border-color:#1663cc}
+  .social-note{margin:13px 4px 0;text-align:center;font-size:12.5px;line-height:1.55;color:#8b939a}
+  .auth-badge{
+    font-size:10.5px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;flex:none;
+    border:1px solid var(--line);border-radius:999px;padding:5px 10px;color:var(--ink-soft);white-space:nowrap;
+  }
+  .head-actions .icon-btn{white-space:nowrap;flex:none}
+  .store-head-in{gap:14px}
+  @media (min-width:961px){ .head-search{max-width:248px} .store-nav{gap:18px;margin-left:8px} }
+  @media (max-width:1240px){ .head-actions .hello{display:none} }
+  .auth-badge[data-provider="Google"]{border-color:#b9cdf5;color:#2b5cb8}
+  .auth-badge[data-provider="Facebook"]{border-color:#b9d2f7;color:#1463cc;background:#eef4fd}
+  @media (prefers-color-scheme: dark){
+    .auth-badge[data-provider="Google"]{color:#9dbcf5}
+    .auth-badge[data-provider="Facebook"]{color:#9dbcf5;background:rgba(24,119,242,.14)}
+  }
+  .social-scrim{
+    position:fixed;inset:0;z-index:150;background:rgba(8,10,12,.58);
+    display:flex;align-items:center;justify-content:center;padding:18px;
+    -webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);
+  }
+  .social-scrim[hidden]{display:none}
+  .social-sheet{
+    position:relative;width:100%;max-width:400px;max-height:92dvh;overflow-y:auto;
+    background:#fff;color:#14161a;border-radius:20px;padding:30px 26px 22px;
+    box-shadow:0 30px 80px rgba(0,0,0,.35);
+    animation:socialIn .35s cubic-bezier(.22,1,.36,1);
+    font-family:"Jost",system-ui,sans-serif;
+  }
+  @keyframes socialIn{from{opacity:0;transform:translateY(16px) scale(.98)}to{opacity:1;transform:none}}
+  .social-close{position:absolute;top:12px;right:12px;background:none;border:0;color:#79828a;font-size:15px;padding:8px;line-height:1}
+  .social-close:hover{color:#0b0c0d}
+  .social-sheet-head{text-align:center;margin-bottom:20px}
+  .social-sheet-logo{width:46px;height:46px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center}
+  .social-sheet-logo svg{width:40px;height:40px}
+  .social-sheet-logo.is-facebook{background:#1877F2;border-radius:12px;color:#fff}
+  .social-sheet-logo.is-facebook svg{width:30px;height:30px}
+  .social-sheet-head h3{margin:0 0 5px;font-size:21px;font-weight:600;font-family:"Jost",system-ui,sans-serif;letter-spacing:0}
+  .social-sheet-head p{margin:0;color:#6d757d;font-size:14px}
+  .social-accounts{display:flex;flex-direction:column;border:1px solid #e1e7ec;border-radius:14px;overflow:hidden}
+  .social-account{
+    display:flex;align-items:center;gap:12px;text-align:left;background:#fff;border:0;
+    padding:13px 14px;border-bottom:1px solid #eef1f3;color:#14161a;width:100%;
+  }
+  .social-account:last-child{border-bottom:0}
+  .social-account:hover{background:#f6f8fa}
+  .social-avatar{width:38px;height:38px;flex:none;border-radius:50%;color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px}
+  .social-account-txt{display:flex;flex-direction:column;min-width:0}
+  .social-account-txt strong{font-size:14.5px;font-weight:600}
+  .social-account-txt small{font-size:12.5px;color:#79828a;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .social-demo-tag{margin-left:auto;flex:none;font-size:9.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#8b939a;border:1px solid #dde3e8;border-radius:999px;padding:4px 8px}
+  .social-or{display:flex;align-items:center;gap:12px;margin:18px 0 14px;color:#98a1a8;font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+  .social-or::before,.social-or::after{content:"";flex:1;height:1px;background:#e1e7ec}
+  .social-field{display:block;margin-bottom:12px}
+  .social-field span{display:block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#2c3034;margin-bottom:7px}
+  .social-field input{
+    width:100%;padding:13px 15px;font-size:15.5px;background:#fff;color:#14161a;
+    border:1px solid #d8dfe5;border-radius:10px;outline:none;font-family:inherit;font-weight:300;
+  }
+  .social-field input:focus{border-color:#0b0c0d;box-shadow:0 0 0 3px rgba(11,12,13,.10)}
+  .social-err{display:none;color:#b3261e;font-size:13.5px;margin:2px 0 10px}
+  .social-err.show{display:block}
+  .social-continue{
+    width:100%;border:0;border-radius:999px;padding:14px;background:#0b0c0d;color:#fff;
+    font-size:14.5px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:10px;font-family:inherit;
+  }
+  .social-continue:hover{background:#26282c}
+  .social-continue .spin{width:15px;height:15px;border-radius:50%;display:none;border:2px solid currentColor;border-top-color:transparent;animation:spin .7s linear infinite}
+  .social-continue.loading .spin{display:block}
+  .social-continue:disabled{opacity:.7}
+  .social-sheet.is-facebook .social-continue{background:#1877F2}
+  .social-sheet.is-facebook .social-continue:hover{background:#1663cc}
+  .social-foot{margin:16px 2px 0;font-size:12px;line-height:1.6;color:#98a1a8;text-align:center}
+  .social-cancel{display:block;margin:12px auto 0;background:none;border:0;color:#5b636a;font-size:13.5px;text-decoration:underline;text-underline-offset:3px;padding:4px}
+  .social-cancel:hover{color:#0b0c0d}
+  @media (max-width:480px){ .social-sheet{padding:26px 20px 20px} }
+  @media (prefers-reduced-motion: reduce){ .social-sheet{animation:none} }
+</style>
+
+<style>
   /* ============ STORE — HOODIE DASHBOARD (dark panel on an orange surround, like the reference) ============ */
   .dash-wrap{
     background:linear-gradient(180deg,#ff6d0a 0%,#ff8a1e 42%,#ffab2e 74%,#ffc53d 100%);
@@ -3810,11 +4261,29 @@
   }
 
   var userName = "Guest";
-  function enterStore(name){
+  var authProvider = "";
+  function enterStore(name, provider){
     userName = name || "Guest";
+    authProvider = provider || "";
     $("#helloText").textContent = "Hi, " + userName;
+    var badge = $("#authBadge");
+    if (authProvider){
+      badge.hidden = false;
+      badge.setAttribute("data-provider", authProvider);
+      badge.textContent = "via " + authProvider;
+    } else {
+      badge.hidden = true;
+      badge.removeAttribute("data-provider");
+      badge.textContent = "";
+    }
     showView(storeView);
-    toast("Welcome to VYSH, " + userName + " — Season 01 is yours.");
+    toast(authProvider
+      ? "Signed in with " + authProvider + " — welcome to VYSH, " + userName + "."
+      : "Welcome to VYSH, " + userName + " — Season 01 is yours.");
+  }
+  function socialSignIn(name, provider){
+    closeSocialSheet();
+    enterStore(prettyName(name), provider);
   }
 
   $("#loginForm").addEventListener("submit", function(e){
@@ -3844,9 +4313,130 @@
     rememberToggle.setAttribute("aria-pressed", on ? "true" : "false");
   });
   $("#forgotBtn").addEventListener("click", function(){ toast("Password reset isn't set up yet — continue as guest, or join with a new account."); });
-  $$(".social-btn").forEach(function(b){
-    b.addEventListener("click", function(){ toast("Social sign-in isn't connected yet — use your email or phone, or continue as guest."); });
+  /* ---------- SOCIAL SIGN-IN — Google & Facebook ----------
+     Live OAuth activates automatically when VYSH's own app IDs are set
+     below. Until then the buttons open the account sheet on this page,
+     which signs the visitor straight into VYSH (labelled demo there). */
+  var SOCIAL_CONFIG = {
+    googleClientId: "",   /* e.g. "1234567890-xxxx.apps.googleusercontent.com" */
+    facebookAppId: ""      /* e.g. "1234567890123456" */
+  };
+  var GOOGLE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.2H12v4.3h6.5c-.1 1.1-.8 2.7-2.4 3.8l3.7 2.9c2.3-2.1 3.7-5.2 3.7-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.2-4.2 1.2-3.2 0-5.9-2.1-6.8-5L1.3 16.3C3.3 20.8 7.3 24 12 24Z"/><path fill="#FBBC05" d="M5.2 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4L1.3 7.7C.5 9.2 0 10.6 0 12s.5 2.8 1.3 4.3l3.9-1.9Z"/><path fill="#EA4335" d="M12 4.7c1.8 0 3 .8 3.7 1.4l3.3-3.2C17.9 1.1 15.2 0 12 0 7.3 0 3.3 3.2 1.3 7.7l3.9 2.9c.9-3.8 3.6-5.9 6.8-5.9Z"/></svg>';
+  var FACEBOOK_ICON = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M13.5 21.9v-7.4h2.5l.4-2.9h-2.9V9.7c0-.8.2-1.4 1.4-1.4h1.6V5.7c-.3 0-1.2-.1-2.3-.1-2.3 0-3.9 1.4-3.9 4v2H7.8v2.9h2.5v7.4a10 10 0 0 0 3.2 0Z"/></svg>';
+  var socialScrim = $("#socialScrim"), socialProvider = "Google";
+  var socialBusy = false;
+
+  function decodeJwtPayload(token){
+    try {
+      var part = token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/");
+      while (part.length % 4) part += "=";
+      return JSON.parse(decodeURIComponent(escape(window.atob(part))));
+    } catch (e){ return null; }
+  }
+  function tryRealGoogle(){
+    if (!SOCIAL_CONFIG.googleClientId) return false;
+    if (!(window.google && google.accounts && google.accounts.id)){
+      toast("Google sign-in is still loading — try again in a moment.");
+      return true;
+    }
+    try {
+      google.accounts.id.initialize({
+        client_id: SOCIAL_CONFIG.googleClientId,
+        callback: function(resp){
+          var profile = resp && resp.credential ? decodeJwtPayload(resp.credential) : null;
+          if (profile && (profile.name || profile.email)) socialSignIn(profile.name || nameFromEmail(profile.email), "Google");
+          else toast("Google didn't return an account — please try again.");
+        }
+      });
+      google.accounts.id.prompt(function(notification){
+        if (notification && (notification.isNotDisplayed() || notification.isSkippedMoment())) openSocialSheet("Google");
+      });
+      return true;
+    } catch (e){ return false; }
+  }
+  function tryRealFacebook(){
+    if (!SOCIAL_CONFIG.facebookAppId) return false;
+    if (!window.FB){
+      toast("Facebook sign-in is still loading — try again in a moment.");
+      return true;
+    }
+    try {
+      if (!window.__vyshFbInit){
+        FB.init({ appId: SOCIAL_CONFIG.facebookAppId, cookie: true, xfbml: false, version: "v19.0" });
+        window.__vyshFbInit = true;
+      }
+      FB.login(function(resp){
+        if (resp && resp.status === "connected"){
+          FB.api("/me", { fields: "name,email" }, function(me){
+            if (me && me.name) socialSignIn(me.name, "Facebook");
+            else toast("Facebook didn't return an account — please try again.");
+          });
+        }
+      }, { scope: "public_profile,email" });
+      return true;
+    } catch (e){ return false; }
+  }
+  function openSocialSheet(provider){
+    socialProvider = provider;
+    var sheet = socialScrim.querySelector(".social-sheet");
+    var isFb = provider === "Facebook";
+    sheet.classList.toggle("is-facebook", isFb);
+    var logo = $("#socialSheetLogo");
+    logo.className = "social-sheet-logo" + (isFb ? " is-facebook" : "");
+    logo.innerHTML = isFb ? FACEBOOK_ICON : GOOGLE_ICON;
+    $("#socialSheetTitle").textContent = isFb ? "Log in with Facebook" : "Choose an account";
+    $("#socialSheetSub").innerHTML = isFb ? "to continue to <strong>VYSH</strong>" : "to continue to <strong>VYSH</strong>";
+    $("#socialEmailLabel").textContent = isFb ? "Email address or phone number" : "Email address";
+    $("#socialEmail").placeholder = isFb ? "you@example.com" : "you@gmail.com";
+    $("#socialContinueLabel").textContent = isFb ? "Log In with Facebook" : "Continue";
+    $$(".social-account", socialScrim).forEach(function(acc){
+      var email = acc.getAttribute("data-demo-email") || "";
+      if (isFb && email.indexOf("@gmail.com") !== -1) acc.querySelector("small").textContent = email.replace("@gmail.com", "@facebook.com");
+      if (!isFb && email.indexOf("@facebook.com") !== -1) acc.querySelector("small").textContent = email.replace("@facebook.com", "@gmail.com");
+    });
+    $("#socialErr").classList.remove("show");
+    $("#socialErr").textContent = "";
+    socialScrim.hidden = false;
+    document.body.style.overflow = "hidden";
+    setTimeout(function(){ var f = $("#socialName"); if (f) f.focus(); }, 60);
+  }
+  function closeSocialSheet(){
+    if (!socialScrim || socialScrim.hidden) return;
+    socialScrim.hidden = true;
+    document.body.style.overflow = "";
+    socialBusy = false;
+    var btn = $("#socialContinue");
+    btn.classList.remove("loading"); btn.disabled = false;
+  }
+  function finishSocial(name){
+    if (socialBusy) return;
+    socialBusy = true;
+    var btn = $("#socialContinue");
+    btn.classList.add("loading"); btn.disabled = true;
+    setTimeout(function(){ socialSignIn(name, socialProvider); }, 650);
+  }
+  $("#googleBtn").addEventListener("click", function(){ if (!tryRealGoogle()) openSocialSheet("Google"); });
+  $("#facebookBtn").addEventListener("click", function(){ if (!tryRealFacebook()) openSocialSheet("Facebook"); });
+  $$(".social-account", socialScrim).forEach(function(acc){
+    acc.addEventListener("click", function(){ finishSocial(acc.getAttribute("data-demo-name")); });
   });
+  $("#socialForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = $("#socialName").value.trim();
+    var email = $("#socialEmail").value.trim();
+    var err = $("#socialErr");
+    if (name.length < 2){ err.textContent = "Please enter your name."; err.classList.add("show"); return; }
+    if (!emailOk(email)){ err.textContent = "Enter a valid email address for your " + socialProvider + " account."; err.classList.add("show"); return; }
+    err.classList.remove("show");
+    finishSocial(name);
+  });
+  ["socialName","socialEmail"].forEach(function(id){
+    $("#"+id).addEventListener("input", function(){ $("#socialErr").classList.remove("show"); });
+  });
+  $("#socialClose").addEventListener("click", closeSocialSheet);
+  $("#socialCancel").addEventListener("click", closeSocialSheet);
+  socialScrim.addEventListener("click", function(e){ if (e.target === socialScrim) closeSocialSheet(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !socialScrim.hidden) closeSocialSheet(); });
   $$(".login-nav-link").forEach(function(a){
     a.addEventListener("click", function(e){ e.preventDefault(); toast("That opens once you're inside VYSH — log in or continue as guest."); });
   });
@@ -3855,6 +4445,11 @@
   $("#replayLink").addEventListener("click", function(){ playIntro(loginView); });
   $("#signOutBtn").addEventListener("click", function(){
     closeBag();
+    try { if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); } catch (e){}
+    try { if (window.FB && authProvider === "Facebook") FB.getLoginStatus(function(r){ if (r && r.status === "connected") FB.logout(function(){}); }); } catch (e){}
+    authProvider = "";
+    var badge = $("#authBadge");
+    badge.hidden = true; badge.removeAttribute("data-provider"); badge.textContent = "";
     showView(loginView);
     toast("Signed out — see you soon.");
   });
@@ -4083,11 +4678,13 @@
     var wrap = $("#drawerItems");
     wrap.innerHTML = "";
     bag.forEach(function(item, i){
+      var pr = bagPrice(item);
       var row = document.createElement("div");
       row.className = "bag-item";
       row.innerHTML =
         '<img src="' + item.img + '" alt="" />' +
-        '<div><p class="bi-name">' + item.name + '</p><p class="bi-meta">Size ' + item.size + " · " + item.cat + (item.color ? " · " + item.color : "") + "</p></div>" +
+        '<div><p class="bi-name">' + item.name + '</p><p class="bi-meta">Size ' + item.size + " · " + item.cat + (item.color ? " · " + item.color : "") + '</p></div>' +
+        '<span class="bi-price">' + fmtMoney(pr.amount, pr.currency) + '</span>' +
         '<button type="button" aria-label="Remove ' + item.name + '">✕</button>';
       $("button", row).addEventListener("click", function(){
         bag.splice(i, 1); renderBag();
@@ -4116,15 +4713,48 @@
     var evCart = $("#evCartLabel");
     if (evCart){ evCart.textContent = "Cart(" + bag.length + ")"; }
     $("#copyBagBtn").style.display = bag.length ? "" : "none";
+    var totals = bagTotals();
+    $("#drawerTotals").hidden = !bag.length;
+    $("#drawerSubtotal").textContent = fmtTotals(totals);
+    $("#drawerTotal").textContent = fmtTotals(totals);
+    var coBtn = $("#checkoutBtn");
+    coBtn.disabled = !bag.length;
+    coBtn.textContent = bag.length ? "Proceed to Checkout →" : "Your bag is empty";
     document.dispatchEvent(new Event("vysh:bagchange"));
   }
   function addToBag(p, opts){
     opts = opts || {};
     var detail = PRODUCT_DETAILS[p.id];
     bag.push({ id: p.id, name: p.name, size: selectedSize[p.id], cat: p.cat, img: p.img,
-               color: opts.color || (detail ? detail.colors[0].name : "") });
+               color: opts.color || (detail ? detail.colors[0].name : ""),
+               price: detail ? detail.price : 0, currency: "USD" });
     renderBag();
     toast(p.name + " · Size " + selectedSize[p.id] + " — added to your bag.");
+  }
+  /* price for a bag line — stored on the item when added; falls back to the
+     catalogues so older in-session items still total correctly */
+  function bagPrice(item){
+    if (typeof item.price === "number") return { amount: item.price, currency: item.currency || "USD" };
+    if (PRODUCT_DETAILS[item.id]) return { amount: PRODUCT_DETAILS[item.id].price, currency: "USD" };
+    if (typeof NAIL_PRODUCTS !== "undefined"){
+      var np = NAIL_PRODUCTS.filter(function(x){ return x.id === item.id; })[0];
+      if (np) return { amount: np.price, currency: "INR" };
+    }
+    return { amount: 0, currency: "USD" };
+  }
+  function bagTotals(){
+    var usd = 0, inr = 0;
+    bag.forEach(function(it){ var pr = bagPrice(it); if (pr.currency === "INR") inr += pr.amount; else usd += pr.amount; });
+    return { usd: usd, inr: inr };
+  }
+  function fmtMoney(amount, currency){
+    return currency === "INR" ? "₹" + amount.toLocaleString("en-IN") : "$" + amount.toLocaleString("en-US");
+  }
+  function fmtTotals(t){
+    var parts = [];
+    if (t.usd) parts.push(fmtMoney(t.usd, "USD"));
+    if (t.inr) parts.push(fmtMoney(t.inr, "INR"));
+    return parts.length ? parts.join("  +  ") : "—";
   }
   function openBag(){ drawer.classList.add("open"); scrim.classList.add("show"); }
   function closeBag(){ drawer.classList.remove("open"); scrim.classList.remove("show"); }
@@ -4777,7 +5407,7 @@
         toast(nailWish[p.id] ? "Saved — the " + p.name + " set is on your wishlist." : "Removed the " + p.name + " set from your wishlist.");
       });
       function addNail(btn){
-        bag.push({ id: p.id, name: p.name + " Nail Set", size: p.shape, cat: "Nails · " + p.cat, img: p.img, color: p.color });
+        bag.push({ id: p.id, name: p.name + " Nail Set", size: p.shape, cat: "Nails · " + p.cat, img: p.img, color: p.color, price: p.price, currency: "INR" });
         renderBag();
         toast(p.name + " nail set · " + p.shape + " — added to your bag.");
         if (btn && btn.classList.contains("nail-add")){
@@ -5751,6 +6381,185 @@
     b.addEventListener("click", function(){
       openShopPage({ gender: b.getAttribute("data-shop-gender") || "All", cat: b.getAttribute("data-shop-cat") || "All" });
     });
+  });
+
+  /* ---------- CHECKOUT / PAYMENTS — UPI (PhonePe, Google Pay, Paytm, BHIM),
+     cards, net banking, wallets, EMI / Pay Later and Cash on Delivery.
+     Demo flow: it validates and walks the full payment steps in-page; no live
+     gateway is connected, and the sheet says so. ---------- */
+  var coScrim = $("#checkoutScrim");
+  var payMethod = "upi", payUpiApp = "PhonePe", payWallet = "PhonePe Wallet", payBank = "", payEmi = "3 months · No-cost EMI";
+  function payMethodLabel(){
+    if (payMethod === "upi") return "Pay with " + payUpiApp;
+    if (payMethod === "card") return "Pay by Card";
+    if (payMethod === "netbanking") return payBank ? "Pay via " + payBank : "Pay via Net Banking";
+    if (payMethod === "wallet") return "Pay with " + payWallet;
+    if (payMethod === "emi") return "Continue with EMI / Pay Later";
+    return "Place Order — Cash on Delivery";
+  }
+  function renderCheckout(){
+    var wrap = $("#coItems");
+    wrap.innerHTML = "";
+    bag.forEach(function(item){
+      var pr = bagPrice(item);
+      var row = document.createElement("div");
+      row.className = "co-item";
+      row.innerHTML = '<img src="' + item.img + '" alt="" /><div><p class="co-name">' + item.name + '</p><p class="co-meta">Size ' + item.size + (item.color ? " · " + item.color : "") + '</p></div><span class="co-price">' + fmtMoney(pr.amount, pr.currency) + "</span>";
+      wrap.appendChild(row);
+    });
+    var t = bagTotals();
+    $("#coSubtotal").textContent = fmtTotals(t);
+    $("#coTotal").textContent = fmtTotals(t);
+    $("#payNowLabel").textContent = (payMethod === "cod" ? "Place Order · " : "Pay · ") + fmtTotals(t) + (payMethod === "cod" ? "" : " — " + (payMethod === "upi" ? payUpiApp : payMethod === "wallet" ? payWallet : payMethod === "netbanking" ? (payBank || "Net Banking") : payMethod === "card" ? "Card" : "EMI"));
+    if (payMethod === "cod") $("#payNowLabel").textContent = "Place Order — Pay on Delivery · " + fmtTotals(t);
+  }
+  function selectPayMethod(m){
+    payMethod = m;
+    $$(".pay-method").forEach(function(el){
+      var on = el.getAttribute("data-method") === m;
+      el.classList.toggle("on", on);
+      var head = $("[data-pay-head]", el); if (head) head.setAttribute("aria-checked", on ? "true" : "false");
+      var panel = $("[data-pay-panel]", el); if (panel) panel.hidden = !on;
+    });
+    $("#payErr").classList.remove("show");
+    renderCheckout();
+  }
+  $$("[data-pay-head]").forEach(function(h){
+    h.addEventListener("click", function(){ selectPayMethod(h.getAttribute("data-pay-head")); });
+  });
+  $$("#upiApps .upi-app").forEach(function(b){
+    b.addEventListener("click", function(){
+      payUpiApp = b.getAttribute("data-upi-app");
+      $$("#upiApps .upi-app").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCheckout();
+    });
+  });
+  $$("#walletList .wallet-chip").forEach(function(b){
+    b.addEventListener("click", function(){
+      payWallet = b.getAttribute("data-wallet");
+      $$("#walletList .wallet-chip").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCheckout();
+    });
+  });
+  $$("#emiList .emi-chip").forEach(function(b){
+    b.addEventListener("click", function(){
+      payEmi = b.getAttribute("data-emi");
+      $$("#emiList .emi-chip").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCheckout();
+    });
+  });
+  function setBank(name){
+    payBank = name || "";
+    $$("#bankGrid .bank-chip").forEach(function(x){ x.classList.toggle("on", x.getAttribute("data-bank") === payBank); });
+    var sel = $("#bankSelect");
+    var found = false;
+    for (var i = 0; i < sel.options.length; i++){ if (sel.options[i].text.replace(/\s+/g, " ").trim() === payBank || sel.options[i].value === payBank) found = true; }
+    if (payBank) sel.value = payBank;
+    $("#bankHint").textContent = payBank ? payBank + " selected — you’ll be redirected to its secure page to approve the payment." : "You’ll be redirected to your bank’s secure page to approve the payment.";
+    $("#bankHint").className = "pay-hint" + (payBank ? " ok" : "");
+    renderCheckout();
+  }
+  $$("#bankGrid .bank-chip").forEach(function(b){
+    b.addEventListener("click", function(){ setBank(b.getAttribute("data-bank")); });
+  });
+  $("#bankSelect").addEventListener("change", function(){ setBank(this.value); });
+  function upiIdOk(v){ return /^[a-zA-Z0-9._\-]{2,}@[a-zA-Z]{2,}[a-zA-Z0-9]*$/.test(v.trim()); }
+  $("#upiVerifyBtn").addEventListener("click", function(){
+    var v = $("#upiIdInput").value.trim();
+    var hint = $("#upiHint");
+    if (!v){ hint.textContent = "Type your UPI ID first — e.g. yourname@okhdfcbank or yourname@ybl."; hint.className = "pay-hint bad"; return; }
+    if (upiIdOk(v)){ hint.textContent = "✓ UPI ID verified — " + v + " is ready to receive a collect request from " + payUpiApp + "."; hint.className = "pay-hint ok"; }
+    else { hint.textContent = "That UPI ID doesn’t look right — it should look like name@bank (e.g. name@okaxis, name@ybl, name@paytm)."; hint.className = "pay-hint bad"; }
+  });
+  $("#upiIdInput").addEventListener("input", function(){ $("#upiHint").className = "pay-hint"; });
+  /* gentle card formatting */
+  $("#cardNumInput").addEventListener("input", function(){
+    var d = this.value.replace(/\D/g, "").slice(0, 19);
+    this.value = d.replace(/(.{4})/g, "$1 ").trim();
+  });
+  $("#cardExpInput").addEventListener("input", function(){
+    var d = this.value.replace(/\D/g, "").slice(0, 4);
+    this.value = d.length > 2 ? d.slice(0, 2) + " / " + d.slice(2) : d;
+  });
+  $("#cardCvvInput").addEventListener("input", function(){ this.value = this.value.replace(/\D/g, "").slice(0, 4); });
+  function payError(msg){
+    var e = $("#payErr");
+    e.textContent = msg;
+    e.classList.add("show");
+    e.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
+    return false;
+  }
+  function validatePayment(){
+    $("#payErr").classList.remove("show");
+    if (!bag.length) return payError("Your bag is empty — add a piece first, then check out.");
+    if (payMethod === "upi"){
+      var v = $("#upiIdInput").value.trim();
+      if (v && !upiIdOk(v)) return payError("That UPI ID doesn’t look right — check it (name@bank) or clear it and pay with the " + payUpiApp + " app instead.");
+    }
+    if (payMethod === "card"){
+      var num = $("#cardNumInput").value.replace(/\D/g, "");
+      if (num.length < 15 || num.length > 19) return payError("Enter the full card number (15–19 digits) to pay by card.");
+      if (!$("#cardNameInput").value.trim()) return payError("Enter the name on the card.");
+      var exp = $("#cardExpInput").value.replace(/\D/g, "");
+      if (exp.length !== 4) return payError("Enter the card expiry as MM / YY.");
+      var mm = parseInt(exp.slice(0, 2), 10);
+      if (!(mm >= 1 && mm <= 12)) return payError("That expiry month doesn’t look right — use MM / YY.");
+      if ($("#cardCvvInput").value.replace(/\D/g, "").length < 3) return payError("Enter the 3-digit CVV on the back of the card.");
+    }
+    if (payMethod === "netbanking" && !payBank) return payError("Choose your bank above — tap a bank chip or pick from the full list.");
+    return true;
+  }
+  function openCheckout(){
+    if (!bag.length){ toast("Your bag is empty — add a piece first."); return; }
+    closeBag();
+    $("#checkoutMain").hidden = false;
+    $("#checkoutSuccess").hidden = true;
+    selectPayMethod(payMethod);
+    renderCheckout();
+    coScrim.hidden = false;
+    document.body.style.overflow = "hidden";
+    coScrim.scrollTop = 0;
+  }
+  function closeCheckout(){
+    coScrim.hidden = true;
+    document.body.style.overflow = "";
+  }
+  $("#checkoutBtn").addEventListener("click", openCheckout);
+  $("#checkoutClose").addEventListener("click", closeCheckout);
+  coScrim.addEventListener("click", function(e){ if (e.target === coScrim) closeCheckout(); });
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !coScrim.hidden) closeCheckout(); });
+  $("#payNowBtn").addEventListener("click", function(){
+    if (!validatePayment()) return;
+    var btn = this;
+    btn.classList.add("loading"); btn.disabled = true;
+    $("#payNowLabel").textContent = payMethod === "cod" ? "Placing your order…" : "Processing payment…";
+    var methodText =
+      payMethod === "upi" ? ($("#upiIdInput").value.trim() ? "UPI ID " + $("#upiIdInput").value.trim() + " via " + payUpiApp : payUpiApp + " (UPI)") :
+      payMethod === "card" ? "Card ending " + $("#cardNumInput").value.replace(/\D/g, "").slice(-4) :
+      payMethod === "netbanking" ? payBank + " Net Banking" :
+      payMethod === "wallet" ? payWallet :
+      payMethod === "emi" ? "EMI / Pay Later — " + payEmi :
+      "Cash on Delivery";
+    var totalText = fmtTotals(bagTotals());
+    var itemCount = bag.length;
+    setTimeout(function(){
+      btn.classList.remove("loading"); btn.disabled = false;
+      var oid = "VYSH-" + Date.now().toString().slice(-6);
+      $("#coOrderId").textContent = oid;
+      $("#coSuccessMsg").textContent = payMethod === "cod"
+        ? "Thank you — your order of " + itemCount + (itemCount === 1 ? " piece" : " pieces") + " (" + totalText + ") is confirmed. Please pay in cash or UPI when it arrives."
+        : "Thank you — " + totalText + " via " + methodText + " was recorded for your " + itemCount + (itemCount === 1 ? " piece" : " pieces") + ", and they’re being packed now.";
+      bag = [];
+      renderBag();
+      $("#checkoutMain").hidden = true;
+      $("#checkoutSuccess").hidden = false;
+      coScrim.scrollTop = 0;
+    }, 1300);
+  });
+  $("#coContinueBtn").addEventListener("click", function(){
+    closeCheckout();
+    showView(storeView);
+    toast("Order placed — thank you for shopping VYSH.");
   });
 
   /* ---------- START ---------- */
