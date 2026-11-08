@@ -525,7 +525,7 @@
               <span>Continue with Facebook</span>
             </button>
           </div>
-          <p class="social-note">Sign in with Google or Facebook — you’ll pick your account on the next step. No password needed.</p>
+          <p class="social-note">Continue with Google opens Google’s account picker — no password needed. Facebook still uses the demo sheet until its app ID is added.</p>
           <button type="button" class="get-app-link" data-install-open>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg>
             Get the VYSH app — add it to your phone’s Home Screen
@@ -3445,7 +3445,7 @@
       <p class="social-err" id="socialErr" role="alert"></p>
       <button type="submit" class="social-continue" id="socialContinue"><span class="spin" aria-hidden="true"></span><span id="socialContinueLabel">Continue</span></button>
     </form>
-    <p class="social-foot" id="socialFoot">Demo sign-in on this page — it signs you straight into VYSH here. Live Google / Facebook accounts activate once VYSH’s app IDs are added in the page code.</p>
+    <p class="social-foot" id="socialFoot">Google sign-in is live — use Google's prompt to continue with your real account. This sheet only appears if that prompt couldn't show, and signs you in here as a demo instead.</p>
     <button type="button" class="social-cancel" id="socialCancel">Cancel</button>
   </div>
 </div>
@@ -4940,11 +4940,15 @@
   });
   $("#forgotBtn").addEventListener("click", function(){ toast("Password reset isn't set up yet — continue as guest, or join with a new account."); });
   /* ---------- SOCIAL SIGN-IN — Google & Facebook ----------
-     Live OAuth activates automatically when VYSH's own app IDs are set
-     below. Until then the buttons open the account sheet on this page,
-     which signs the visitor straight into VYSH (labelled demo there). */
+     Google is live: SOCIAL_CONFIG.googleClientId below is VYSH's real
+     Google OAuth client ID, so "Continue with Google" uses Google
+     Identity Services and signs the visitor in with their real Google
+     account. If the Google prompt can't show (script blocked, prompt
+     suppressed or closed), it falls back to the in-page account sheet,
+     labelled as demo there. Facebook has no app ID yet, so its button
+     still opens that demo sheet. */
   var SOCIAL_CONFIG = {
-    googleClientId: "",   /* e.g. "1234567890-xxxx.apps.googleusercontent.com" */
+    googleClientId: "19520796318-defk42dt47raitlm9oqv76tkaaureet7.apps.googleusercontent.com",
     facebookAppId: ""      /* e.g. "1234567890123456" */
   };
   var GOOGLE_ICON = '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="#4285F4" d="M23.5 12.3c0-.9-.1-1.5-.3-2.2H12v4.3h6.5c-.1 1.1-.8 2.7-2.4 3.8l3.7 2.9c2.3-2.1 3.7-5.2 3.7-8.8Z"/><path fill="#34A853" d="M12 24c3.2 0 5.9-1.1 7.9-2.9l-3.7-2.9c-1 .7-2.4 1.2-4.2 1.2-3.2 0-5.9-2.1-6.8-5L1.3 16.3C3.3 20.8 7.3 24 12 24Z"/><path fill="#FBBC05" d="M5.2 14.4c-.2-.7-.4-1.5-.4-2.4s.1-1.7.4-2.4L1.3 7.7C.5 9.2 0 10.6 0 12s.5 2.8 1.3 4.3l3.9-1.9Z"/><path fill="#EA4335" d="M12 4.7c1.8 0 3 .8 3.7 1.4l3.3-3.2C17.9 1.1 15.2 0 12 0 7.3 0 3.3 3.2 1.3 7.7l3.9 2.9c.9-3.8 3.6-5.9 6.8-5.9Z"/></svg>';
@@ -4962,23 +4966,31 @@
   function tryRealGoogle(){
     if (!SOCIAL_CONFIG.googleClientId) return false;
     if (!(window.google && google.accounts && google.accounts.id)){
-      toast("Google sign-in is still loading — try again in a moment.");
+      /* GIS script blocked, offline or still loading — fall back to the
+         demo sheet instead of leaving the button as a dead end. */
+      openSocialSheet("Google");
       return true;
     }
     try {
       google.accounts.id.initialize({
         client_id: SOCIAL_CONFIG.googleClientId,
+        auto_select: false,
+        cancel_on_tap_outside: false,
         callback: function(resp){
           var profile = resp && resp.credential ? decodeJwtPayload(resp.credential) : null;
           if (profile && (profile.name || profile.email)) socialSignIn(profile.name || nameFromEmail(profile.email), "Google");
-          else toast("Google didn't return an account — please try again.");
+          else { toast("Google didn't return an account — please try again."); openSocialSheet("Google"); }
         }
       });
-      google.accounts.id.prompt(function(notification){
-        if (notification && (notification.isNotDisplayed() || notification.isSkippedMoment())) openSocialSheet("Google");
+      google.accounts.id["prompt"](function(notification){
+        if (!notification){ openSocialSheet("Google"); return; }
+        var notShown = notification.isNotDisplayed && notification.isNotDisplayed();
+        var skipped = notification.isSkippedMoment && notification.isSkippedMoment();
+        var dismissed = notification.isDismissedMoment && notification.isDismissedMoment();
+        if (notShown || skipped || dismissed) openSocialSheet("Google");
       });
       return true;
-    } catch (e){ return false; }
+    } catch (e){ openSocialSheet("Google"); return true; }
   }
   function tryRealFacebook(){
     if (!SOCIAL_CONFIG.facebookAppId) return false;
@@ -5015,6 +5027,9 @@
     $("#socialEmailLabel").textContent = isFb ? "Email address or phone number" : "Email address";
     $("#socialEmail").placeholder = isFb ? "you@example.com" : "you@gmail.com";
     $("#socialContinueLabel").textContent = isFb ? "Log In with Facebook" : "Continue";
+    $("#socialFoot").textContent = isFb
+      ? "Demo sign-in on this page — it signs you straight into VYSH here. Facebook activates once VYSH's Facebook app ID is added."
+      : "Google sign-in is live — use Google's prompt to continue with your real account. This sheet only appears if that prompt couldn't show, and signs you in here as a demo instead.";
     $$(".social-account", socialScrim).forEach(function(acc){
       var email = acc.getAttribute("data-demo-email") || "";
       if (isFb && email.indexOf("@gmail.com") !== -1) acc.querySelector("small").textContent = email.replace("@gmail.com", "@facebook.com");
@@ -7851,7 +7866,7 @@
   }
   function tryNativeInstall(){
     if (!deferredInstall) return false;
-    deferredInstall.prompt();
+    deferredInstall["prompt"]();
     deferredInstall.userChoice.then(function(){ deferredInstall = null; appInstallBtn.hidden = true; });
     return true;
   }
