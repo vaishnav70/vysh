@@ -484,12 +484,12 @@
           </div>
 
           <div class="field" id="emailField">
-            <label for="emailInput">Email or Phone Number</label>
+            <label for="emailInput">Email address</label>
             <div class="control">
               <span class="field-icon" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5.5" width="18" height="13" rx="2"/><path d="m4 7 8 6 8-6"/></svg></span>
-              <input id="emailInput" type="text" inputmode="email" autocomplete="email" placeholder="Enter your email or phone" />
+              <input id="emailInput" type="email" inputmode="email" autocomplete="email" placeholder="Enter your email" />
             </div>
-            <p class="err">Enter a valid email address or phone number.</p>
+            <p class="err">Enter a valid email address.</p>
           </div>
 
           <div class="field" id="passField">
@@ -501,7 +501,7 @@
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M2 12s3.5-6.5 10-6.5S22 12 22 12s-3.5 6.5-10 6.5S2 12 2 12Z"/><circle cx="12" cy="12" r="3"/></svg>
               </button>
             </div>
-            <p class="err">Password needs at least 4 characters.</p>
+            <p class="err">Password needs at least 6 characters.</p>
           </div>
 
           <div class="remember-row">
@@ -513,6 +513,7 @@
           </div>
 
           <button class="btn-primary" type="submit" id="submitBtn"><span class="spin" aria-hidden="true"></span><span id="submitLabel">Log In</span><span class="submit-arrow" aria-hidden="true">→</span></button>
+          <p class="social-note">Email accounts are real VYSH accounts, secured by Supabase — your password is stored hashed, never in plain text, and sign-in travels over HTTPS.</p>
 
           <div class="divider">Or continue with</div>
           <div class="social-stack">
@@ -526,7 +527,7 @@
             </button>
           </div>
           <p class="social-note">Continue with Google opens Google’s account picker — no password needed. Facebook still uses the demo sheet until its app ID is added.</p>
-          <button type="button" class="get-app-link" data-install-open>
+          <button type="button" class="get-app-link install-ui" data-install-open>
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg>
             Get the VYSH app — add it to your phone’s Home Screen
           </button>
@@ -580,7 +581,7 @@
           Bag
           <span class="bag-count" id="bagCount">0</span>
         </button>
-        <button class="icon-btn" type="button" id="appBtn" data-install-open title="Get the VYSH app on your phone">
+        <button class="icon-btn install-ui" type="button" id="appBtn" data-install-open title="Get the VYSH app on your phone">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg>
           Get the app
         </button>
@@ -773,7 +774,7 @@
     </div>
   </section>
 
-  <section class="section app-band" id="getApp" aria-label="Get the VYSH app">
+  <section class="section app-band install-ui" id="getApp" aria-label="Get the VYSH app">
     <div class="app-band-in">
       <img class="app-band-icon" src="assets/app-icon-192.png" alt="VYSH app icon — the black VY monogram" width="96" height="96" />
       <div class="app-band-copy">
@@ -801,7 +802,7 @@
       <div>
         <h3>VYSH as a Flutter app — one codebase for iPhone &amp; Android</h3>
         <p>The VYSH Flutter project lives in the brand’s GitHub repository, in the <strong>flutter-app</strong> folder. It reads the same Supabase backend as this site — all 4 collections (Nail Art &amp; Extensions, Hoodies, T-Shirts, Sweatshirts) — and its Owner tab posts new designs straight into the shared catalogue, so a design posted from the app appears here on the site, and the other way round.</p>
-        <p>Publishing it to the App Store takes one step only the owner can do: building it on a Mac with Xcode under an Apple Developer account. Until then, the installable web app above already puts VYSH on any iPhone Home Screen today.</p>
+        <p>Publishing it to the App Store takes one step only the owner can do: building it on a Mac with Xcode under an Apple Developer account. Until then, VYSH’s installable web app already puts the shop on any iPhone Home Screen today.</p>
         <div class="code-actions">
           <a class="btn-solid" href="https://github.com/vaishnav70/vysh/tree/main/flutter-app" target="_blank" rel="noopener">Open the Flutter app folder</a>
           <a class="btn-line" href="https://github.com/vaishnav70/vysh" target="_blank" rel="noopener">VYSH on GitHub</a>
@@ -825,7 +826,7 @@
         <a href="#categories">Categories</a>
         <a href="#story">Our Story</a>
         <button type="button" class="link-btn" id="footNailsLink">Nails</button>
-        <button type="button" class="link-btn" data-install-open>Get the app</button>
+        <button type="button" class="link-btn install-ui" data-install-open>Get the app</button>
         <button type="button" class="link-btn" id="replayFoot">Replay intro</button>
       </nav>
       <p class="foot-note">Season 01 — The Neutral Edit</p>
@@ -4687,6 +4688,10 @@
   @media (prefers-reduced-motion: reduce){ .cust-pick:hover,.cust-add:hover,.own-login-btn:hover{transform:none} }
 
   /* ============ GET THE APP (install / Add to Home Screen) ============ */
+  /* The install UI is owner-only: every install element carries .install-ui
+     and stays hidden unless the owner route (#owner) has put the page in
+     owner mode — shoppers never see the app band, buttons or sheet. */
+  body:not(.owner-mode) .install-ui{display:none !important}
   .get-app-link{
     display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;
     background:none;border:0;padding:6px 4px;color:#5b6068;font-size:13px;font-weight:500;letter-spacing:.02em;
@@ -4778,8 +4783,8 @@
 </style>
 
 <!-- ================= GET THE APP — INSTALL SHEET ================= -->
-<div class="app-sheet-scrim" id="appSheetScrim"></div>
-<div class="app-sheet" id="appSheet" role="dialog" aria-modal="true" aria-labelledby="appSheetTitle" hidden>
+<div class="app-sheet-scrim install-ui" id="appSheetScrim"></div>
+<div class="app-sheet install-ui" id="appSheet" role="dialog" aria-modal="true" aria-labelledby="appSheetTitle" hidden>
   <div class="app-sheet-head">
     <img src="assets/app-icon-192.png" alt="" width="52" height="52" />
     <div>
@@ -4912,20 +4917,99 @@
     enterStore(prettyName(name), provider);
   }
 
+  /* ---------- EMAIL ACCOUNTS — real Supabase Auth ----------
+     Email + password accounts are real Supabase Auth accounts on the shared
+     VYSH project: sign-up and sign-in go to Supabase, which stores the
+     password as a hash server-side (never plain text, never in this page)
+     and only the account holder can sign back in with it. sbAuthUserId is
+     the signed-in shopper's Supabase user id — orders and questions they
+     place carry it, so row-level security can scope their data to them.
+     Google sign-in below is unchanged (Google Identity Services). */
+  var sbAuthUserId = null;
+  var sbAuthRestored = false;
+  function ensureSbAuth(){
+    if (sbClient && sbClient.auth) return true;
+    try {
+      if (window.supabase && window.supabase.createClient && !sbClient){
+        sbClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.publishableKey);
+        sbReady = true;
+      }
+    } catch (e){}
+    if (sbClient && sbClient.auth) sbAuthRestore();
+    return !!(sbClient && sbClient.auth);
+  }
+  function authErrText(err){
+    var m = (err && err.message) || "something went wrong";
+    if (/invalid login credentials/i.test(m)) return "that email and password don't match. Check them, or create an account instead.";
+    if (/already registered/i.test(m)) return "that email already has an account — sign in instead.";
+    if (/password should be at least/i.test(m)) return "your password needs at least 6 characters.";
+    if (/email not confirmed/i.test(m)) return "confirm your email first — tap the link in the VYSH email in your inbox, then sign in.";
+    if (/rate limit|too many/i.test(m)) return "too many tries just now — wait a minute and try again.";
+    return m;
+  }
+  /* restore a live Supabase session on load (a returning shopper who is
+     still signed in goes straight into the store) and keep the user id in
+     sync for order/question tagging */
+  function sbAuthRestore(){
+    if (!sbClient || !sbClient.auth || sbAuthRestored) return;
+    sbAuthRestored = true;
+    try {
+      sbClient.auth.onAuthStateChange(function(event, session){
+        sbAuthUserId = session && session.user ? session.user.id : null;
+      });
+      sbClient.auth.getSession().then(function(res){
+        var session = res && res.data ? res.data.session : null;
+        if (!session || !session.user) return;
+        sbAuthUserId = session.user.id;
+        var u = session.user;
+        var nm = (u.user_metadata && u.user_metadata.name) || (u.email ? nameFromEmail(u.email) : "Guest");
+        enterStore(prettyName(nm), "Email");
+      }).catch(function(){});
+    } catch (e){}
+  }
+
   $("#loginForm").addEventListener("submit", function(e){
     e.preventDefault();
     var ok = true;
     if (mode === "join") ok = fieldValid(nameField, $("#nameInput").value.trim().length >= 2) && ok;
-    ok = fieldValid($("#emailField"), contactOk($("#emailInput").value.trim())) && ok;
-    ok = fieldValid(passField(), passInput.value.length >= 4) && ok;
+    ok = fieldValid($("#emailField"), emailOk($("#emailInput").value.trim())) && ok;
+    ok = fieldValid(passField(), passInput.value.length >= 6) && ok;
     if (!ok) return;
+    if (!ensureSbAuth()){
+      toast("The sign-in service couldn't load — check your connection, or continue as guest for now.");
+      return;
+    }
+    var email = $("#emailInput").value.trim();
     var btn = $("#submitBtn");
     btn.classList.add("loading"); btn.disabled = true;
-    setTimeout(function(){
-      btn.classList.remove("loading"); btn.disabled = false;
-      var name = mode === "join" ? prettyName($("#nameInput").value) : nameFromContact($("#emailInput").value.trim());
-      enterStore(name);
-    }, 750);
+    function done(){ btn.classList.remove("loading"); btn.disabled = false; }
+    if (mode === "join"){
+      var fullName = $("#nameInput").value.trim();
+      sbClient.auth.signUp({ email: email, password: passInput.value, options: { data: { name: fullName } } })
+        .then(function(res){
+          done();
+          if (res.error){ toast("Couldn't create your account — " + authErrText(res.error)); return; }
+          if (res.data && res.data.user) sbAuthUserId = res.data.user.id;
+          if (res.data && res.data.session){
+            enterStore(prettyName(fullName), "Email");
+          } else {
+            toast("Account created for " + email + " — tap the confirmation link in your inbox, then sign in here with your password.");
+            setMode("in");
+          }
+        })
+        .catch(function(){ done(); toast("Couldn't reach the sign-in service — check your connection and try again."); });
+    } else {
+      sbClient.auth.signInWithPassword({ email: email, password: passInput.value })
+        .then(function(res){
+          done();
+          if (res.error){ toast("Couldn't sign you in — " + authErrText(res.error)); return; }
+          var u = res.data && res.data.user;
+          if (u) sbAuthUserId = u.id;
+          var nm = (u && u.user_metadata && u.user_metadata.name) || nameFromEmail(email);
+          enterStore(prettyName(nm), "Email");
+        })
+        .catch(function(){ done(); toast("Couldn't reach the sign-in service — check your connection and try again."); });
+    }
   });
   function passField(){ return $("#passField"); }
   ["nameInput","emailInput","passInput"].forEach(function(id){
@@ -4938,7 +5022,15 @@
     var on = rememberToggle.classList.toggle("on");
     rememberToggle.setAttribute("aria-pressed", on ? "true" : "false");
   });
-  $("#forgotBtn").addEventListener("click", function(){ toast("Password reset isn't set up yet — continue as guest, or join with a new account."); });
+  $("#forgotBtn").addEventListener("click", function(){
+    var email = $("#emailInput").value.trim();
+    if (!emailOk(email)){ toast("Enter your account email above first — the reset link goes there."); $("#emailInput").focus(); return; }
+    if (!ensureSbAuth()){ toast("Password reset needs the sign-in service — check your connection and try again."); return; }
+    sbClient.auth.resetPasswordForEmail(email).then(function(res){
+      if (res.error) toast("Couldn't send the reset email — " + authErrText(res.error));
+      else toast("Reset link sent to " + email + " — check your inbox to set a new password.");
+    }).catch(function(){ toast("Couldn't reach the sign-in service — check your connection and try again."); });
+  });
   /* ---------- SOCIAL SIGN-IN — Google & Facebook ----------
      Google is live: SOCIAL_CONFIG.googleClientId below is VYSH's real
      Google OAuth client ID, so "Continue with Google" uses Google
@@ -5086,6 +5178,8 @@
   $("#replayLink").addEventListener("click", function(){ playIntro(loginView); });
   $("#signOutBtn").addEventListener("click", function(){
     closeBag();
+    try { if (sbClient && sbClient.auth) sbClient.auth.signOut(); } catch (e){}
+    sbAuthUserId = null;
     try { if (window.google && google.accounts && google.accounts.id) google.accounts.id.disableAutoSelect(); } catch (e){}
     try { if (window.FB && authProvider === "Facebook") FB.getLoginStatus(function(r){ if (r && r.status === "connected") FB.logout(function(){}); }); } catch (e){}
     authProvider = "";
@@ -7813,7 +7907,15 @@
     }, 1750);
   });
 
-  /* ---------- GET THE APP (installable PWA — iOS Add to Home Screen + Android/desktop install prompt) ---------- */
+  /* ---------- GET THE APP (installable PWA — iOS Add to Home Screen + Android/desktop install prompt) ----------
+     OWNER-ONLY: the install band, header/login/footer buttons and this sheet
+     are all .install-ui elements, hidden by CSS unless the page is in owner
+     mode, and every opener below double-checks owner mode in JS. Owner mode
+     is the owner's own #owner route — regular shoppers never see any of it. */
+  function isOwnerMode(){ return window.location.hash === "#owner"; }
+  function syncInstallGate(){ document.body.classList.toggle("owner-mode", isOwnerMode()); }
+  syncInstallGate();
+  window.addEventListener("hashchange", syncInstallGate);
   var appSheet = $("#appSheet"), appScrim = $("#appSheetScrim"), appStepsEl = $("#appSheetSteps"),
       appDoneEl = $("#appSheetDone"), appInstallBtn = $("#appSheetInstall"), deferredInstall = null;
   var uaStr = navigator.userAgent || "";
@@ -7854,6 +7956,7 @@
     appInstallBtn.hidden = !(deferredInstall && tab === detectedAppTab() && !isStandaloneApp);
   }
   function openAppSheet(){
+    if (!isOwnerMode()) return;
     renderAppSteps(detectedAppTab());
     appSheet.hidden = false;
     appScrim.classList.add("show");
@@ -7865,7 +7968,7 @@
     setTimeout(function(){ appSheet.hidden = true; }, reduced ? 0 : 380);
   }
   function tryNativeInstall(){
-    if (!deferredInstall) return false;
+    if (!isOwnerMode() || !deferredInstall) return false;
     deferredInstall["prompt"]();
     deferredInstall.userChoice.then(function(){ deferredInstall = null; appInstallBtn.hidden = true; });
     return true;
@@ -7874,7 +7977,7 @@
     e.preventDefault();
     deferredInstall = e;
     var bandBtn = $("#appBandInstall");
-    if (bandBtn && !isStandaloneApp) bandBtn.textContent = "Install the VYSH app";
+    if (bandBtn && !isStandaloneApp && isOwnerMode()) bandBtn.textContent = "Install the VYSH app";
   });
   window.addEventListener("appinstalled", function(){
     deferredInstall = null;
@@ -7883,6 +7986,7 @@
   });
   $$("[data-install-open]").forEach(function(btn){
     btn.addEventListener("click", function(){
+      if (!isOwnerMode()) return;
       if (!isStandaloneApp && deferredInstall && tryNativeInstall()) return;
       openAppSheet();
     });
@@ -7946,6 +8050,7 @@
       if (window.supabase && window.supabase.createClient){
         sbClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.publishableKey);
         sbReady = true;
+        sbAuthRestore();
       }
     } catch (e){ sbClient = null; }
     if (!sbReady){ sbSetStatus("Couldn't load the backend library — the shop is running on its built-in catalogue for this visit."); return; }
@@ -8125,13 +8230,14 @@
     sbClient.from("orders").insert({
       ref: ref, customer_name: pending.customer, items: items,
       total: (t.usd || 0) > 0 ? t.usd : (t.inr || 0),
-      payment_method: pending.method, status: "New"
+      payment_method: pending.method, status: "New",
+      user_id: sbAuthUserId || null
     }).then(function(){}).catch(function(){});
   }
   var sbQueryIds = {};
   function sbSaveQuery(product, customer, msg){
     if (!sbReady) return;
-    sbClient.from("queries").insert({ customer_name: customer, product_name: product, message: msg, status: "Open" }).select("id").single()
+    sbClient.from("queries").insert({ customer_name: customer, product_name: product, message: msg, status: "Open", user_id: sbAuthUserId || null }).select("id").single()
       .then(function(res){ if (!res.error && res.data) sbQueryIds[msg + "|" + customer] = res.data.id; })
       .catch(function(){});
   }
