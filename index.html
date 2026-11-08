@@ -4,13 +4,24 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <meta name="color-scheme" content="light dark" />
-<link rel="icon" href="data:," />
+<meta name="description" content="VYSH — unisex fashion brand. Season 01: hoodies, t-shirts, sweatshirts and nail art & extensions, customisable to you." />
+<link rel="icon" type="image/png" href="assets/app-icon-192.png" />
+<!-- Installable app (PWA): Android/Chrome use the manifest; iPhone & iPad use the Apple tags below with Add to Home Screen -->
+<link rel="manifest" href="assets/manifest.webmanifest" />
+<link rel="apple-touch-icon" href="assets/app-icon-180.png" />
+<meta name="mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-title" content="VYSH" />
+<meta name="apple-mobile-web-app-status-bar-style" content="default" />
+<meta name="theme-color" content="#f4f1ea" media="(prefers-color-scheme: light)" />
+<meta name="theme-color" content="#131210" media="(prefers-color-scheme: dark)" />
 <title>VYSH — Unisex Fashion Brand</title>
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@700;800;900&family=Caveat:wght@600;700&family=Cinzel:wght@400;500;600&family=Jost:ital,wght@0,300;0,400;0,500;0,600;1,400;1,600&family=Marcellus&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet" />
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script async defer crossorigin="anonymous" src="https://connect.facebook.net/en_US/sdk.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
 <style>
   :root{
     --paper:#f4f1ea;
@@ -385,7 +396,7 @@
   <div class="intro-core">
     <div class="intro-stage">
       <div class="intro-bgword" aria-hidden="true"><span>V</span><span>Y</span><span>S</span><span>H</span></div>
-      <div class="intro-mark"><img src="img-001.png" alt="" /></div>
+      <div class="intro-mark"><img src="assets/logo-mark-white.png" alt="" /></div>
     </div>
     <div class="intro-tag">Unisex Fashion Brand</div>
     <div class="intro-line"><i></i></div>
@@ -428,7 +439,7 @@
           <path d="M-30 340 C90 240 260 210 390 230 C490 245 560 210 640 240" stroke="#fdfcf8" stroke-width="2" opacity=".8" fill="none"/>
           <ellipse cx="330" cy="120" rx="270" ry="72" stroke="#8f9682" stroke-width="1.6" opacity=".55" transform="rotate(-14 330 120)"/>
         </svg>
-        <img src="img-002.jpg" alt="Model wearing the black VYSH Onyx Oversized Hoodie against a pale studio background, shown in profile with the hood up" />
+        <img src="assets/look-hoodie.jpg" alt="Model wearing the black VYSH Onyx Oversized Hoodie against a pale studio background, shown in profile with the hood up" />
         <p class="product-caption">Onyx Oversized Hoodie · Season 01</p>
         <div class="stage-copy">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 1c.9 6.8 4.2 10.1 11 11-6.8.9-10.1 4.2-11 11-.9-6.8-4.2-10.1-11-11C7.8 11.1 11.1 7.8 12 1Z"/></svg>
@@ -515,6 +526,10 @@
             </button>
           </div>
           <p class="social-note">Sign in with Google or Facebook — you’ll pick your account on the next step. No password needed.</p>
+          <button type="button" class="get-app-link" data-install-open>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg>
+            Get the VYSH app — add it to your phone’s Home Screen
+          </button>
 
           <p class="account-line"><span id="accountPrompt">Don't have an account?</span><button type="button" class="account-toggle" id="signUpToggle">Sign Up</button></p>
 
@@ -537,7 +552,7 @@
   <header class="store-head">
     <div class="store-head-in">
       <a class="brand-lockup" href="#top" aria-label="VYSH home">
-        <span class="chip"><img src="img-003.png" alt="" /></span>
+        <span class="chip"><img src="assets/logo-mark.png" alt="" /></span>
         <span class="word">VYSH</span>
       </a>
       <nav class="store-nav" aria-label="Store">
@@ -546,6 +561,7 @@
         <a href="#" id="navWomenLink">Women</a>
         <a href="#" id="navMenLink">Men</a>
         <a href="#" id="navNailsLink">Nails</a>
+        <a href="#" id="navCustomLink">Customize</a>
         <a href="#story">Our Story</a>
       </nav>
       <form class="head-search" id="globalSearchForm" role="search">
@@ -564,6 +580,10 @@
           Bag
           <span class="bag-count" id="bagCount">0</span>
         </button>
+        <button class="icon-btn" type="button" id="appBtn" data-install-open title="Get the VYSH app on your phone">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><rect x="7" y="2.5" width="10" height="19" rx="2.4"/><path d="M10.8 18.6h2.4"/></svg>
+          Get the app
+        </button>
         <button class="icon-btn" type="button" id="signOutBtn">Sign out</button>
       </div>
     </div>
@@ -573,11 +593,11 @@
   <!-- ================= HOODIE DASHBOARD (Jacket Masters-style showcase) ================= -->
   <section class="dash-wrap" id="hoodies">
     <div class="dash-panel" id="dashPanel">
-      <img class="dash-peek" id="dashPeek" src="img-004.jpg" alt="" aria-hidden="true" />
+      <img class="dash-peek" id="dashPeek" src="assets/look-hoodie-washed.jpg" alt="" aria-hidden="true" />
 
       <div class="dash-top">
         <div class="dash-brand">
-          <span class="dash-chip"><img src="img-003.png" alt="" /></span>
+          <span class="dash-chip"><img src="assets/logo-mark.png" alt="" /></span>
           <span class="dash-brand-word">VYSH <em>Hoodies</em></span>
         </div>
         <nav class="dash-nav" aria-label="Hoodie section">
@@ -629,7 +649,7 @@
 
         <div class="dash-stage dash-fade" id="dashStage">
           <div class="dash-glow" aria-hidden="true"></div>
-          <img class="dash-img" id="dashImg" src="img-002.jpg" alt="Model in a black oversized VYSH hoodie" />
+          <img class="dash-img" id="dashImg" src="assets/look-hoodie.jpg" alt="Model in a black oversized VYSH hoodie" />
           <div class="dash-floor" aria-hidden="true"></div>
         </div>
 
@@ -643,7 +663,7 @@
 
       <p class="dash-tagline">Confidence,<br />wrapped in fleece</p>
       <button class="dash-thumb" type="button" id="dashThumb" aria-label="See the other hoodie">
-        <img id="dashThumbImg" src="img-004.jpg" alt="" />
+        <img id="dashThumbImg" src="assets/look-hoodie-washed.jpg" alt="" />
         <span class="dash-thumb-tag">Next</span>
       </button>
     </div>
@@ -660,19 +680,19 @@
     </div>
     <div class="cat-grid">
       <button class="cat-tile" type="button" data-nail-collection="All Nails">
-        <img src="img-005.jpg" alt="Blush Bloom floral nail art set from the VYSH Nail Art and Extensions collection" />
+        <img src="assets/nails-blush-bloom.jpg" alt="Blush Bloom floral nail art set from the VYSH Nail Art and Extensions collection" />
         <span class="cat-label"><span class="cat-txt">Nail Art &amp; Extensions<small>For women · 17 sets</small></span> <i>→</i></span>
       </button>
       <button class="cat-tile" type="button" data-filter-link="Hoodies">
-        <img src="img-002.jpg" alt="Model in a black oversized VYSH hoodie" />
+        <img src="assets/look-hoodie.jpg" alt="Model in a black oversized VYSH hoodie" />
         <span class="cat-label"><span class="cat-txt">Hoodies<small>Unisex + for women · 4 pieces</small></span> <i>→</i></span>
       </button>
       <button class="cat-tile" type="button" data-filter-link="T-Shirts">
-        <img src="img-006.jpg" alt="A woman and a man wearing black VYSH logo t-shirts" />
+        <img src="assets/look-tee-onyx.jpg" alt="A woman and a man wearing black VYSH logo t-shirts" />
         <span class="cat-label"><span class="cat-txt">T-Shirts<small>Unisex + for women · 3 pieces</small></span> <i>→</i></span>
       </button>
       <button class="cat-tile" type="button" data-filter-link="Sweatshirts">
-        <img src="img-007.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" />
+        <img src="assets/look-sweat-sand.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" />
         <span class="cat-label"><span class="cat-txt">Sweatshirts<small>Unisex + for women · 3 pieces</small></span> <i>→</i></span>
       </button>
     </div>
@@ -683,13 +703,13 @@
         <p>Nail Art &amp; Extensions is split into its own category pages. Pick one here, from the Nails menu, or just search for it above.</p>
       </div>
       <div class="nails-cat-row">
-        <button type="button" class="nail-cat-chip" data-nail-cat="All Nails"><img src="img-008.jpg" alt="" /><span>All Nails</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="Floral"><img src="img-005.jpg" alt="" /><span>Floral</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="French"><img src="img-009.jpg" alt="" /><span>French</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="Glitter"><img src="img-010.jpg" alt="" /><span>Glitter</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="Neutral"><img src="img-011.jpg" alt="" /><span>Neutral</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="Minimal"><img src="img-012.jpg" alt="" /><span>Minimal</span></button>
-        <button type="button" class="nail-cat-chip" data-nail-cat="Luxury"><img src="img-013.jpg" alt="" /><span>Luxury</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="All Nails"><img src="assets/nails-dried-thyme.jpg" alt="" /><span>All Nails</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="Floral"><img src="assets/nails-blush-bloom.jpg" alt="" /><span>Floral</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="French"><img src="assets/nails-bisque-french.jpg" alt="" /><span>French</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="Glitter"><img src="assets/nails-champagne-shine.jpg" alt="" /><span>Glitter</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="Neutral"><img src="assets/nails-mauve.jpg" alt="" /><span>Neutral</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="Minimal"><img src="assets/nails-milky-white.jpg" alt="" /><span>Minimal</span></button>
+        <button type="button" class="nail-cat-chip" data-nail-cat="Luxury"><img src="assets/nails-velvet-luxe.jpg" alt="" /><span>Luxury</span></button>
       </div>
     </div>
 
@@ -699,15 +719,15 @@
         <p>Just like the nails, every clothing collection has its own shop page — and the clothing is divided into Women and Men. Pick a page here, from the Women / Men menu, or search for it above.</p>
       </div>
       <div class="nails-cat-row">
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="All"><img src="img-007.jpg" alt="" /><span>All Clothing</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="All"><img src="img-014.jpg" alt="" /><span>For Women</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Men" data-shop-cat="All"><img src="img-002.jpg" alt="" /><span>For Men</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="Hoodies"><img src="img-004.jpg" alt="" /><span>Hoodies</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="T-Shirts"><img src="img-015.jpg" alt="" /><span>T-Shirts</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="Sweatshirts"><img src="img-016.jpg" alt="" /><span>Sweatshirts</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="Hoodies"><img src="img-017.jpg" alt="" /><span>Women · Hoodies</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="T-Shirts"><img src="img-018.jpg" alt="" /><span>Women · T-Shirts</span></button>
-        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="Sweatshirts"><img src="img-019.jpg" alt="" /><span>Women · Sweatshirts</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="All"><img src="assets/look-sweat-sand.jpg" alt="" /><span>All Clothing</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="All"><img src="assets/look-hoodie-blush-women.jpg" alt="" /><span>For Women</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Men" data-shop-cat="All"><img src="assets/look-hoodie.jpg" alt="" /><span>For Men</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="Hoodies"><img src="assets/look-hoodie-washed.jpg" alt="" /><span>Hoodies</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="T-Shirts"><img src="assets/look-tee-ivory.jpg" alt="" /><span>T-Shirts</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="All" data-shop-cat="Sweatshirts"><img src="assets/look-sweat-stone.jpg" alt="" /><span>Sweatshirts</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="Hoodies"><img src="assets/look-hoodie-cream-women.jpg" alt="" /><span>Women · Hoodies</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="T-Shirts"><img src="assets/look-tee-rose-women.jpg" alt="" /><span>Women · T-Shirts</span></button>
+        <button type="button" class="nail-cat-chip" data-shop-page data-shop-gender="Women" data-shop-cat="Sweatshirts"><img src="assets/look-sweat-lilac-women.jpg" alt="" /><span>Women · Sweatshirts</span></button>
       </div>
     </div>
   </section>
@@ -725,7 +745,7 @@
   <section class="section story" id="story">
     <div class="story-grid">
       <div class="story-img">
-        <img src="img-007.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" />
+        <img src="assets/look-sweat-sand.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" />
       </div>
       <div class="story-copy">
         <div class="season">The VYSH idea</div>
@@ -742,7 +762,7 @@
 
   <section class="section drop">
     <div class="drop-box">
-      <img src="img-003.png" alt="" class="drop-mark" />
+      <img src="assets/logo-mark.png" alt="" class="drop-mark" />
       <h3>First to know, first to wear</h3>
       <p>Join the list for the Season 02 drop date, early access and members-only pieces.</p>
       <form id="dropForm" novalidate>
@@ -753,10 +773,48 @@
     </div>
   </section>
 
+  <section class="section app-band" id="getApp" aria-label="Get the VYSH app">
+    <div class="app-band-in">
+      <img class="app-band-icon" src="assets/app-icon-192.png" alt="VYSH app icon — the black VY monogram" width="96" height="96" />
+      <div class="app-band-copy">
+        <h3>VYSH, as an app on your phone</h3>
+        <p>No app store, no download wait. Add VYSH to your Home Screen and it opens full-screen like a real app — one tap to the collection, your bag and the Customise Studio. Works on iPhone &amp; iPad, Android, and on Windows &amp; Mac too.</p>
+        <div class="app-band-actions">
+          <button type="button" class="app-band-btn" id="appBandInstall" data-install-open>Add VYSH to my phone</button>
+          <span class="app-band-note" id="appBandNote">Free · Takes about 10 seconds</span>
+        </div>
+      </div>
+      <ol class="app-band-steps" id="appBandSteps" aria-label="Quick install steps"></ol>
+    </div>
+  </section>
+
+  <style>
+    .code-band-in{display:grid;grid-template-columns:1fr;gap:18px;border:1px solid var(--line);border-radius:6px;padding:clamp(22px,4vw,38px);background:var(--card)}
+    .code-band h3{font-family:"Marcellus",serif;font-weight:400;font-size:clamp(24px,3vw,32px);margin:0 0 10px}
+    .code-band p{color:var(--ink-soft);font-size:15.5px;line-height:1.65;margin:0 0 14px;max-width:75ch}
+    .code-band .code-actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:4px}
+    .code-band .sb-line{font-size:13.5px;color:var(--muted);margin:14px 0 0}
+    .code-band .sb-line strong{color:var(--ink-soft)}
+  </style>
+  <section class="section code-band" id="flutterApp" aria-label="VYSH Flutter app and code">
+    <div class="code-band-in">
+      <div>
+        <h3>VYSH as a Flutter app — one codebase for iPhone &amp; Android</h3>
+        <p>The VYSH Flutter project lives in the brand’s GitHub repository, in the <strong>flutter-app</strong> folder. It reads the same Supabase backend as this site — all 4 collections (Nail Art &amp; Extensions, Hoodies, T-Shirts, Sweatshirts) — and its Owner tab posts new designs straight into the shared catalogue, so a design posted from the app appears here on the site, and the other way round.</p>
+        <p>Publishing it to the App Store takes one step only the owner can do: building it on a Mac with Xcode under an Apple Developer account. Until then, the installable web app above already puts VYSH on any iPhone Home Screen today.</p>
+        <div class="code-actions">
+          <a class="btn-solid" href="https://github.com/vaishnav70/vysh/tree/main/flutter-app" target="_blank" rel="noopener">Open the Flutter app folder</a>
+          <a class="btn-line" href="https://github.com/vaishnav70/vysh" target="_blank" rel="noopener">VYSH on GitHub</a>
+        </div>
+        <p class="sb-line"><strong>Backend:</strong> <span id="sbStatusPublic">Connecting to the shared Supabase backend…</span></p>
+      </div>
+    </div>
+  </section>
+
   <footer class="foot">
     <div class="foot-in">
       <div class="foot-brand">
-        <span class="chip"><img src="img-003.png" alt="" /></span>
+        <span class="chip"><img src="assets/logo-mark.png" alt="" /></span>
         <div>
           <div class="foot-word">VYSH</div>
           <div class="foot-tag">Unisex Fashion Brand</div>
@@ -767,6 +825,7 @@
         <a href="#categories">Categories</a>
         <a href="#story">Our Story</a>
         <button type="button" class="link-btn" id="footNailsLink">Nails</button>
+        <button type="button" class="link-btn" data-install-open>Get the app</button>
         <button type="button" class="link-btn" id="replayFoot">Replay intro</button>
       </nav>
       <p class="foot-note">Season 01 — The Neutral Edit</p>
@@ -1673,7 +1732,7 @@
       <p class="cv-hero-tag" id="cvHeroTag">The best hoodies are only here</p>
       <h2 class="cv-word" id="cvWord">HOODIES</h2>
       <div class="cv-hero-imgbox">
-        <img id="cvHeroImg" src="img-020.jpg" alt="" />
+        <img id="cvHeroImg" src="assets/cat-hero-hoodies.jpg" alt="" />
         <button class="cv-swipe" type="button" id="cvSwipe">
           <b>Swipe <i aria-hidden="true"></i></b>
           <span>Discover now</span>
@@ -1712,7 +1771,7 @@
             <span>Minimal design.<br />Maximum comfort.</span>
             <button type="button" id="cvNewShop">Shop now</button>
           </div>
-          <img id="cvRailImg" src="img-004.jpg" alt="" />
+          <img id="cvRailImg" src="assets/look-hoodie-washed.jpg" alt="" />
         </div>
 
         <div class="cv-trust">
@@ -1735,7 +1794,7 @@
         </div>
 
         <div class="cv-offer">
-          <img id="cvOfferImg" src="img-002.jpg" alt="" />
+          <img id="cvOfferImg" src="assets/look-hoodie.jpg" alt="" />
           <div class="cv-offer-in">
             <p>Limited offer</p>
             <h4>Up to</h4>
@@ -2018,7 +2077,7 @@
       <section class="ev-hero">
         <div class="ev-hero-left">
           <div class="ev-hero-media">
-            <img src="img-021.jpg" alt="A smiling model in a sage green oversized VYSH hoodie, one arm raised, against a pale mint studio background" />
+            <img src="assets/hoodie-ever-hero.jpg" alt="A smiling model in a sage green oversized VYSH hoodie, one arm raised, against a pale mint studio background" />
             <span class="ev-streak s1" aria-hidden="true"></span>
             <span class="ev-streak s2" aria-hidden="true"></span>
           </div>
@@ -2278,7 +2337,7 @@
       </div>
 
       <section class="tv-hero">
-        <img src="img-022.jpg" alt="Neutral VYSH T-shirts and shirts in cream, beige and warm brown hanging on a wooden rail" />
+        <img src="assets/tee-hero-rail.jpg" alt="Neutral VYSH T-shirts and shirts in cream, beige and warm brown hanging on a wooden rail" />
         <div class="tv-hero-shade" aria-hidden="true"></div>
         <div class="tv-hero-copy">
           <h2>Wear Your Confidence</h2>
@@ -2333,19 +2392,19 @@
         <p>Four ways in — her tee, his tee, and the rest of the VYSH rack.</p>
         <div class="tv-cat-grid">
           <button class="tv-cat-card" type="button" data-tvcat="her">
-            <img src="img-006.jpg" alt="Her — a woman wearing the black Onyx Logo T-Shirt" style="object-position:22% top" loading="lazy" />
+            <img src="assets/look-tee-onyx.jpg" alt="Her — a woman wearing the black Onyx Logo T-Shirt" style="object-position:22% top" loading="lazy" />
             <span class="tv-cat-label"><b>For Her</b><span>T-Shirts · her cut</span></span>
           </button>
           <button class="tv-cat-card" type="button" data-tvcat="him">
-            <img src="img-015.jpg" alt="Him — a man wearing the Ivory Oversized T-Shirt" loading="lazy" />
+            <img src="assets/look-tee-ivory.jpg" alt="Him — a man wearing the Ivory Oversized T-Shirt" loading="lazy" />
             <span class="tv-cat-label"><b>For Him</b><span>T-Shirts · his cut</span></span>
           </button>
           <button class="tv-cat-card" type="button" data-tvcat="hoodies">
-            <img src="img-002.jpg" alt="Model in a black oversized VYSH hoodie" loading="lazy" />
+            <img src="assets/look-hoodie.jpg" alt="Model in a black oversized VYSH hoodie" loading="lazy" />
             <span class="tv-cat-label"><b>Hoodies</b><span>Unisex · shop now</span></span>
           </button>
           <button class="tv-cat-card" type="button" data-tvcat="sweatshirts">
-            <img src="img-007.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" loading="lazy" />
+            <img src="assets/look-sweat-sand.jpg" alt="A man and a woman wearing sand VYSH crew sweatshirts" loading="lazy" />
             <span class="tv-cat-label"><b>Sweatshirts</b><span>Unisex · shop now</span></span>
           </button>
         </div>
@@ -2603,7 +2662,7 @@
 
   <section class="sp-hero">
     <div class="sp-hero-in">
-      <img class="sp-hero-img" id="shopHeroImg" src="img-007.jpg" alt="" />
+      <img class="sp-hero-img" id="shopHeroImg" src="assets/look-sweat-sand.jpg" alt="" />
       <div class="sp-hero-copy">
         <h2 id="shopTitle">Shop All Clothing</h2>
         <p class="crumbs">
@@ -2640,7 +2699,7 @@
       </div>
       <button class="sp-clear" type="button" id="shopClearFilters">Clear all filters</button>
       <div class="sp-promo">
-        <img src="img-014.jpg" alt="A woman wearing the blush pink VYSH hoodie made for her" />
+        <img src="assets/look-hoodie-blush-women.jpg" alt="A woman wearing the blush pink VYSH hoodie made for her" />
         <div class="sp-promo-in">
           <p>New for Her</p>
           <h5>The Women’s Edit</h5>
@@ -2737,7 +2796,7 @@
       </div>
     </div>
     <div class="wv-hero-img">
-      <img src="img-014.jpg" alt="A woman wearing the blush pink oversized VYSH hoodie from the new Women’s Edit" />
+      <img src="assets/look-hoodie-blush-women.jpg" alt="A woman wearing the blush pink oversized VYSH hoodie from the new Women’s Edit" />
     </div>
   </section>
 
@@ -2745,19 +2804,19 @@
     <h3>Featured Categories</h3>
     <div class="wv-cat-grid">
       <button class="wv-cat-card" type="button" data-wvcat="Hoodies">
-        <img src="img-017.jpg" alt="A woman wearing the cream VYSH hoodie with the hood up" loading="lazy" />
+        <img src="assets/look-hoodie-cream-women.jpg" alt="A woman wearing the cream VYSH hoodie with the hood up" loading="lazy" />
         <span class="wv-cat-label"><b>Hoodies</b><span>For her · shop the page</span></span>
       </button>
       <button class="wv-cat-card" type="button" data-wvcat="T-Shirts">
-        <img src="img-018.jpg" alt="A woman wearing the dusty rose VYSH t-shirt" loading="lazy" />
+        <img src="assets/look-tee-rose-women.jpg" alt="A woman wearing the dusty rose VYSH t-shirt" loading="lazy" />
         <span class="wv-cat-label"><b>T-Shirts</b><span>For her · shop the page</span></span>
       </button>
       <button class="wv-cat-card" type="button" data-wvcat="Sweatshirts">
-        <img src="img-019.jpg" alt="A woman wearing the lilac VYSH crew sweatshirt" loading="lazy" />
+        <img src="assets/look-sweat-lilac-women.jpg" alt="A woman wearing the lilac VYSH crew sweatshirt" loading="lazy" />
         <span class="wv-cat-label"><b>Sweatshirts</b><span>For her · shop the page</span></span>
       </button>
       <button class="wv-cat-card" type="button" data-wvcat="Nails">
-        <img src="img-005.jpg" alt="Blush Bloom floral nail art set from VYSH Nail Art and Extensions" loading="lazy" />
+        <img src="assets/nails-blush-bloom.jpg" alt="Blush Bloom floral nail art set from VYSH Nail Art and Extensions" loading="lazy" />
         <span class="wv-cat-label"><b>Nail Art &amp; Extensions</b><span>For women · 17 sets</span></span>
       </button>
     </div>
@@ -2848,7 +2907,7 @@
 
   <section class="nails-hero">
     <div class="nails-hero-in">
-      <img class="nails-hero-img" id="nailsHeroImg" src="img-008.jpg" alt="Hands wearing VYSH French nail extensions with pink sakura flowers" />
+      <img class="nails-hero-img" id="nailsHeroImg" src="assets/nails-dried-thyme.jpg" alt="Hands wearing VYSH French nail extensions with pink sakura flowers" />
       <div class="nails-hero-copy">
         <h2 id="nailsTitle">Shop All Nails</h2>
         <p class="crumbs">
@@ -2890,7 +2949,7 @@
       </div>
       <button class="nails-clear" type="button" id="nailsClearFilters">Clear all filters</button>
       <div class="nails-promo">
-        <img src="img-023.jpg" alt="Petal Fantasy floral nail set" />
+        <img src="assets/nails-petal-fantasy.jpg" alt="Petal Fantasy floral nail set" />
         <div class="nails-promo-in">
           <p>New Collection</p>
           <h5>Elegant &amp; Timeless</h5>
@@ -2996,7 +3055,7 @@
 
           <div class="fr-visual" id="frVisual">
             <div class="fr-visual-inner" id="frVisualInner">
-              <img id="frMainImg" src="img-002.jpg" alt="" />
+              <img id="frMainImg" src="assets/look-hoodie.jpg" alt="" />
             </div>
             <div class="fr-fabric" id="frFabric" role="img" aria-label="Close-up of this piece's fabric"><span>Fabric</span></div>
             <button class="fr-hotspot hs-fabric" type="button" id="frHotFabric" aria-label="Jump to materials and care">+</button>
@@ -3051,7 +3110,7 @@
               <span class="fr-stock-pill ok" id="frStockPill">In stock</span>
             </div>
             <div class="fr-item-head">
-              <img id="frThumb" src="img-002.jpg" alt="" />
+              <img id="frThumb" src="assets/look-hoodie.jpg" alt="" />
               <div class="fr-item-txt">
                 <h4 id="frName"></h4>
                 <p id="frRef"></p>
@@ -3086,6 +3145,7 @@
             </div>
 
             <button class="fr-yellow-btn fr-add" type="button" id="frAddBtn">Add to bag</button>
+            <button class="fr-custom-btn" type="button" id="frCustomBtn">✎ Customize this piece — your text, your logo, your colours</button>
           </section>
 
           <section class="fr-card fr-complete" aria-label="Complete the look">
@@ -3115,6 +3175,209 @@
           <button type="button" data-frnav="foryou">For You</button>
         </nav>
       </div>
+    </section>
+  </div>
+</div>
+
+<!-- ================= CUSTOMIZE STUDIO ================= -->
+<div id="customView" class="view">
+  <div class="cust-wrap">
+    <header class="cust-head">
+      <button class="cust-back" type="button" id="custBack">← Back</button>
+      <div class="cust-head-txt">
+        <h2>VYSH Customize Studio</h2>
+        <p>Every product, made yours. Pick any piece — clothing or nails — then add your own name, words or logo, choose the colours and placement, and we make it to order for you.</p>
+      </div>
+      <button class="cust-bag-btn" type="button" id="custBagBtn">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 8h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 8Z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg>
+        Bag <span class="cust-bag-count" id="custBagCount">0</span>
+      </button>
+    </header>
+
+    <p class="cust-picker-label">1 · Choose any product to customize</p>
+    <div class="cust-picker" id="custPicker" role="group" aria-label="Choose a product to customize"></div>
+
+    <div class="cust-layout">
+      <section class="cust-preview-card" aria-label="Your custom design preview">
+        <div class="cust-stage" id="custStage">
+          <img id="custImg" src="assets/look-hoodie.jpg" alt="" />
+          <div class="cust-print pos-chest" id="custPrint">
+            <img id="custLogoImg" alt="" hidden />
+            <span id="custPrintText"></span>
+          </div>
+          <span class="cust-place-tag" id="custPlaceTag">Chest print</span>
+        </div>
+        <div class="cust-nailviz" id="custNailViz" hidden>
+          <div class="cust-nails-row" id="custNailsRow" aria-hidden="true"></div>
+          <p class="cust-nailviz-note" id="custNailVizNote"></p>
+        </div>
+        <h3 id="custProdName"></h3>
+        <p class="cust-prod-meta" id="custProdMeta"></p>
+        <div class="cust-spec" id="custSpec"></div>
+        <div class="cust-price-box">
+          <div><span>Base price</span><strong id="custBasePrice"></strong></div>
+          <div><span>Customisation</span><strong id="custFeePrice"></strong></div>
+          <div class="cust-total"><span>Your one-of-one piece</span><strong id="custTotalPrice"></strong></div>
+        </div>
+        <button class="cust-add" type="button" id="custAddBtn">Add my customised piece to bag</button>
+        <p class="cust-note">Customised pieces are made to order in 3–5 days. Because they’re made just for you, they’re exchange-only (a size swap), not refundable. The preview above is a guide — your text and artwork are printed on the real garment.</p>
+      </section>
+
+      <section class="cust-options" aria-label="Customization options">
+        <div id="custClothOpts">
+          <div class="cust-sec">
+            <h4>Base colour</h4>
+            <div class="cust-swatches" id="custColors"></div>
+            <p class="cust-sel-name" id="custColorName"></p>
+          </div>
+          <div class="cust-sec">
+            <h4>Your text — a name, a word, your own brand</h4>
+            <input id="custText" type="text" maxlength="20" placeholder="e.g. Aisha · DREAM BIG · your brand name" aria-label="Your custom text" />
+            <p class="cust-mini-label">Lettering style</p>
+            <div class="cust-chips" id="custFonts">
+              <button type="button" data-font="sans" class="on">Bold Sans</button>
+              <button type="button" data-font="serif">Serif</button>
+              <button type="button" data-font="script">Handwritten</button>
+              <button type="button" data-font="caps">Classic Caps</button>
+            </div>
+            <p class="cust-mini-label">Ink colour</p>
+            <div class="cust-swatches small" id="custInk"></div>
+            <p class="cust-sel-name" id="custInkName"></p>
+          </div>
+          <div class="cust-sec">
+            <h4>Your logo or artwork</h4>
+            <div class="cust-chips" id="custLogoChips">
+              <button type="button" data-logo="none" class="on">No logo</button>
+              <button type="button" data-logo="vysh">VYSH monogram</button>
+              <button type="button" data-logo="upload">Upload mine</button>
+            </div>
+            <label class="cust-upload" id="custUploadLabel" hidden>Choose your logo / artwork image<input id="custUpload" type="file" accept="image/*" /></label>
+            <p class="cust-hint">An uploaded image is used only for this piece, in this visit — it isn’t sent or stored anywhere.</p>
+          </div>
+          <div class="cust-sec">
+            <h4>Print placement</h4>
+            <div class="cust-chips" id="custPlaces">
+              <button type="button" data-place="chest" class="on">Chest</button>
+              <button type="button" data-place="full">Full front</button>
+              <button type="button" data-place="back">Back</button>
+              <button type="button" data-place="sleeve">Sleeve</button>
+              <button type="button" data-place="hem">Hem</button>
+            </div>
+          </div>
+          <div class="cust-sec">
+            <h4>Size</h4>
+            <div class="cust-chips" id="custSizes"></div>
+          </div>
+        </div>
+
+        <div id="custNailOpts" hidden>
+          <div class="cust-sec">
+            <h4>Your shade</h4>
+            <div class="cust-swatches" id="custNailShades"></div>
+            <p class="cust-sel-name" id="custNailShadeName"></p>
+          </div>
+          <div class="cust-sec">
+            <h4>Shape</h4>
+            <div class="cust-chips" id="custNailShapes"></div>
+          </div>
+          <div class="cust-sec">
+            <h4>Finish</h4>
+            <div class="cust-chips" id="custNailFinish">
+              <button type="button" data-finish="Gloss" class="on">Gloss</button>
+              <button type="button" data-finish="Matte">Matte</button>
+              <button type="button" data-finish="Chrome">Chrome</button>
+            </div>
+          </div>
+          <div class="cust-sec">
+            <h4>Art add-on</h4>
+            <div class="cust-chips" id="custNailArt"></div>
+          </div>
+          <div class="cust-sec">
+            <h4>Your initials on the accent nail</h4>
+            <input id="custNailText" type="text" maxlength="3" placeholder="e.g. A·K" aria-label="Your initials for the accent nail" />
+          </div>
+        </div>
+
+        <div class="cust-sec cust-ask">
+          <h4>Questions about this piece?</h4>
+          <p class="cust-hint">Ask the VYSH owner directly — sizing, a custom idea, delivery. Your question goes straight to the owner’s panel.</p>
+          <textarea id="custQuestion" rows="3" placeholder="Type your question about this product…"></textarea>
+          <button class="cust-ask-btn" type="button" id="custAskBtn">Send question to the owner</button>
+          <p class="cust-ask-ok" id="custAskOk" hidden>✓ Sent — the owner sees it in their panel right away.</p>
+        </div>
+      </section>
+    </div>
+  </div>
+</div>
+
+<!-- ================= OWNER PANEL — separate login, never part of the customer shop ================= -->
+<div id="ownerView" class="view">
+  <div class="own-wrap">
+    <header class="own-top">
+      <button class="own-back" type="button" id="ownBackBtn">← Back to store</button>
+      <div class="own-brand">
+        <span class="own-mark" aria-hidden="true">VY</span>
+        <div><strong>VYSH Owner Panel</strong><small>Separate from the shop — not linked from any customer page</small></div>
+      </div>
+    </header>
+
+    <section class="own-dash" id="ownerDash">
+      <p class="own-live-note"><strong>Demo panel — no owner sign-in on this build.</strong> A real owner login (and keeping order data private) needs the server version of VYSH, so this page is an open preview of the owner dashboard, reached only through the owner’s own #owner link — nothing in the customer shop links here. Live for this visit: every order placed and every question asked in the shop lands here. Rows tagged <em>Sample</em> are example data so you can see the panel working before real orders come in.</p>
+      <p class="own-live-note" id="sbStatusNote"><strong>Supabase backend:</strong> <span id="sbStatusText">Connecting to the shared VYSH backend…</span> Designs posted here are saved to Supabase and appear on the site for every visitor across all 4 collections, and designs posted from the Flutter app or the owner app show up here. Orders and customer questions are saved to the backend for the owner’s private app — this public page never reads other customers’ orders or questions back, so the lists below only ever show this visit’s activity plus the sample rows.</p>
+
+      <div class="own-stats">
+        <div class="own-stat"><span>Orders received</span><strong id="ownStatOrders">0</strong></div>
+        <div class="own-stat"><span>Revenue · active orders</span><strong id="ownStatRevenue">—</strong></div>
+        <div class="own-stat"><span>Cancelled</span><strong id="ownStatCancelled">0</strong></div>
+        <div class="own-stat"><span>Open questions</span><strong id="ownStatQueries">0</strong></div>
+        <div class="own-stat"><span>Customised orders</span><strong id="ownStatCustom">0</strong></div>
+        <div class="own-stat"><span>Products live</span><strong id="ownStatProducts">0</strong></div>
+      </div>
+
+      <div class="own-grid">
+        <section class="own-panel" aria-label="Orders">
+          <h3>Orders</h3>
+          <div id="ownOrders"></div>
+        </section>
+        <section class="own-panel" aria-label="Customer questions">
+          <h3>Customer questions</h3>
+          <div id="ownQueries"></div>
+        </section>
+      </div>
+
+      <section class="own-panel" aria-label="Post a new design">
+        <h3>Post a new design</h3>
+        <p class="own-panel-sub">It goes live in the shop, the collection pages, search — and the Customize Studio — the moment you post it. Customers see it as a normal VYSH product; nothing here shows in their panel.</p>
+        <form id="ownDesignForm" novalidate>
+          <div class="own-form-grid">
+            <label>Design name<input id="odName" type="text" placeholder="e.g. Sage Oversized Hoodie" /></label>
+            <label>Type
+              <select id="odType"><option value="clothing">Clothing</option><option value="nail">Nail set</option></select>
+            </label>
+            <label id="odCatWrap">Collection
+              <select id="odCat"><option>Hoodies</option><option>T-Shirts</option><option>Sweatshirts</option></select>
+            </label>
+            <label id="odGenderWrap">For
+              <select id="odGender"><option>Unisex</option><option>Women</option></select>
+            </label>
+            <label id="odNailCatWrap" hidden>Nail category
+              <select id="odNailCat"><option>Floral</option><option>French</option><option>Glitter</option><option>Neutral</option><option>Minimal</option><option>Luxury</option></select>
+            </label>
+            <label id="odShapeWrap" hidden>Shape
+              <select id="odShape"><option>Almond</option><option>Coffin</option><option>Square</option><option>Oval</option><option>Stiletto</option></select>
+            </label>
+            <label>Price (<span id="odCur">$</span>)<input id="odPrice" type="number" min="1" step="1" placeholder="99" /></label>
+            <label>Short description<input id="odNote" type="text" placeholder="e.g. Sage brushed fleece · relaxed fit" /></label>
+          </div>
+          <div class="own-form-grid">
+            <label>Photo — pick one from the shoot<select id="odImgSel"></select></label>
+            <label>…or upload your own photo<input id="odUpload" type="file" accept="image/*" /></label>
+          </div>
+          <p class="own-err" id="odErr" role="alert"></p>
+          <button class="own-login-btn" type="submit">Post design to the shop</button>
+        </form>
+        <div id="ownDesigns"></div>
+      </section>
     </section>
   </div>
 </div>
@@ -4172,6 +4435,369 @@
   }
 </style>
 
+<style>
+  /* ============ CUSTOMIZE STUDIO + OWNER PANEL ============ */
+  /* entry buttons sprinkled through the existing shop */
+  .card-custom-btn,.sp-custom,.nail-custom{
+    background:transparent;border:1px solid var(--line);color:var(--ink);
+    border-radius:999px;font-weight:500;letter-spacing:.02em;transition:border-color .2s ease,background .2s ease,color .2s ease;
+  }
+  .card-custom-btn{width:100%;margin-top:8px;padding:10px 14px;font-size:13px}
+  .card-custom-btn:hover{border-color:var(--ink)}
+  .sp-custom{padding:10px 14px;font-size:13px}
+  .sp-custom:hover{border-color:currentColor}
+  .nail-custom{padding:10px 13px;font-size:13px;border-color:#d8b7bc;color:#7c4a52}
+  .nail-custom:hover{background:#f7e8ea}
+  .fr-custom-btn{
+    width:100%;margin-top:10px;padding:12px 14px;border-radius:12px;
+    background:transparent;border:1.5px solid #141310;color:#141310;
+    font-size:13.5px;font-weight:600;letter-spacing:.02em;transition:background .2s ease,color .2s ease;
+  }
+  .fr-custom-btn:hover{background:#141310;color:#ffd83d}
+  #loginView .owner-entry{margin:18px 0 0;text-align:center;font-size:13.5px;color:var(--muted)}
+  #loginView .owner-entry button{background:none;border:0;color:var(--ink);font-weight:600;text-decoration:underline;text-underline-offset:3px;padding:2px}
+  .bi-custom,.co-custom{color:var(--accent);font-weight:500}
+  .bi-custom{font-size:12px;margin:3px 0 0;line-height:1.45}
+  .co-custom{font-size:11.5px}
+
+  /* ---------- studio ---------- */
+  #customView{background:var(--paper)}
+  .cust-wrap{max-width:1240px;margin:0 auto;padding:26px clamp(16px,3vw,34px) 70px}
+  .cust-head{display:flex;align-items:flex-start;gap:20px;flex-wrap:wrap}
+  .cust-back,.cust-bag-btn{
+    background:var(--card);border:1px solid var(--line);color:var(--ink);
+    border-radius:999px;padding:10px 18px;font-size:13.5px;font-weight:500;flex:none;
+    display:inline-flex;align-items:center;gap:8px;transition:border-color .2s ease;
+  }
+  .cust-back:hover,.cust-bag-btn:hover{border-color:var(--ink)}
+  .cust-bag-btn svg{width:17px;height:17px}
+  .cust-bag-count{background:var(--ink);color:var(--paper);border-radius:999px;min-width:20px;height:20px;padding:0 5px;display:inline-flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:700}
+  .cust-head-txt{flex:1;min-width:240px}
+  .cust-head-txt h2{font-family:"Archivo",system-ui,sans-serif;font-weight:800;font-size:clamp(28px,4vw,42px);line-height:1.05;margin:2px 0 8px;letter-spacing:-.01em}
+  .cust-head-txt p{margin:0;color:var(--ink-soft);font-size:15.5px;line-height:1.6;max-width:62ch}
+  .cust-picker-label{margin:28px 0 10px;font-size:12px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+  .cust-picker{display:flex;gap:10px;flex-wrap:wrap;padding:4px 2px 12px}
+  .cust-pick{
+    flex:none;width:118px;background:var(--card);border:1.5px solid var(--line);border-radius:14px;
+    padding:8px;text-align:left;color:var(--ink);transition:border-color .2s ease,transform .2s ease;
+  }
+  .cust-pick:hover{transform:translateY(-2px)}
+  .cust-pick.on{border-color:var(--ink)}
+  .cust-pick img{width:100%;height:74px;object-fit:cover;object-position:top;border-radius:9px}
+  .cust-pick span{display:block;margin-top:7px;font-size:11.5px;font-weight:500;line-height:1.35}
+  .cust-pick small{display:block;color:var(--muted);font-size:10.5px;margin-top:2px}
+  .cust-layout{display:grid;grid-template-columns:minmax(0,1.02fr) minmax(0,.98fr);gap:clamp(18px,3vw,36px);margin-top:14px;align-items:start}
+  .cust-preview-card{
+    background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;
+    position:sticky;top:18px;box-shadow:var(--shadow);
+  }
+  .cust-stage{position:relative;border-radius:14px;overflow:hidden;background:var(--paper-2)}
+  .cust-stage>img{width:100%;height:min(480px,56vh);object-fit:cover;object-position:top}
+  .cust-print{
+    position:absolute;left:50%;transform:translateX(-50%);top:29%;width:46%;
+    display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;
+    padding:12px 8px;border:1.5px dashed rgba(255,255,255,.65);border-radius:10px;
+    background:rgba(20,19,16,.10);pointer-events:none;
+  }
+  .cust-print:empty{display:none}
+  .cust-print.pos-full{top:19%;width:58%}
+  .cust-print.pos-back{top:29%}
+  .cust-print.pos-sleeve{left:auto;right:5%;transform:none;width:23%;top:40%}
+  .cust-print.pos-hem{top:auto;bottom:8%}
+  .cust-print img{max-width:74%;max-height:58px;object-fit:contain;filter:drop-shadow(0 1px 3px rgba(0,0,0,.35))}
+  #custPrintText{font-weight:700;line-height:1.15;word-break:break-word;text-shadow:0 1px 5px rgba(0,0,0,.35);font-size:clamp(17px,2.6vw,27px)}
+  #custPrintText.font-serif{font-family:"Playfair Display",serif;font-weight:600}
+  #custPrintText.font-script{font-family:"Caveat",cursive;font-weight:700;font-size:clamp(26px,4vw,40px)}
+  #custPrintText.font-caps{font-family:"Cinzel",serif;font-weight:600;letter-spacing:.14em;text-transform:uppercase;font-size:clamp(14px,2.1vw,21px)}
+  #custPrintText.font-sans{font-family:"Archivo",system-ui,sans-serif;font-weight:800}
+  .cust-place-tag{
+    position:absolute;left:12px;bottom:12px;background:rgba(20,19,16,.78);color:#f4f1ea;
+    font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;
+    padding:6px 11px;border-radius:999px;
+  }
+  .cust-nailviz{margin-top:16px;background:var(--paper-2);border:1px dashed var(--line);border-radius:14px;padding:18px 14px 12px;text-align:center}
+  .cust-nails-row{display:flex;gap:10px;justify-content:center}
+  .cust-nailtip{
+    width:42px;height:72px;position:relative;flex:none;
+    display:flex;align-items:center;justify-content:center;
+    font-family:"Cinzel",serif;font-weight:600;font-size:14px;color:rgba(20,19,16,.75);
+    box-shadow:inset 0 -8px 14px rgba(0,0,0,.10),0 4px 10px rgba(20,19,16,.14);
+  }
+  .cust-nailtip.shape-Almond{border-radius:50% 50% 46% 46% / 64% 64% 36% 36%}
+  .cust-nailtip.shape-Oval{border-radius:50% 50% 50% 50% / 58% 58% 42% 42%}
+  .cust-nailtip.shape-Square{border-radius:7px 7px 9px 9px}
+  .cust-nailtip.shape-Coffin{clip-path:polygon(16% 0,84% 0,100% 100%,0 100%)}
+  .cust-nailtip.shape-Stiletto{clip-path:polygon(50% 0,100% 36%,86% 100%,14% 100%,0 36%)}
+  .cust-nailviz-note{margin:12px 0 2px;font-size:12.5px;color:var(--muted)}
+  .cust-preview-card h3{font-family:"Archivo",system-ui,sans-serif;font-size:21px;font-weight:700;margin:16px 0 2px}
+  .cust-prod-meta{margin:0;color:var(--muted);font-size:13.5px}
+  .cust-spec{margin-top:12px;display:flex;flex-wrap:wrap;gap:6px}
+  .cust-spec span{background:var(--paper-2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:12px;font-weight:500}
+  .cust-spec span.none{color:var(--muted);font-weight:300}
+  .cust-price-box{margin-top:16px;border-top:1px solid var(--line);padding-top:12px;display:grid;gap:6px}
+  .cust-price-box>div{display:flex;justify-content:space-between;font-size:14px;color:var(--ink-soft)}
+  .cust-price-box .cust-total{font-size:16.5px;color:var(--ink);border-top:1px dashed var(--line);padding-top:8px;margin-top:2px}
+  .cust-add{
+    width:100%;margin-top:16px;background:var(--ink);color:var(--paper);border:0;border-radius:999px;
+    padding:15px 20px;font-size:15px;font-weight:600;letter-spacing:.03em;transition:transform .18s ease,opacity .2s ease;
+  }
+  .cust-add:hover{transform:translateY(-1px)}
+  .cust-add:active{transform:scale(.98)}
+  .cust-note{margin:12px 2px 0;font-size:12.5px;line-height:1.6;color:var(--muted)}
+  .cust-sec{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
+  .cust-sec h4{margin:0 0 12px;font-size:15px;font-weight:600;letter-spacing:.01em}
+  .cust-sec input[type="text"],.cust-sec textarea{
+    width:100%;background:var(--paper);border:1px solid var(--line);border-radius:12px;
+    padding:12px 14px;font-size:15px;color:var(--ink);font-family:inherit;
+  }
+  .cust-sec textarea{resize:vertical}
+  .cust-sec input:focus,.cust-sec textarea:focus{outline:2px solid var(--accent);outline-offset:1px}
+  .cust-mini-label{margin:14px 0 8px;font-size:11.5px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+  .cust-swatches{display:flex;gap:9px;flex-wrap:wrap}
+  .cust-swatches button{
+    width:38px;height:38px;border-radius:50%;border:2px solid var(--line);padding:0;flex:none;
+    transition:transform .15s ease,border-color .15s ease;
+  }
+  .cust-swatches.small button{width:30px;height:30px}
+  .cust-swatches button:hover{transform:scale(1.1)}
+  .cust-swatches button.on{border-color:var(--ink);box-shadow:0 0 0 2px var(--paper),0 0 0 4px var(--ink)}
+  .cust-sel-name{margin:9px 0 0;font-size:13px;color:var(--ink-soft);font-weight:500}
+  .cust-chips{display:flex;gap:8px;flex-wrap:wrap}
+  .cust-chips button{
+    background:var(--paper);border:1px solid var(--line);color:var(--ink);border-radius:999px;
+    padding:9px 15px;font-size:13.5px;font-weight:500;transition:all .18s ease;
+  }
+  .cust-chips button:hover{border-color:var(--ink)}
+  .cust-chips button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .cust-upload{
+    display:inline-flex;margin-top:12px;background:var(--paper);border:1px dashed var(--line);
+    border-radius:12px;padding:12px 16px;font-size:13.5px;font-weight:500;cursor:pointer;
+  }
+  .cust-upload input{display:none}
+  .cust-hint{margin:10px 0 0;font-size:12.5px;line-height:1.55;color:var(--muted)}
+  .cust-ask-btn{
+    margin-top:12px;background:transparent;border:1.5px solid var(--ink);color:var(--ink);
+    border-radius:999px;padding:11px 20px;font-size:14px;font-weight:600;transition:background .2s ease,color .2s ease;
+  }
+  .cust-ask-btn:hover{background:var(--ink);color:var(--paper)}
+  .cust-ask-ok{margin:10px 0 0;font-size:13.5px;font-weight:600;color:var(--accent)}
+  @media (max-width:900px){
+    .cust-layout{grid-template-columns:1fr}
+    .cust-preview-card{position:static}
+    .cust-stage>img{height:min(400px,50vh)}
+  }
+
+  /* ---------- owner panel — its own dark console, apart from the shop ---------- */
+  #ownerView{background:radial-gradient(120% 90% at 80% -10%,#2b2517 0%,#171410 46%,#100e0a 100%);color:#f2eee1;min-height:100vh}
+  .own-wrap{max-width:1180px;margin:0 auto;padding:24px clamp(16px,3vw,32px) 70px}
+  .own-top{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+  .own-back,.own-signout{
+    background:transparent;border:1px solid rgba(242,238,225,.3);color:#f2eee1;border-radius:999px;
+    padding:9px 16px;font-size:13px;font-weight:500;transition:border-color .2s ease;
+  }
+  .own-back:hover,.own-signout:hover{border-color:#c9a35f}
+  .own-brand{display:flex;align-items:center;gap:12px;margin-right:auto}
+  .own-mark{
+    width:40px;height:40px;border-radius:10px;background:#c9a35f;color:#171410;flex:none;
+    display:flex;align-items:center;justify-content:center;font-family:"Archivo",sans-serif;font-weight:800;font-size:15px;letter-spacing:.04em;
+  }
+  .own-brand strong{display:block;font-family:"Archivo",sans-serif;font-size:17px;letter-spacing:.02em}
+  .own-brand small{display:block;color:rgba(242,238,225,.55);font-size:12px;margin-top:1px}
+  .own-gate{
+    max-width:520px;margin:52px auto 0;background:rgba(255,255,255,.045);
+    border:1px solid rgba(201,163,95,.35);border-radius:22px;padding:32px clamp(22px,4vw,38px);
+  }
+  .own-gate h2{font-family:"Archivo",sans-serif;font-size:27px;margin:0 0 8px}
+  .own-gate>p{color:rgba(242,238,225,.72);font-size:14.5px;line-height:1.65;margin:0 0 20px}
+  .own-gate label,.own-panel label{display:block;font-size:12.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:rgba(242,238,225,.65);margin-bottom:14px}
+  .own-gate input,.own-panel input,.own-panel select,.own-panel textarea{
+    display:block;width:100%;margin-top:6px;background:#100e0a;border:1px solid rgba(242,238,225,.22);
+    border-radius:11px;padding:12px 14px;color:#f2eee1;font-size:15px;font-family:inherit;text-transform:none;letter-spacing:0;
+  }
+  .own-gate input:focus,.own-panel input:focus,.own-panel select:focus,.own-panel textarea:focus{outline:2px solid #c9a35f;outline-offset:1px}
+  .own-login-btn{
+    width:100%;background:#c9a35f;color:#171410;border:0;border-radius:999px;padding:14px 20px;
+    font-size:15px;font-weight:700;letter-spacing:.02em;transition:transform .18s ease;
+  }
+  .own-login-btn:hover{transform:translateY(-1px)}
+  .own-demo{display:block;margin:14px auto 0;background:none;border:0;color:#c9a35f;font-size:13.5px;text-decoration:underline;text-underline-offset:3px}
+  .own-note{margin:18px 0 0;font-size:12.5px;line-height:1.65;color:rgba(242,238,225,.5);text-align:center}
+  .own-note strong{color:rgba(242,238,225,.8)}
+  .own-err{color:#ff9d94;font-size:13.5px;min-height:18px;margin:0 0 10px}
+  .own-live-note{
+    margin:26px 0 0;background:rgba(201,163,95,.10);border:1px solid rgba(201,163,95,.3);
+    border-radius:14px;padding:13px 17px;font-size:13.5px;line-height:1.6;color:rgba(242,238,225,.85);
+  }
+  .own-stats{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-top:18px}
+  .own-stat{background:rgba(255,255,255,.045);border:1px solid rgba(242,238,225,.12);border-radius:16px;padding:16px}
+  .own-stat span{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:rgba(242,238,225,.55);line-height:1.5}
+  .own-stat strong{display:block;font-family:"Archivo",sans-serif;font-size:24px;margin-top:7px;color:#fff}
+  .own-grid{display:grid;grid-template-columns:1.25fr .95fr;gap:16px;margin-top:16px;align-items:start}
+  .own-panel{background:rgba(255,255,255,.045);border:1px solid rgba(242,238,225,.12);border-radius:18px;padding:20px;margin-top:16px}
+  .own-grid .own-panel{margin-top:0}
+  .own-panel h3{font-family:"Archivo",sans-serif;font-size:18px;margin:0 0 6px}
+  .own-panel-sub{color:rgba(242,238,225,.6);font-size:13.5px;line-height:1.6;margin:0 0 16px}
+  .own-empty{color:rgba(242,238,225,.5);font-size:14px;padding:10px 0}
+  .own-order,.own-query,.own-design{
+    border:1px solid rgba(242,238,225,.13);border-radius:14px;padding:14px 15px;margin-top:12px;background:rgba(0,0,0,.22);
+  }
+  .own-order-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap}
+  .own-order-head strong{font-size:14.5px;letter-spacing:.03em}
+  .own-order-head time{color:rgba(242,238,225,.5);font-size:12px;margin-right:auto}
+  .own-tag{font-size:10px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;background:rgba(201,163,95,.18);color:#c9a35f;border:1px solid rgba(201,163,95,.4);padding:3px 8px;border-radius:999px}
+  .own-tag.live{background:rgba(127,201,143,.14);color:#8fd79e;border-color:rgba(127,201,143,.4)}
+  .own-status{
+    background:#100e0a;color:#f2eee1;border:1px solid rgba(242,238,225,.25);border-radius:999px;
+    padding:6px 10px;font-size:12.5px;font-family:inherit;
+  }
+  .own-order-items{margin:10px 0 0;padding:0;list-style:none}
+  .own-order-items li{font-size:13.5px;line-height:1.55;color:rgba(242,238,225,.85);padding:3px 0;border-bottom:1px dashed rgba(242,238,225,.09)}
+  .own-order-items li:last-child{border-bottom:0}
+  .own-order-items .cust-line{display:block;color:#c9a35f;font-size:12.5px}
+  .own-order-foot{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;margin-top:10px;font-size:13px;color:rgba(242,238,225,.65)}
+  .own-order-foot strong{color:#fff;font-size:14.5px}
+  .own-query p{margin:6px 0 0;font-size:14px;line-height:1.6;color:rgba(242,238,225,.88)}
+  .own-query .own-q-meta{font-size:12.5px;color:rgba(242,238,225,.55)}
+  .own-query .own-q-meta strong{color:#f2eee1;font-size:13.5px}
+  .own-pill{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:3px 9px;border-radius:999px}
+  .own-pill.open{background:rgba(201,163,95,.18);color:#c9a35f}
+  .own-pill.done{background:rgba(127,201,143,.14);color:#8fd79e}
+  .own-reply-box{margin-top:10px}
+  .own-reply-box textarea{min-height:64px;resize:vertical}
+  .own-reply-btn{
+    margin-top:8px;background:#c9a35f;color:#171410;border:0;border-radius:999px;padding:9px 18px;font-size:13px;font-weight:700;
+  }
+  .own-reply-sent{margin-top:10px;font-size:13.5px;color:rgba(242,238,225,.75);background:rgba(255,255,255,.05);border-radius:10px;padding:9px 12px}
+  .own-reply-sent b{color:#8fd79e}
+  .own-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:0 14px}
+  .own-design{display:flex;align-items:center;gap:12px}
+  .own-design img{width:52px;height:52px;object-fit:cover;object-position:top;border-radius:10px;flex:none}
+  .own-design div{flex:1;min-width:0}
+  .own-design strong{display:block;font-size:14.5px}
+  .own-design small{color:rgba(242,238,225,.55);font-size:12.5px}
+  .own-design button{background:transparent;border:1px solid rgba(242,238,225,.3);color:#f2eee1;border-radius:999px;padding:7px 13px;font-size:12.5px;flex:none}
+  .own-design button:hover{border-color:#c9a35f}
+  .own-design button.danger:hover{border-color:#ff9d94;color:#ff9d94}
+  @media (max-width:1020px){ .own-stats{grid-template-columns:repeat(3,1fr)} }
+  @media (max-width:820px){
+    .own-grid{grid-template-columns:1fr}
+    .own-stats{grid-template-columns:repeat(2,1fr)}
+    .own-form-grid{grid-template-columns:1fr}
+  }
+  @media (prefers-reduced-motion: reduce){ .cust-pick:hover,.cust-add:hover,.own-login-btn:hover{transform:none} }
+
+  /* ============ GET THE APP (install / Add to Home Screen) ============ */
+  .get-app-link{
+    display:flex;align-items:center;justify-content:center;gap:8px;width:100%;margin-top:14px;
+    background:none;border:0;padding:6px 4px;color:#5b6068;font-size:13px;font-weight:500;letter-spacing:.02em;
+  }
+  .get-app-link svg{width:16px;height:16px;flex:none}
+  .get-app-link:hover{color:#141310;text-decoration:underline}
+  .app-band{padding-top:6px}
+  .app-band-in{
+    max-width:1280px;margin:0 auto;background:var(--card);border:1px solid var(--line);border-radius:18px;
+    padding:clamp(22px,4vw,40px);display:flex;gap:clamp(20px,4vw,44px);align-items:center;flex-wrap:wrap;
+  }
+  .app-band-icon{width:96px;height:96px;border-radius:22px;box-shadow:0 14px 34px rgba(20,19,16,.18);flex:none}
+  .app-band-copy{flex:1 1 340px;min-width:min(340px,100%)}
+  .app-band-copy h3{font-family:"Marcellus",serif;font-weight:400;font-size:clamp(24px,3.4vw,34px);margin:0 0 10px;line-height:1.15}
+  .app-band-copy p{margin:0;font-size:15.5px;line-height:1.65;color:var(--ink-soft);max-width:56ch}
+  .app-band-actions{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin-top:20px}
+  .app-band-btn{
+    padding:14px 26px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);
+    font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  }
+  .app-band-btn:hover{opacity:.87}
+  .app-band-note{font-size:13px;color:var(--muted)}
+  .app-band-steps{flex:1 1 260px;min-width:min(260px,100%);margin:0;padding:0;list-style:none;counter-reset:appstep}
+  .app-band-steps li{
+    counter-increment:appstep;position:relative;padding:9px 0 9px 44px;font-size:14.5px;line-height:1.5;color:var(--ink-soft);
+    border-bottom:1px dashed var(--line);
+  }
+  .app-band-steps li:last-child{border-bottom:0}
+  .app-band-steps li::before{
+    content:counter(appstep);position:absolute;left:0;top:7px;width:28px;height:28px;border-radius:50%;
+    border:1px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center;
+    font-size:13px;font-weight:500;
+  }
+  .app-band-steps strong{color:var(--ink);font-weight:500}
+  .app-band-steps svg{width:15px;height:15px;vertical-align:-2px}
+  .app-sheet-scrim{
+    position:fixed;inset:0;background:rgba(12,11,9,.5);z-index:130;
+    opacity:0;pointer-events:none;transition:opacity .3s ease;
+  }
+  .app-sheet-scrim.show{opacity:1;pointer-events:auto}
+  .app-sheet{
+    position:fixed;left:50%;bottom:0;transform:translate(-50%,105%);z-index:131;
+    width:min(520px,100vw);max-height:88dvh;overflow-y:auto;
+    background:var(--paper);color:var(--ink);border-radius:22px 22px 0 0;box-shadow:var(--shadow);
+    padding:26px 26px calc(26px + env(safe-area-inset-bottom));
+    transition:transform .45s cubic-bezier(.22,1,.36,1);
+  }
+  @media (min-width:700px){
+    .app-sheet{bottom:auto;top:50%;transform:translate(-50%,-46%);border-radius:22px;opacity:0;pointer-events:none;transition:transform .35s ease,opacity .35s ease}
+    .app-sheet.open{transform:translate(-50%,-50%);opacity:1;pointer-events:auto}
+  }
+  .app-sheet.open{transform:translate(-50%,0)}
+  @media (min-width:700px){ .app-sheet.open{transform:translate(-50%,-50%)} }
+  .app-sheet-head{display:flex;align-items:center;gap:14px}
+  .app-sheet-head img{width:52px;height:52px;border-radius:13px;box-shadow:0 8px 20px rgba(20,19,16,.16)}
+  .app-sheet-head h3{font-family:"Marcellus",serif;font-weight:400;font-size:22px;margin:0;line-height:1.2}
+  .app-sheet-head p{margin:2px 0 0;font-size:13px;color:var(--muted)}
+  .app-sheet-close{margin-left:auto;background:none;border:1px solid var(--line);border-radius:50%;width:34px;height:34px;font-size:16px;color:var(--ink);flex:none;line-height:1}
+  .app-sheet-tabs{display:flex;gap:8px;margin:20px 0 6px;flex-wrap:wrap}
+  .app-sheet-tabs button{
+    border:1px solid var(--line);background:var(--card);color:var(--ink-soft);border-radius:999px;
+    padding:8px 15px;font-size:12px;letter-spacing:.12em;text-transform:uppercase;font-weight:500;
+  }
+  .app-sheet-tabs button.on{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+  .app-sheet-steps{margin:10px 0 0;padding:0;list-style:none;counter-reset:sheetstep}
+  .app-sheet-steps li{
+    counter-increment:sheetstep;position:relative;padding:11px 0 11px 46px;font-size:15px;line-height:1.55;color:var(--ink-soft);
+    border-bottom:1px dashed var(--line);
+  }
+  .app-sheet-steps li:last-child{border-bottom:0}
+  .app-sheet-steps li::before{
+    content:counter(sheetstep);position:absolute;left:0;top:9px;width:30px;height:30px;border-radius:50%;
+    border:1px solid var(--ink);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:13.5px;font-weight:500;
+  }
+  .app-sheet-steps strong{color:var(--ink);font-weight:500}
+  .app-sheet-steps svg{width:16px;height:16px;vertical-align:-3px}
+  .app-sheet-install{
+    width:100%;margin-top:18px;padding:15px;border-radius:999px;border:0;background:var(--ink);color:var(--paper);
+    font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;font-weight:500;
+  }
+  .app-sheet-install:hover{opacity:.87}
+  .app-sheet-done{
+    margin-top:18px;padding:14px 16px;border:1px solid var(--line);border-radius:12px;background:var(--card);
+    font-size:14.5px;line-height:1.55;color:var(--ink-soft);display:none;
+  }
+  .app-sheet-done.show{display:block}
+  .app-sheet-done strong{color:var(--ink);font-weight:500}
+  @media (prefers-reduced-motion: reduce){ .app-sheet,.app-sheet-scrim{transition:none} }
+</style>
+
+<!-- ================= GET THE APP — INSTALL SHEET ================= -->
+<div class="app-sheet-scrim" id="appSheetScrim"></div>
+<div class="app-sheet" id="appSheet" role="dialog" aria-modal="true" aria-labelledby="appSheetTitle" hidden>
+  <div class="app-sheet-head">
+    <img src="assets/app-icon-192.png" alt="" width="52" height="52" />
+    <div>
+      <h3 id="appSheetTitle">Get the VYSH app</h3>
+      <p>Add VYSH to your Home Screen — free, no app store.</p>
+    </div>
+    <button type="button" class="app-sheet-close" id="appSheetClose" aria-label="Close">✕</button>
+  </div>
+  <div class="app-sheet-tabs" role="tablist" aria-label="Choose your device">
+    <button type="button" data-app-tab="ios">iPhone / iPad</button>
+    <button type="button" data-app-tab="android">Android</button>
+    <button type="button" data-app-tab="desktop">Computer</button>
+  </div>
+  <ol class="app-sheet-steps" id="appSheetSteps"></ol>
+  <p class="app-sheet-done" id="appSheetDone"><strong>You’re already in the app.</strong> VYSH is installed on this device — just open it from your Home Screen or app drawer any time.</p>
+  <button type="button" class="app-sheet-install" id="appSheetInstall" hidden>Install VYSH now</button>
+</div>
+
 <script>
 (function(){
   "use strict";
@@ -4184,7 +4810,7 @@
   var introTimer = null, introDone = false;
 
   function showView(view){
-    [loginView, storeView, productView, nailsView, catView, teeView, shopView, womenView, hoodieView].forEach(function(v){ v.classList.remove("active","enter"); });
+    $$(".view").forEach(function(v){ v.classList.remove("active","enter"); });
     view.classList.add("active","enter");
     window.scrollTo(0,0);
   }
@@ -4460,16 +5086,16 @@
 
   /* ---------- COLLECTION ---------- */
   var PRODUCTS = [
-    { id:"hoodie", name:"Onyx Oversized Hoodie", cat:"Hoodies", gender:"Unisex", note:"480 GSM brushed fleece · dropped shoulder", img:"img-002.jpg", alt:"Model in a black oversized VYSH hoodie" },
-    { id:"washed", name:"Washed Charcoal Hoodie", cat:"Hoodies", gender:"Unisex", note:"Garment-washed · tonal stitch", img:"img-004.jpg", alt:"Model in profile wearing a washed charcoal hoodie" },
-    { id:"tee-onyx", name:"Onyx Logo T-Shirt", cat:"T-Shirts", gender:"Unisex", note:"Heavyweight cotton · small chest logo · unisex", img:"img-006.jpg", alt:"A woman and a man wearing black oversized VYSH logo t-shirts" },
-    { id:"tee-ivory", name:"Ivory Oversized T-Shirt", cat:"T-Shirts", gender:"Unisex", note:"Washed ivory cotton · relaxed fit · unisex", img:"img-015.jpg", alt:"Model wearing a washed ivory oversized VYSH t-shirt" },
-    { id:"sweat-stone", name:"Stone Crew Sweatshirt", cat:"Sweatshirts", gender:"Unisex", note:"Brushed fleece crew · ribbed cuff · unisex", img:"img-016.jpg", alt:"Model wearing a stone grey VYSH crew sweatshirt" },
-    { id:"sweat-sand", name:"Sand Crew Sweatshirt", cat:"Sweatshirts", gender:"Unisex", note:"Sand brushed fleece · relaxed crew · unisex", img:"img-007.jpg", alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
-    { id:"hoodie-blush-women", name:"Blush Oversized Hoodie — Women", cat:"Hoodies", gender:"Women", note:"Soft blush fleece · cut for her · kangaroo pocket", img:"img-014.jpg", alt:"A woman wearing a blush pink oversized VYSH hoodie" },
-    { id:"hoodie-cream-women", name:"Cream Hoodie — Women", cat:"Hoodies", gender:"Women", note:"Cream brushed fleece · hood up or down · for her", img:"img-017.jpg", alt:"A woman wearing a cream VYSH hoodie with the hood up" },
-    { id:"tee-rose-women", name:"Rose Oversized T-Shirt — Women", cat:"T-Shirts", gender:"Women", note:"Dusty rose cotton · oversized · cut for her", img:"img-018.jpg", alt:"A woman wearing a dusty rose oversized VYSH t-shirt" },
-    { id:"sweat-lilac-women", name:"Lilac Crew Sweatshirt — Women", cat:"Sweatshirts", gender:"Women", note:"Soft lilac fleece crew · relaxed · for her", img:"img-019.jpg", alt:"A woman wearing a lilac VYSH crew sweatshirt" }
+    { id:"hoodie", name:"Onyx Oversized Hoodie", cat:"Hoodies", gender:"Unisex", note:"480 GSM brushed fleece · dropped shoulder", img:"assets/look-hoodie.jpg", alt:"Model in a black oversized VYSH hoodie" },
+    { id:"washed", name:"Washed Charcoal Hoodie", cat:"Hoodies", gender:"Unisex", note:"Garment-washed · tonal stitch", img:"assets/look-hoodie-washed.jpg", alt:"Model in profile wearing a washed charcoal hoodie" },
+    { id:"tee-onyx", name:"Onyx Logo T-Shirt", cat:"T-Shirts", gender:"Unisex", note:"Heavyweight cotton · small chest logo · unisex", img:"assets/look-tee-onyx.jpg", alt:"A woman and a man wearing black oversized VYSH logo t-shirts" },
+    { id:"tee-ivory", name:"Ivory Oversized T-Shirt", cat:"T-Shirts", gender:"Unisex", note:"Washed ivory cotton · relaxed fit · unisex", img:"assets/look-tee-ivory.jpg", alt:"Model wearing a washed ivory oversized VYSH t-shirt" },
+    { id:"sweat-stone", name:"Stone Crew Sweatshirt", cat:"Sweatshirts", gender:"Unisex", note:"Brushed fleece crew · ribbed cuff · unisex", img:"assets/look-sweat-stone.jpg", alt:"Model wearing a stone grey VYSH crew sweatshirt" },
+    { id:"sweat-sand", name:"Sand Crew Sweatshirt", cat:"Sweatshirts", gender:"Unisex", note:"Sand brushed fleece · relaxed crew · unisex", img:"assets/look-sweat-sand.jpg", alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
+    { id:"hoodie-blush-women", name:"Blush Oversized Hoodie — Women", cat:"Hoodies", gender:"Women", note:"Soft blush fleece · cut for her · kangaroo pocket", img:"assets/look-hoodie-blush-women.jpg", alt:"A woman wearing a blush pink oversized VYSH hoodie" },
+    { id:"hoodie-cream-women", name:"Cream Hoodie — Women", cat:"Hoodies", gender:"Women", note:"Cream brushed fleece · hood up or down · for her", img:"assets/look-hoodie-cream-women.jpg", alt:"A woman wearing a cream VYSH hoodie with the hood up" },
+    { id:"tee-rose-women", name:"Rose Oversized T-Shirt — Women", cat:"T-Shirts", gender:"Women", note:"Dusty rose cotton · oversized · cut for her", img:"assets/look-tee-rose-women.jpg", alt:"A woman wearing a dusty rose oversized VYSH t-shirt" },
+    { id:"sweat-lilac-women", name:"Lilac Crew Sweatshirt — Women", cat:"Sweatshirts", gender:"Women", note:"Soft lilac fleece crew · relaxed · for her", img:"assets/look-sweat-lilac-women.jpg", alt:"A woman wearing a lilac VYSH crew sweatshirt" }
   ];
   /* Per-product fitting-room details: price, colours (with a preview filter for
      colourways we don't have a separate photo of), materials/care, fit notes and
@@ -4606,7 +5232,7 @@
   PRODUCTS.forEach(function(p){
     selectedSize[p.id] = "M";
     var card = document.createElement("article");
-    card.className = "card"; card.setAttribute("data-cat", p.cat);
+    card.className = "card"; card.setAttribute("data-cat", p.cat); card.setAttribute("data-pid", p.id);
     card.innerHTML =
       '<div class="ph"><img src="' + p.img + '" alt="' + p.alt + '" loading="lazy" /><span class="card-badge' + (p.gender === "Women" ? " women" : "") + '">' + (p.gender === "Women" ? "For Women" : "Unisex · Him &amp; Her") + "</span></div>" +
       "<h4>" + p.name + "</h4>" +
@@ -4616,10 +5242,12 @@
         SIZES.map(function(s){ return '<button type="button" data-size="' + s + '"' + (s === "M" ? ' class="sel"' : "") + ">" + s + "</button>"; }).join("") +
       "</div>" +
       '<button class="add-btn" type="button">Add to bag</button>' +
-      '<button class="product-open-btn" type="button">View in Fitting Room</button>';
+      '<button class="product-open-btn" type="button">View in Fitting Room</button>' +
+      '<button class="card-custom-btn" type="button">✎ Customize it — make it yours</button>';
     $(".ph", card).addEventListener("click", function(){ openProduct(p.id); });
     $("h4", card).addEventListener("click", function(){ openProduct(p.id); });
     $(".product-open-btn", card).addEventListener("click", function(){ openProduct(p.id); });
+    $(".card-custom-btn", card).addEventListener("click", function(){ openStudio(p.id, "clothing"); });
     $$(".sizes button", card).forEach(function(b){
       b.addEventListener("click", function(){
         selectedSize[p.id] = b.getAttribute("data-size");
@@ -4683,7 +5311,7 @@
       row.className = "bag-item";
       row.innerHTML =
         '<img src="' + item.img + '" alt="" />' +
-        '<div><p class="bi-name">' + item.name + '</p><p class="bi-meta">Size ' + item.size + " · " + item.cat + (item.color ? " · " + item.color : "") + '</p></div>' +
+        '<div><p class="bi-name">' + item.name + '</p><p class="bi-meta">Size ' + item.size + " · " + item.cat + (item.color ? " · " + item.color : "") + '</p>' + (item.custom ? '<p class="bi-custom">✎ Customised — ' + item.custom + "</p>" : "") + "</div>" +
         '<span class="bi-price">' + fmtMoney(pr.amount, pr.currency) + '</span>' +
         '<button type="button" aria-label="Remove ' + item.name + '">✕</button>';
       $("button", row).addEventListener("click", function(){
@@ -4763,7 +5391,7 @@
   scrim.addEventListener("click", closeBag);
   document.addEventListener("keydown", function(e){ if (e.key === "Escape"){ closeBag(); if (!introDone) endIntro(); else if (productView.classList.contains("active")) showView(frReturnView()); } });
   $("#copyBagBtn").addEventListener("click", function(){
-    var text = "My VYSH bag:\n" + bag.map(function(it, i){ return (i + 1) + ". " + it.name + " — Size " + it.size + (it.color ? " · " + it.color : ""); }).join("\n");
+    var text = "My VYSH bag:\n" + bag.map(function(it, i){ return (i + 1) + ". " + it.name + " — Size " + it.size + (it.color ? " · " + it.color : "") + (it.custom ? "\n   Customised: " + it.custom : ""); }).join("\n");
     function done(){ toast("Bag list copied — share it wherever you shop."); }
     if (navigator.clipboard && navigator.clipboard.writeText){
       navigator.clipboard.writeText(text).then(done, function(){ toast(text); });
@@ -4884,11 +5512,11 @@
      garment on the body (same Hers / His models, same pose), so the fitting
      room swaps the photo in instead of the product's own picture */
   var CHAR_WORN = {
-    hers: { hoodie:"img-024.png", washed:"img-025.png" },
-    his:  { hoodie:"img-026.png",  washed:"img-027.png" }
+    hers: { hoodie:"assets/model-girl-hoodie.png", washed:"assets/model-girl-washed.png" },
+    his:  { hoodie:"assets/model-boy-hoodie.png",  washed:"assets/model-boy-washed.png" }
   };
   /* preload the worn photos so the fitting room shows them instantly */
-  (function(){ ["img-024.png","img-026.png","img-025.png","img-027.png"].forEach(function(src){ var im = new Image(); im.src = src; }); })();
+  (function(){ ["assets/model-girl-hoodie.png","assets/model-boy-hoodie.png","assets/model-girl-washed.png","assets/model-boy-washed.png"].forEach(function(src){ var im = new Image(); im.src = src; }); })();
 
   /* ---------- PRODUCT FITTING ROOM ---------- */
   var frCurrentId = "hoodie", frColorIdx = 0, frModel = "hers", frZoom = 1;
@@ -5023,8 +5651,8 @@
     pill.className = "fr-stock-pill " + state;
     pill.textContent = left === 0 ? "Out of stock" : (left <= 3 ? "Low stock" : "In stock");
     $("#frStockLine").innerHTML = left === 0
-      ? "<strong>Size " + size + " in " + v.name + " has sold out</strong> — pick another colour or size to see what's left."
-      : "<strong>" + left + " available</strong> in size " + size + " · " + v.name + " — pieces already in your bag are counted out.";
+      ? "<strong>Size " + size + " in " + escHtml(v.name) + " has sold out</strong> — pick another colour or size to see what's left."
+      : "<strong>" + left + " available</strong> in size " + size + " · " + escHtml(v.name) + " — pieces already in your bag are counted out.";
     var fill = $("#frStockMeterFill");
     fill.className = state;
     fill.style.width = base ? Math.round((left / base) * 100) + "%" : "0%";
@@ -5047,7 +5675,7 @@
     }).join("");
     var total = SIZES.reduce(function(n, s){ return n + frStockLeft(frColorIdx, s); }, 0);
     $("#frAccAvailability").innerHTML =
-      "<p><strong>" + v.name + "</strong> — " + total + " pieces across all sizes in this colour.</p>" + rows;
+      "<p><strong>" + escHtml(v.name) + "</strong> — " + total + " pieces across all sizes in this colour.</p>" + rows;
   }
 
   function renderFrPairs(){
@@ -5271,23 +5899,23 @@
      the Categories section, the Nails menu, the footer, and both search bars ---------- */
   var NAIL_CATS = ["All Nails","Floral","French","Glitter","Neutral","Minimal","Luxury"];
   var NAIL_PRODUCTS = [
-    { id:"n-blush-bloom",    name:"Blush Bloom",     cat:"Floral",  price:499, was:649, shape:"Almond",   color:"Pink",  img:"img-005.jpg",    alt:"Blush Bloom press-on nails — soft pink almond set with painted blooms" },
-    { id:"n-antique-rose",   name:"Antique Rose",    cat:"Floral",  price:549, was:699, shape:"Almond",   color:"Rose",  img:"img-028.jpg",   alt:"Antique Rose press-on nails — pink almond set with 3D flowers" },
-    { id:"n-petal-fantasy",  name:"Petal Fantasy",   cat:"Floral",  price:499, was:649, shape:"Oval",     color:"Pink",  img:"img-023.jpg",  alt:"Petal Fantasy press-on nails — bold floral almond set with French tips" },
-    { id:"n-bisque-french",  name:"Bisque French",   cat:"French",  price:499, was:649, shape:"Almond",   color:"White", img:"img-009.jpg",  alt:"Bisque French press-on nails — classic white French tips on a nude base" },
-    { id:"n-parisian",       name:"Parisian French", cat:"French",  price:449, was:599, shape:"Square",   color:"White", img:"img-029.jpg",alt:"Parisian French press-on nails — handmade classic French tip set" },
-    { id:"n-fleur-french",   name:"Fleur French",    cat:"French",  price:599, was:749, shape:"Almond",   color:"White", img:"img-030.jpg",   alt:"Fleur French press-on nails — pink almond set with white French tips and 3D flowers" },
-    { id:"n-sakura-french",  name:"Sakura French",   cat:"French",  price:599, was:749, shape:"Stiletto", color:"White", img:"img-008.jpg",    alt:"Sakura French nail extensions worn on hands — white French tips with pink sakura flowers" },
-    { id:"n-champagne",      name:"Champagne Shine", cat:"Glitter", price:499, was:649, shape:"Coffin",   color:"Gold",  img:"img-010.jpg",alt:"Champagne Shine press-on nails — reflective glitter set with rhinestones" },
-    { id:"n-golden-blush",   name:"Golden Blush",    cat:"Glitter", price:549, was:699, shape:"Coffin",   color:"Gold",  img:"img-031.jpg",   alt:"Golden Blush press-on nails — glittery pink-mauve luxury set" },
-    { id:"n-starlit",        name:"Starlit Confetti",cat:"Glitter", price:599, was:749, shape:"Stiletto", color:"Pink",  img:"img-032.jpg",        alt:"Starlit Confetti press-on nails — pink stiletto set with iridescent star glitter" },
-    { id:"n-milky-nude",     name:"Milky Nude",      cat:"Neutral", price:399, was:549, shape:"Square",   color:"Nude",  img:"img-011.jpg",          alt:"Milky Nude press-on nails — glossy nude square set in its tray" },
-    { id:"n-velvet-nude",    name:"Velvet Nude",     cat:"Neutral", price:449, was:599, shape:"Oval",     color:"Nude",  img:"img-033.jpg",    alt:"Velvet Nude press-on nails — soft nude foundation set" },
-    { id:"n-bare-minimal",   name:"Bare Minimal",    cat:"Minimal", price:399, was:549, shape:"Oval",     color:"White", img:"img-034.jpg",   alt:"Bare Minimal press-on nails — clean medium round French set" },
-    { id:"n-milky-white",    name:"Milky White",     cat:"Minimal", price:449, was:599, shape:"Almond",   color:"White", img:"img-012.jpg",    alt:"Milky White press-on nails — minimalist milky white gel set" },
-    { id:"n-velvet-luxe",    name:"Velvet Luxe",     cat:"Luxury",  price:799, was:999, shape:"Oval",     color:"Gold",  img:"img-013.jpg",    alt:"Velvet Luxe press-on nails — pink oval set scattered with gold foil" },
-    { id:"n-gilded-pearl",   name:"Gilded Pearl",    cat:"Luxury",  price:899, was:1099, shape:"Almond",  color:"Gold",  img:"img-035.jpg",   alt:"Gilded Pearl press-on nails — blush almond set with gold filigree and pearl shine" },
-    { id:"n-golden-hour",    name:"Golden Hour",     cat:"Luxury",  price:849, was:1049, shape:"Almond",  color:"Rose",  img:"img-036.jpg",      alt:"Golden Hour press-on nails — pink cat-eye almond set with gold chrome waves" }
+    { id:"n-blush-bloom",    name:"Blush Bloom",     cat:"Floral",  price:499, was:649, shape:"Almond",   color:"Pink",  img:"assets/nails-blush-bloom.jpg",    alt:"Blush Bloom press-on nails — soft pink almond set with painted blooms" },
+    { id:"n-antique-rose",   name:"Antique Rose",    cat:"Floral",  price:549, was:699, shape:"Almond",   color:"Rose",  img:"assets/nails-antique-rose.jpg",   alt:"Antique Rose press-on nails — pink almond set with 3D flowers" },
+    { id:"n-petal-fantasy",  name:"Petal Fantasy",   cat:"Floral",  price:499, was:649, shape:"Oval",     color:"Pink",  img:"assets/nails-petal-fantasy.jpg",  alt:"Petal Fantasy press-on nails — bold floral almond set with French tips" },
+    { id:"n-bisque-french",  name:"Bisque French",   cat:"French",  price:499, was:649, shape:"Almond",   color:"White", img:"assets/nails-bisque-french.jpg",  alt:"Bisque French press-on nails — classic white French tips on a nude base" },
+    { id:"n-parisian",       name:"Parisian French", cat:"French",  price:449, was:599, shape:"Square",   color:"White", img:"assets/nails-parisian-french.jpg",alt:"Parisian French press-on nails — handmade classic French tip set" },
+    { id:"n-fleur-french",   name:"Fleur French",    cat:"French",  price:599, was:749, shape:"Almond",   color:"White", img:"assets/nails-fleur-french.jpg",   alt:"Fleur French press-on nails — pink almond set with white French tips and 3D flowers" },
+    { id:"n-sakura-french",  name:"Sakura French",   cat:"French",  price:599, was:749, shape:"Stiletto", color:"White", img:"assets/nails-dried-thyme.jpg",    alt:"Sakura French nail extensions worn on hands — white French tips with pink sakura flowers" },
+    { id:"n-champagne",      name:"Champagne Shine", cat:"Glitter", price:499, was:649, shape:"Coffin",   color:"Gold",  img:"assets/nails-champagne-shine.jpg",alt:"Champagne Shine press-on nails — reflective glitter set with rhinestones" },
+    { id:"n-golden-blush",   name:"Golden Blush",    cat:"Glitter", price:549, was:699, shape:"Coffin",   color:"Gold",  img:"assets/nails-golden-blush.jpg",   alt:"Golden Blush press-on nails — glittery pink-mauve luxury set" },
+    { id:"n-starlit",        name:"Starlit Confetti",cat:"Glitter", price:599, was:749, shape:"Stiletto", color:"Pink",  img:"assets/nails-starlit.jpg",        alt:"Starlit Confetti press-on nails — pink stiletto set with iridescent star glitter" },
+    { id:"n-milky-nude",     name:"Milky Nude",      cat:"Neutral", price:399, was:549, shape:"Square",   color:"Nude",  img:"assets/nails-mauve.jpg",          alt:"Milky Nude press-on nails — glossy nude square set in its tray" },
+    { id:"n-velvet-nude",    name:"Velvet Nude",     cat:"Neutral", price:449, was:599, shape:"Oval",     color:"Nude",  img:"assets/nails-velvet-nude.jpg",    alt:"Velvet Nude press-on nails — soft nude foundation set" },
+    { id:"n-bare-minimal",   name:"Bare Minimal",    cat:"Minimal", price:399, was:549, shape:"Oval",     color:"White", img:"assets/nails-bare-minimal.jpg",   alt:"Bare Minimal press-on nails — clean medium round French set" },
+    { id:"n-milky-white",    name:"Milky White",     cat:"Minimal", price:449, was:599, shape:"Almond",   color:"White", img:"assets/nails-milky-white.jpg",    alt:"Milky White press-on nails — minimalist milky white gel set" },
+    { id:"n-velvet-luxe",    name:"Velvet Luxe",     cat:"Luxury",  price:799, was:999, shape:"Oval",     color:"Gold",  img:"assets/nails-velvet-luxe.jpg",    alt:"Velvet Luxe press-on nails — pink oval set scattered with gold foil" },
+    { id:"n-gilded-pearl",   name:"Gilded Pearl",    cat:"Luxury",  price:899, was:1099, shape:"Almond",  color:"Gold",  img:"assets/nails-gilded-pearl.jpg",   alt:"Gilded Pearl press-on nails — blush almond set with gold filigree and pearl shine" },
+    { id:"n-golden-hour",    name:"Golden Hour",     cat:"Luxury",  price:849, was:1049, shape:"Almond",  color:"Rose",  img:"assets/nails-rose-gold.jpg",      alt:"Golden Hour press-on nails — pink cat-eye almond set with gold chrome waves" }
   ];
   var NAIL_COLORS = [
     { name:"Pink",  hex:"#e8a2b4" }, { name:"Rose", hex:"#c4747f" }, { name:"Nude", hex:"#d3b49c" },
@@ -5391,15 +6019,16 @@
       var card = document.createElement("article");
       card.className = "nail-card";
       card.innerHTML =
-        '<div class="nph"><img src="' + p.img + '" alt="' + p.alt + '" loading="lazy" />' +
-        '<button class="nail-heart' + (nailWish[p.id] ? " saved" : "") + '" type="button" aria-label="Save the ' + p.name + ' set to your wishlist">' +
+        '<div class="nph"><img src="' + p.img + '" alt="' + escHtml(p.alt) + '" loading="lazy" />' +
+        '<button class="nail-heart' + (nailWish[p.id] ? " saved" : "") + '" type="button" aria-label="Save the ' + escHtml(p.name) + ' set to your wishlist">' +
         '<svg viewBox="0 0 24 24" fill="' + (nailWish[p.id] ? "currentColor" : "none") + '" stroke="currentColor" stroke-width="1.8"><path d="M12 20.5C7 16.5 3.5 13.3 3.5 9.6 3.5 7 5.4 5 7.9 5c1.6 0 3.2.9 4.1 2.3C12.9 5.9 14.5 5 16.1 5c2.5 0 4.4 2 4.4 4.6 0 3.7-3.5 6.9-8.5 10.9Z"/></svg></button>' +
         '<span class="nail-cat-tag">' + p.cat + "</span></div>" +
-        '<div class="nail-body"><h4>' + p.name + "</h4>" +
+        '<div class="nail-body"><h4>' + escHtml(p.name) + "</h4>" +
         '<p class="nail-meta">' + p.cat + " · " + p.shape + " · " + p.color + " · Set of 24</p>" +
         '<p class="nail-price">₹' + p.price + "<s>₹" + p.was + "</s></p>" +
         '<div class="nail-actions"><button class="nail-add" type="button">Add to Cart</button>' +
-        '<button class="nail-cart" type="button" aria-label="Add the ' + p.name + ' set to your bag">' +
+        '<button class="nail-custom" type="button">✎ Customize</button>' +
+        '<button class="nail-cart" type="button" aria-label="Add the ' + escHtml(p.name) + ' set to your bag">' +
         '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M5 8h14l-1.2 12.2a1.5 1.5 0 0 1-1.5 1.3H7.7a1.5 1.5 0 0 1-1.5-1.3L5 8Z"/><path d="M8.5 10V6.5a3.5 3.5 0 0 1 7 0V10"/></svg></button></div></div>';
       $(".nail-heart", card).addEventListener("click", function(){
         nailWish[p.id] = !nailWish[p.id];
@@ -5417,6 +6046,7 @@
       }
       $(".nail-add", card).addEventListener("click", function(){ addNail(this); });
       $(".nail-cart", card).addEventListener("click", function(){ addNail(null); });
+      $(".nail-custom", card).addEventListener("click", function(){ openStudio(p.id, "nail"); });
       grid.appendChild(card);
     });
 
@@ -5556,11 +6186,11 @@
     searchIndex.push({ label: c + " Nails — Category Page", meta: "Category · Nails", img: "", kind: "nailCat", cat: c,
       hay: (c + " nails nail category extensions").toLowerCase() });
   });
-  searchIndex.push({ label: "Women — Shop Page", meta: "Page · For Her", img: "img-014.jpg", kind: "womenPage",
+  searchIndex.push({ label: "Women — Shop Page", meta: "Page · For Her", img: "assets/look-hoodie-blush-women.jpg", kind: "womenPage",
     hay: "women womens ladies her girls female shop page clothing hoodies t-shirts sweatshirts" });
-  searchIndex.push({ label: "For Women — All Clothing", meta: "Shop Page · Women", img: "img-018.jpg", kind: "shopPage", gender: "Women", cat: "All",
+  searchIndex.push({ label: "For Women — All Clothing", meta: "Shop Page · Women", img: "assets/look-tee-rose-women.jpg", kind: "shopPage", gender: "Women", cat: "All",
     hay: "women clothing shop women hoodies women tshirts women sweatshirts for her ladies" });
-  searchIndex.push({ label: "For Men — All Clothing", meta: "Shop Page · Men", img: "img-002.jpg", kind: "shopPage", gender: "Men", cat: "All",
+  searchIndex.push({ label: "For Men — All Clothing", meta: "Shop Page · Men", img: "assets/look-hoodie.jpg", kind: "shopPage", gender: "Men", cat: "All",
     hay: "men clothing shop mens for him hoodies tshirts sweatshirts" });
   ["Hoodies","T-Shirts","Sweatshirts"].forEach(function(c){
     searchIndex.push({ label: c + " — Clothing Shop Page", meta: "Shop Page · Clothing", img: "", kind: "shopPage", gender: "All", cat: c,
@@ -5626,37 +6256,37 @@
   var CAT_PAGES = {
     "Hoodies": {
       word:"HOODIES", tag:"The best hoodies are only here",
-      hero:"img-020.jpg",
+      hero:"assets/cat-hero-hoodies.jpg",
       heroAlt:"His and hers — a man in a cream oversized VYSH hoodie standing beside a woman in a black VYSH hoodie with the hood up",
-      railImg:"img-004.jpg", railAlt:"Model in profile wearing the washed charcoal VYSH hoodie",
-      offerImg:"img-002.jpg", offerAlt:"Model wearing the black Onyx Oversized Hoodie",
+      railImg:"assets/look-hoodie-washed.jpg", railAlt:"Model in profile wearing the washed charcoal VYSH hoodie",
+      offerImg:"assets/look-hoodie.jpg", offerAlt:"Model wearing the black Onyx Oversized Hoodie",
       heroPos:"50% 2%",
       quote:"The quality is amazing! Super soft fabric and perfect fit. Definitely my go-to brand for hoodies."
     },
     "T-Shirts": {
       word:"T-SHIRTS", tag:"The best tees are only here",
-      hero:"img-006.jpg",
+      hero:"assets/look-tee-onyx.jpg",
       heroAlt:"His and hers — a woman and a man wearing black oversized VYSH logo t-shirts",
-      railImg:"img-015.jpg", railAlt:"Model wearing the washed ivory oversized VYSH t-shirt",
-      offerImg:"img-006.jpg", offerAlt:"A woman and a man wearing black VYSH logo t-shirts",
+      railImg:"assets/look-tee-ivory.jpg", railAlt:"Model wearing the washed ivory oversized VYSH t-shirt",
+      offerImg:"assets/look-tee-onyx.jpg", offerAlt:"A woman and a man wearing black VYSH logo t-shirts",
       heroPos:"50% 12%",
       quote:"The quality is amazing! Heavyweight cotton that holds its shape. Definitely my go-to brand for tees."
     },
     "Sweatshirts": {
       word:"SWEATSHIRTS", tag:"The best sweatshirts are only here",
-      hero:"img-007.jpg",
+      hero:"assets/look-sweat-sand.jpg",
       heroAlt:"His and hers — a man and a woman wearing sand VYSH crew sweatshirts",
-      railImg:"img-016.jpg", railAlt:"Model wearing the stone grey VYSH crew sweatshirt",
-      offerImg:"img-007.jpg", offerAlt:"A man and a woman wearing sand VYSH crew sweatshirts",
+      railImg:"assets/look-sweat-stone.jpg", railAlt:"Model wearing the stone grey VYSH crew sweatshirt",
+      offerImg:"assets/look-sweat-sand.jpg", offerAlt:"A man and a woman wearing sand VYSH crew sweatshirts",
       heroPos:"50% 0%",
       quote:"The quality is amazing! Brushed fleece, soft from the first wear. Definitely my go-to brand for sweatshirts."
     }
   };
   var CV_COLLECTION_CARDS = [
-    { label:"Hoodies",     sub:"Shop now", img:"img-002.jpg",      alt:"Model in a black oversized VYSH hoodie", kind:"cat",  cat:"Hoodies" },
-    { label:"T-Shirts",    sub:"Shop now", img:"img-006.jpg",    alt:"A woman and a man wearing black VYSH logo t-shirts", kind:"cat", cat:"T-Shirts" },
-    { label:"Sweatshirts", sub:"Shop now", img:"img-007.jpg",  alt:"A man and a woman wearing sand VYSH crew sweatshirts", kind:"cat", cat:"Sweatshirts" },
-    { label:"Nail Art & Extensions", sub:"For women", img:"img-005.jpg", alt:"Blush Bloom floral nail art set", kind:"nails" }
+    { label:"Hoodies",     sub:"Shop now", img:"assets/look-hoodie.jpg",      alt:"Model in a black oversized VYSH hoodie", kind:"cat",  cat:"Hoodies" },
+    { label:"T-Shirts",    sub:"Shop now", img:"assets/look-tee-onyx.jpg",    alt:"A woman and a man wearing black VYSH logo t-shirts", kind:"cat", cat:"T-Shirts" },
+    { label:"Sweatshirts", sub:"Shop now", img:"assets/look-sweat-sand.jpg",  alt:"A man and a woman wearing sand VYSH crew sweatshirts", kind:"cat", cat:"Sweatshirts" },
+    { label:"Nail Art & Extensions", sub:"For women", img:"assets/nails-blush-bloom.jpg", alt:"Blush Bloom floral nail art set", kind:"nails" }
   ];
   var CV_RATINGS = { hoodie:"4.8", washed:"4.9", "tee-onyx":"4.9", "tee-ivory":"4.7", "sweat-stone":"4.8", "sweat-sand":"4.8", "hoodie-blush-women":"4.9", "hoodie-cream-women":"4.8", "tee-rose-women":"4.8", "sweat-lilac-women":"4.9" };
   var catCurrent = "Hoodies", cvQuery = "", cvGender = "All";
@@ -6105,12 +6735,12 @@
   var SHOP_CATS = ["All","Hoodies","T-Shirts","Sweatshirts"];
   var shopState = { gender:"All", cat:"All", query:"", maxPrice:200, sort:"new" };
   var SHOP_HERO = {
-    "All":        { img:"img-007.jpg",        alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
-    "Hoodies":    { img:"img-020.jpg",       alt:"His and hers — models wearing VYSH hoodies" },
-    "T-Shirts":   { img:"img-006.jpg",          alt:"A woman and a man wearing black VYSH logo t-shirts" },
-    "Sweatshirts":{ img:"img-007.jpg",        alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
-    "Women":      { img:"img-014.jpg",alt:"A woman wearing the blush pink oversized VYSH hoodie" },
-    "Men":        { img:"img-020.jpg",        alt:"His and hers — models wearing VYSH hoodies, his in cream" }
+    "All":        { img:"assets/look-sweat-sand.jpg",        alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
+    "Hoodies":    { img:"assets/cat-hero-hoodies.jpg",       alt:"His and hers — models wearing VYSH hoodies" },
+    "T-Shirts":   { img:"assets/look-tee-onyx.jpg",          alt:"A woman and a man wearing black VYSH logo t-shirts" },
+    "Sweatshirts":{ img:"assets/look-sweat-sand.jpg",        alt:"A man and a woman wearing sand VYSH crew sweatshirts" },
+    "Women":      { img:"assets/look-hoodie-blush-women.jpg",alt:"A woman wearing the blush pink oversized VYSH hoodie" },
+    "Men":        { img:"assets/cat-hero-hoodies.jpg",        alt:"His and hers — models wearing VYSH hoodies, his in cream" }
   };
   function shopGenderOk(p, gender){
     if (gender === "Women") return p.gender === "Women" || p.gender === "Unisex";
@@ -6241,7 +6871,8 @@
           '<p class="sp-rate">' + CV_RATINGS[p.id] + ' <i aria-hidden="true">★</i> · ' + (p.gender === "Women" ? "Women" : "Unisex") + " · Size " + selectedSize[p.id] + "</p>" +
           '<p class="sp-price">$' + d.price + "<s>$" + d.was + "</s></p>" +
           '<div class="sp-actions"><button class="sp-add" type="button">Add to Cart</button>' +
-          '<button class="sp-view" type="button">View</button></div></div>';
+          '<button class="sp-view" type="button">View</button>' +
+          '<button class="sp-custom" type="button">✎ Customize</button></div></div>';
         $(".sph", card).addEventListener("click", function(){ openProduct(p.id); });
         $("h4", card).addEventListener("click", function(){ openProduct(p.id); });
         $(".sp-view", card).addEventListener("click", function(){ openProduct(p.id); });
@@ -6251,6 +6882,7 @@
           btn.classList.add("added"); btn.textContent = "Added ✓";
           setTimeout(function(){ btn.classList.remove("added"); btn.textContent = "Add to Cart"; }, 1400);
         });
+        $(".sp-custom", card).addEventListener("click", function(){ openStudio(p.id, "clothing"); });
         gridEl.appendChild(card);
       });
       wrap.appendChild(gridEl);
@@ -6404,7 +7036,7 @@
       var pr = bagPrice(item);
       var row = document.createElement("div");
       row.className = "co-item";
-      row.innerHTML = '<img src="' + item.img + '" alt="" /><div><p class="co-name">' + item.name + '</p><p class="co-meta">Size ' + item.size + (item.color ? " · " + item.color : "") + '</p></div><span class="co-price">' + fmtMoney(pr.amount, pr.currency) + "</span>";
+      row.innerHTML = '<img src="' + item.img + '" alt="" /><div><p class="co-name">' + item.name + '</p><p class="co-meta">Size ' + item.size + (item.color ? " · " + item.color : "") + (item.custom ? '<br /><span class="co-custom">✎ Customised — ' + item.custom + "</span>" : "") + '</p></div><span class="co-price">' + fmtMoney(pr.amount, pr.currency) + "</span>";
       wrap.appendChild(row);
     });
     var t = bagTotals();
@@ -6561,6 +7193,951 @@
     showView(storeView);
     toast("Order placed — thank you for shopping VYSH.");
   });
+
+  /* ---------- CUSTOMIZE STUDIO — every product, made yours ----------
+     Pick any clothing piece or nail set, add your own text / brand name,
+     logo or artwork, colours and placement; the design rides along in the
+     bag, at checkout, and into the owner's order list. */
+  var customView = $("#customView"), ownerView = $("#ownerView");
+  var CUSTOM_FEE_CLOTH = 12, CUSTOM_FEE_NAIL = 149;
+  var FONT_LABELS = { sans:"Bold Sans", serif:"Serif", script:"Handwritten", caps:"Classic Caps" };
+  var PLACE_LABELS = { chest:"Chest print", full:"Full-front print", back:"Back print", sleeve:"Sleeve print", hem:"Hem print" };
+  var INK_COLORS = [
+    { name:"White", hex:"#ffffff" }, { name:"Ink Black", hex:"#141310" }, { name:"Gold", hex:"#c9a35f" },
+    { name:"Blush", hex:"#e7a7a0" }, { name:"Sage", hex:"#8f9682" }, { name:"Sky", hex:"#7fb0c9" }
+  ];
+  var NAIL_SHADES = NAIL_COLORS.concat([
+    { name:"Burgundy", hex:"#6e2434" }, { name:"Sage", hex:"#9aa48c" }, { name:"Sky", hex:"#a8c8dc" }, { name:"Black", hex:"#1c1c1e" }
+  ]);
+  var NAIL_ARTS = [
+    { name:"None", fee:0 }, { name:"French tips", fee:50 }, { name:"Glitter fade", fee:60 },
+    { name:"Chrome lines", fee:70 }, { name:"3D flowers", fee:90 }
+  ];
+  var cust = { kind:"clothing", id:"hoodie", colorIdx:0, text:"", font:"sans", ink:"#ffffff", inkName:"White",
+               logo:"none", upload:"", place:"chest", size:"M",
+               shade:"Pink", shape:"Almond", finish:"Gloss", art:"None", initials:"" };
+  var custFromView = null;
+
+  function escHtml(s){
+    return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+  function custNail(){ return NAIL_PRODUCTS.filter(function(p){ return p.id === cust.id; })[0]; }
+  function custShadeHex(){
+    var s = NAIL_SHADES.filter(function(x){ return x.name === cust.shade; })[0];
+    return s ? s.hex : "#e8a2b4";
+  }
+  function custArtFee(){
+    var a = NAIL_ARTS.filter(function(x){ return x.name === cust.art; })[0];
+    return a ? a.fee : 0;
+  }
+  function hexLum(hex){
+    var n = parseInt(hex.slice(1), 16);
+    return (0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255)) / 255;
+  }
+  function openStudio(id, kind){
+    var from = $$(".view").filter(function(v){ return v.classList.contains("active"); })[0];
+    if (from && from !== customView) custFromView = from;
+    cust.id = id; cust.kind = kind;
+    cust.colorIdx = 0;
+    $("#custAskOk").hidden = true;
+    if (kind === "nail"){
+      var np = custNail();
+      if (!np){ cust.id = NAIL_PRODUCTS[0].id; np = custNail(); }
+      if (np){ cust.shade = np.color; cust.shape = np.shape; }
+    } else {
+      var p = productById(id);
+      if (p) cust.size = selectedSize[p.id] || "M";
+    }
+    renderCustPicker();
+    renderCust();
+    showView(customView);
+  }
+  function renderCustPicker(){
+    var wrap = $("#custPicker");
+    wrap.innerHTML = "";
+    PRODUCTS.forEach(function(p){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cust-pick" + (cust.kind === "clothing" && cust.id === p.id ? " on" : "");
+      b.innerHTML = '<img src="' + p.img + '" alt="" /><span>' + escHtml(p.name) + "</span><small>Clothing · " + escHtml(p.cat) + " · $" + PRODUCT_DETAILS[p.id].price + "</small>";
+      b.addEventListener("click", function(){ openStudio(p.id, "clothing"); });
+      wrap.appendChild(b);
+    });
+    NAIL_PRODUCTS.forEach(function(p){
+      var b = document.createElement("button");
+      b.type = "button";
+      b.className = "cust-pick" + (cust.kind === "nail" && cust.id === p.id ? " on" : "");
+      b.innerHTML = '<img src="' + p.img + '" alt="" /><span>' + escHtml(p.name) + " Nail Set</span><small>Nails · " + escHtml(p.cat) + " · ₹" + p.price + "</small>";
+      b.addEventListener("click", function(){ openStudio(p.id, "nail"); });
+      wrap.appendChild(b);
+    });
+  }
+  function custSpecParts(){
+    var parts = [];
+    if (cust.kind === "clothing"){
+      var d = PRODUCT_DETAILS[cust.id], v = d.colors[cust.colorIdx];
+      parts.push(v.name);
+      parts.push("Size " + cust.size);
+      if (cust.text.trim()) parts.push("“" + cust.text.trim() + "” · " + FONT_LABELS[cust.font] + " · " + cust.inkName + " ink");
+      if (cust.logo === "vysh") parts.push("VYSH monogram logo");
+      if (cust.logo === "upload") parts.push("Your uploaded artwork");
+      if (cust.text.trim() || cust.logo !== "none") parts.push(PLACE_LABELS[cust.place]);
+      if (!cust.text.trim() && cust.logo === "none") parts.push("Plain — colour & size only");
+    } else {
+      parts.push(cust.shade + " shade");
+      parts.push(cust.shape);
+      parts.push(cust.finish + " finish");
+      if (cust.art !== "None") parts.push(cust.art);
+      if (cust.initials.trim()) parts.push("Initials “" + cust.initials.trim() + "”");
+    }
+    return parts;
+  }
+  function renderCust(){
+    var isCloth = cust.kind === "clothing";
+    $("#custClothOpts").hidden = !isCloth;
+    $("#custNailOpts").hidden = isCloth;
+    $("#custPrint").style.display = isCloth ? "" : "none";
+    $("#custPlaceTag").style.display = isCloth ? "" : "none";
+    $("#custNailViz").hidden = isCloth;
+    var img = $("#custImg"), total, fee, base;
+    if (isCloth){
+      var p = productById(cust.id) || PRODUCTS[0];
+      cust.id = p.id;
+      var d = PRODUCT_DETAILS[cust.id], v = d.colors[cust.colorIdx];
+      img.src = p.img; img.alt = p.alt; img.style.filter = v.filter || "";
+      $("#custProdName").textContent = p.name;
+      $("#custProdMeta").textContent = p.cat + " · " + p.gender + " · " + d.ref + " — customized by you";
+      /* colourways */
+      var cw = $("#custColors"); cw.innerHTML = "";
+      d.colors.forEach(function(c, i){
+        var b = document.createElement("button");
+        b.type = "button"; b.style.background = c.hex;
+        b.className = i === cust.colorIdx ? "on" : "";
+        b.setAttribute("aria-label", "Base colour " + c.name);
+        b.addEventListener("click", function(){ cust.colorIdx = i; renderCust(); });
+        cw.appendChild(b);
+      });
+      $("#custColorName").textContent = "Base colour — " + v.name;
+      /* ink */
+      var iw = $("#custInk"); iw.innerHTML = "";
+      INK_COLORS.forEach(function(c){
+        var b = document.createElement("button");
+        b.type = "button"; b.style.background = c.hex;
+        b.className = c.hex === cust.ink ? "on" : "";
+        b.setAttribute("aria-label", "Ink colour " + c.name);
+        b.addEventListener("click", function(){ cust.ink = c.hex; cust.inkName = c.name; renderCust(); });
+        iw.appendChild(b);
+      });
+      $("#custInkName").textContent = "Ink — " + cust.inkName;
+      /* sizes */
+      var sw = $("#custSizes"); sw.innerHTML = "";
+      SIZES.forEach(function(s){
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = s;
+        b.className = s === cust.size ? "on" : "";
+        b.addEventListener("click", function(){ cust.size = s; renderCust(); });
+        sw.appendChild(b);
+      });
+      /* preview print zone */
+      var print = $("#custPrint");
+      print.className = "cust-print pos-" + cust.place;
+      var txt = $("#custPrintText");
+      txt.textContent = cust.text.trim();
+      txt.className = "font-" + cust.font;
+      txt.style.color = cust.ink;
+      txt.style.display = cust.text.trim() ? "" : "none";
+      var logo = $("#custLogoImg");
+      if (cust.logo === "vysh"){
+        logo.src = hexLum(v.hex) > 0.6 ? "assets/logo-mark.png" : "assets/logo-mark-white.png";
+        logo.hidden = false;
+      } else if (cust.logo === "upload" && cust.upload){
+        logo.src = cust.upload; logo.hidden = false;
+      } else { logo.hidden = true; }
+      print.style.display = (cust.text.trim() || cust.logo !== "none") ? "" : "none";
+      $("#custPlaceTag").textContent = PLACE_LABELS[cust.place];
+      base = d.price; fee = CUSTOM_FEE_CLOTH; total = base + fee;
+      $("#custBasePrice").textContent = fmtMoney(base, "USD");
+      $("#custFeePrice").textContent = fmtMoney(fee, "USD");
+      $("#custTotalPrice").textContent = fmtMoney(total, "USD");
+    } else {
+      var np = custNail() || NAIL_PRODUCTS[0];
+      cust.id = np.id;
+      img.src = np.img; img.alt = np.alt; img.style.filter = "";
+      $("#custProdName").textContent = np.name + " Nail Set";
+      $("#custProdMeta").textContent = "Nails · " + np.cat + " · Set of 24 — customized by you";
+      var shw = $("#custNailShades"); shw.innerHTML = "";
+      NAIL_SHADES.forEach(function(c){
+        var b = document.createElement("button");
+        b.type = "button"; b.style.background = c.hex;
+        b.className = c.name === cust.shade ? "on" : "";
+        b.setAttribute("aria-label", "Shade " + c.name);
+        b.addEventListener("click", function(){ cust.shade = c.name; renderCust(); });
+        shw.appendChild(b);
+      });
+      $("#custNailShadeName").textContent = "Shade — " + cust.shade;
+      var spw = $("#custNailShapes"); spw.innerHTML = "";
+      NAIL_SHAPES.forEach(function(s){
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = s;
+        b.className = s === cust.shape ? "on" : "";
+        b.addEventListener("click", function(){ cust.shape = s; renderCust(); });
+        spw.appendChild(b);
+      });
+      var aw = $("#custNailArt"); aw.innerHTML = "";
+      NAIL_ARTS.forEach(function(a){
+        var b = document.createElement("button");
+        b.type = "button"; b.textContent = a.name + (a.fee ? " +₹" + a.fee : "");
+        b.className = a.name === cust.art ? "on" : "";
+        b.addEventListener("click", function(){ cust.art = a.name; renderCust(); });
+        aw.appendChild(b);
+      });
+      /* nail preview: five tips in the chosen shade / shape / finish */
+      var row = $("#custNailsRow"); row.innerHTML = "";
+      var hex = custShadeHex();
+      for (var i = 0; i < 5; i++){
+        var tip = document.createElement("div");
+        tip.className = "cust-nailtip shape-" + cust.shape;
+        tip.style.background = cust.finish === "Chrome"
+          ? "linear-gradient(160deg,#f4f4f6 0%," + hex + " 55%,#8f8f96 100%)"
+          : (cust.finish === "Gloss"
+              ? "linear-gradient(135deg,rgba(255,255,255,.6) 0%,rgba(255,255,255,0) 46%)," + hex
+              : hex);
+        if (i === 2 && cust.initials.trim()) tip.textContent = cust.initials.trim();
+        row.appendChild(tip);
+      }
+      $("#custNailVizNote").textContent = "Your set in " + cust.shade + " · " + cust.shape + " · " + cust.finish + (cust.art !== "None" ? " · " + cust.art : "") + (cust.initials.trim() ? " · initials on the accent nail" : "");
+      base = np.price; fee = CUSTOM_FEE_NAIL + custArtFee(); total = base + fee;
+      $("#custBasePrice").textContent = fmtMoney(base, "INR");
+      $("#custFeePrice").textContent = fmtMoney(fee, "INR");
+      $("#custTotalPrice").textContent = fmtMoney(total, "INR");
+    }
+    var spec = $("#custSpec");
+    spec.innerHTML = "";
+    custSpecParts().forEach(function(s){
+      var el = document.createElement("span");
+      el.textContent = s;
+      spec.appendChild(el);
+    });
+    $("#custAddBtn").textContent = "Add my customised piece to bag · " + $("#custTotalPrice").textContent;
+  }
+  $("#custText").addEventListener("input", function(){ cust.text = this.value; renderCust(); });
+  $("#custNailText").addEventListener("input", function(){ cust.initials = this.value; renderCust(); });
+  $$("#custFonts button").forEach(function(b){
+    b.addEventListener("click", function(){
+      cust.font = b.getAttribute("data-font");
+      $$("#custFonts button").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCust();
+    });
+  });
+  $$("#custPlaces button").forEach(function(b){
+    b.addEventListener("click", function(){
+      cust.place = b.getAttribute("data-place");
+      $$("#custPlaces button").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCust();
+    });
+  });
+  $$("#custNailFinish button").forEach(function(b){
+    b.addEventListener("click", function(){
+      cust.finish = b.getAttribute("data-finish");
+      $$("#custNailFinish button").forEach(function(x){ x.classList.toggle("on", x === b); });
+      renderCust();
+    });
+  });
+  $$("#custLogoChips button").forEach(function(b){
+    b.addEventListener("click", function(){
+      cust.logo = b.getAttribute("data-logo");
+      $$("#custLogoChips button").forEach(function(x){ x.classList.toggle("on", x === b); });
+      $("#custUploadLabel").hidden = cust.logo !== "upload";
+      renderCust();
+    });
+  });
+  $("#custUpload").addEventListener("change", function(){
+    var f = this.files && this.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){ cust.upload = r.result; cust.logo = "upload"; renderCust(); toast("Your artwork is on the piece — check the preview."); };
+    r.readAsDataURL(f);
+  });
+  $("#custAddBtn").addEventListener("click", function(){
+    var spec = custSpecParts().join(" · ");
+    if (cust.kind === "clothing"){
+      var p = productById(cust.id), d = PRODUCT_DETAILS[cust.id];
+      bag.push({ id: p.id, name: p.name + " — Customised", size: cust.size, cat: p.cat, img: p.img,
+                 color: d.colors[cust.colorIdx].name, price: d.price + CUSTOM_FEE_CLOTH, currency: "USD", custom: spec });
+      toast("Your customised " + p.name + " is in the bag — made to order, just for you.");
+    } else {
+      var np = custNail();
+      bag.push({ id: np.id, name: np.name + " Nail Set — Customised", size: cust.shape, cat: "Nails · " + np.cat, img: np.img,
+                 color: cust.shade, price: np.price + CUSTOM_FEE_NAIL + custArtFee(), currency: "INR", custom: spec });
+      toast("Your customised " + np.name + " nail set is in the bag — made to order, just for you.");
+    }
+    renderBag();
+    openBag();
+  });
+  $("#custBack").addEventListener("click", function(){ showView(custFromView || storeView); });
+  $("#custBagBtn").addEventListener("click", openBag);
+  $("#navCustomLink").addEventListener("click", function(e){ e.preventDefault(); openStudio(cust.id, cust.kind); });
+  $("#frCustomBtn").addEventListener("click", function(){ openStudio(frCurrentId, "clothing"); });
+  document.addEventListener("vysh:bagchange", function(){
+    var c = $("#custBagCount"); if (c) c.textContent = bag.length;
+  });
+  $("#custAskBtn").addEventListener("click", function(){
+    var msg = $("#custQuestion").value.trim();
+    if (!msg){ toast("Type your question first — the owner reads every one."); return; }
+    var itemName = cust.kind === "clothing" ? productById(cust.id).name : custNail().name + " Nail Set";
+    ownerQueries.unshift({ product: itemName, customer: userName, msg: msg, status: "Open", reply: "", sample: false, when: "Just now" });
+    sbSaveQuery(itemName, userName, msg);
+    $("#custQuestion").value = "";
+    $("#custAskOk").hidden = false;
+    renderOwner();
+    toast("Question sent to the VYSH owner.");
+  });
+
+  /* ---------- OWNER PANEL — a separate dashboard, apart from the shop.
+     This static build carries no owner authentication (a real owner login
+     needs a server), so the panel is an open preview reached only through
+     the owner's own #owner link, and the page says so. Orders placed and
+     questions asked in this visit land here live; the seeded rows are
+     tagged Sample so the panel can be seen working. ---------- */
+  var ownerSeq = 100;
+  var ownerOrders = [
+    { id:"VYSH-810234", customer:"Aarav S.", when:"Today · 11:02 AM", method:"PhonePe (UPI)", status:"Packed", sample:true, custom:false, usd:149, inr:0,
+      items:[{ name:"Onyx Oversized Hoodie", size:"M", color:"Onyx Black", custom:"" }] },
+    { id:"VYSH-810187", customer:"Meera K.", when:"Today · 9:41 AM", method:"Card", status:"Shipped", sample:true, custom:false, usd:0, inr:1298,
+      items:[{ name:"Blush Bloom Nail Set", size:"Almond", color:"Pink", custom:"" }, { name:"Velvet Luxe Nail Set", size:"Oval", color:"Gold", custom:"" }] },
+    { id:"VYSH-809955", customer:"Jordan L.", when:"Yesterday · 6:15 PM", method:"Net Banking", status:"New", sample:true, custom:true, usd:101, inr:0,
+      items:[{ name:"Stone Crew Sweatshirt — Customised", size:"L", color:"Stone", custom:"“JORDAN” · Bold Sans · White ink · Chest print" }] },
+    { id:"VYSH-809812", customer:"Priya R.", when:"Yesterday · 1:03 PM", method:"Cash on Delivery", status:"Cancelled", sample:true, custom:false, usd:59, inr:0,
+      items:[{ name:"Ivory Oversized T-Shirt", size:"S", color:"Ivory", custom:"" }] }
+  ];
+  var ownerQueries = [
+    { product:"Onyx Oversized Hoodie", customer:"Kabir", when:"Today · 10:12 AM", sample:true, status:"Open", reply:"",
+      msg:"Can I get the hoodie with my gym’s logo on the back instead of the chest? It’s a small running club — 6 pieces." },
+    { product:"Blush Bloom Nail Set", customer:"Sana", when:"Yesterday · 4:48 PM", sample:true, status:"Answered",
+      reply:"Yes — the Blush Bloom set can be made in Square at no extra cost. Pick Square in the Customize Studio and it’s done.",
+      msg:"Do you make the Blush Bloom set in a square shape? Almond doesn’t suit my nails." }
+  ];
+  var ownerDesigns = [];
+
+  function ownerTotals(o){ return fmtTotals({ usd: o.usd || 0, inr: o.inr || 0 }); }
+  function renderOwner(){
+    var cancelled = ownerOrders.filter(function(o){ return o.status === "Cancelled"; });
+    var revUsd = 0, revInr = 0;
+    ownerOrders.forEach(function(o){ if (o.status !== "Cancelled"){ revUsd += o.usd || 0; revInr += o.inr || 0; } });
+    $("#ownStatOrders").textContent = ownerOrders.length;
+    $("#ownStatRevenue").textContent = fmtTotals({ usd: revUsd, inr: revInr });
+    $("#ownStatCancelled").textContent = cancelled.length;
+    $("#ownStatQueries").textContent = ownerQueries.filter(function(q){ return q.status === "Open"; }).length;
+    $("#ownStatCustom").textContent = ownerOrders.filter(function(o){ return o.custom; }).length;
+    $("#ownStatProducts").textContent = PRODUCTS.length + NAIL_PRODUCTS.length + " live";
+
+    var ow = $("#ownOrders");
+    ow.innerHTML = ownerOrders.length ? "" : '<p class="own-empty">No orders yet — orders placed in the shop appear here.</p>';
+    ownerOrders.forEach(function(o){
+      var card = document.createElement("div");
+      card.className = "own-order";
+      var itemsHtml = o.items.map(function(it){
+        return "<li>" + escHtml(it.name) + " — Size " + escHtml(it.size) + (it.color ? " · " + escHtml(it.color) : "") +
+          (it.custom ? '<span class="cust-line">✎ Customised — ' + escHtml(it.custom) + "</span>" : "") + "</li>";
+      }).join("");
+      card.innerHTML =
+        '<div class="own-order-head"><strong>' + escHtml(o.id) + "</strong>" +
+        '<span class="own-tag' + (o.sample ? "" : " live") + '">' + (o.sample ? "Sample" : "Live") + "</span>" +
+        "<time>" + escHtml(o.when) + "</time>" +
+        '<select class="own-status" aria-label="Order status for ' + escHtml(o.id) + '">' +
+        ["New","Packed","Shipped","Delivered","Cancelled"].map(function(s){ return '<option value="' + s + '"' + (s === o.status ? " selected" : "") + ">" + s + "</option>"; }).join("") +
+        "</select></div>" +
+        '<ul class="own-order-items">' + itemsHtml + "</ul>" +
+        '<div class="own-order-foot"><span>' + escHtml(o.customer) + " · " + escHtml(o.method) + "</span><strong>" + ownerTotals(o) + "</strong></div>";
+      $(".own-status", card).addEventListener("change", function(){
+        o.status = this.value;
+        if (!o.sample) sbSaveOrderStatus(o.id, o.status);
+        renderOwner();
+        toast("Order " + o.id + " is now " + o.status + ".");
+      });
+      ow.appendChild(card);
+    });
+
+    var qw = $("#ownQueries");
+    qw.innerHTML = ownerQueries.length ? "" : '<p class="own-empty">No questions yet — questions asked in the Customize Studio appear here.</p>';
+    ownerQueries.forEach(function(q){
+      var card = document.createElement("div");
+      card.className = "own-query";
+      card.innerHTML =
+        '<p class="own-q-meta"><strong>' + escHtml(q.product) + "</strong> · asked by " + escHtml(q.customer) + " · " + escHtml(q.when) + " " +
+        '<span class="own-tag' + (q.sample ? "" : " live") + '">' + (q.sample ? "Sample" : "Live") + "</span> " +
+        '<span class="own-pill ' + (q.status === "Open" ? "open" : "done") + '">' + q.status + "</span></p>" +
+        "<p>" + escHtml(q.msg) + "</p>" +
+        (q.reply ? '<p class="own-reply-sent"><b>Your reply:</b> ' + escHtml(q.reply) + "</p>" : "") +
+        (q.status === "Open"
+          ? '<div class="own-reply-box"><textarea placeholder="Reply to ' + escHtml(q.customer) + '…" aria-label="Reply to ' + escHtml(q.customer) + '"></textarea><button type="button" class="own-reply-btn">Send reply</button></div>'
+          : "");
+      var btn = $(".own-reply-btn", card);
+      if (btn) btn.addEventListener("click", function(){
+        var ta = $("textarea", card);
+        var v = ta.value.trim();
+        if (!v){ toast("Write a reply first."); return; }
+        q.reply = v; q.status = "Answered";
+        if (!q.sample) sbSaveQueryReply(q);
+        renderOwner();
+        toast("Reply sent to " + q.customer + ".");
+      });
+      qw.appendChild(card);
+    });
+
+    var dw = $("#ownDesigns");
+    dw.innerHTML = "";
+    function ownDesignRow(did){
+      var isNailD = did.indexOf("owner-nail-") === 0 || did.indexOf("sb-nail-") === 0;
+      var prod = isNailD ? NAIL_PRODUCTS.filter(function(x){ return x.id === did; })[0]
+                         : productById(did);
+      if (!prod) return;
+      var row = document.createElement("div");
+      row.className = "own-design";
+      row.innerHTML = '<img src="' + prod.img + '" alt="" /><div><strong>' + escHtml(prod.name) + "</strong><small>" +
+        (isNailD ? "Nails · " + escHtml(prod.cat) + " · ₹" + prod.price : escHtml(prod.cat) + " · $" + PRODUCT_DETAILS[did].price) + " · Live in the shop</small></div>" +
+        '<button type="button" class="own-design-view">View</button><button type="button" class="own-design-remove danger">Remove</button>';
+      $(".own-design-view", row).addEventListener("click", function(){
+        if (isNailD) openNails(prod.cat); else openProduct(did);
+      });
+      $(".own-design-remove", row).addEventListener("click", function(){ removeOwnerDesign(did); });
+      dw.appendChild(row);
+    }
+    function ownDesignHead(txt){
+      var h = document.createElement("p");
+      h.className = "cust-picker-label"; h.style.color = "rgba(242,238,225,.55)";
+      h.textContent = txt;
+      dw.appendChild(h);
+    }
+    if (ownerDesigns.length){
+      ownDesignHead("Designs you posted this visit");
+      ownerDesigns.forEach(ownDesignRow);
+    }
+    if (typeof sbRemoteIds !== "undefined" && sbRemoteIds.length){
+      ownDesignHead("Live from the shared catalogue (Supabase) — posted from the owner app or the Flutter app");
+      sbRemoteIds.slice().forEach(ownDesignRow);
+    }
+  }
+  function sbRemoveLocalDesign(did){
+    var isNailD = did.indexOf("owner-nail-") === 0 || did.indexOf("sb-nail-") === 0;
+    if (isNailD){
+      var ni = NAIL_PRODUCTS.map(function(x){ return x.id; }).indexOf(did);
+      if (ni !== -1) NAIL_PRODUCTS.splice(ni, 1);
+      renderNails();
+    } else {
+      var pi = PRODUCTS.map(function(x){ return x.id; }).indexOf(did);
+      if (pi !== -1) PRODUCTS.splice(pi, 1);
+      delete PRODUCT_DETAILS[did];
+      delete CV_RATINGS[did];
+      var card = $('#productGrid [data-pid="' + did + '"]');
+      if (card) card.remove();
+      setFilter(currentFilter);
+    }
+    for (var i = searchIndex.length - 1; i >= 0; i--) if (searchIndex[i].id === did) searchIndex.splice(i, 1);
+    ownerDesigns = ownerDesigns.filter(function(x){ return x !== did; });
+    if (typeof sbRemoteIds !== "undefined") sbRemoteIds = sbRemoteIds.filter(function(x){ return x !== did; });
+  }
+  function removeOwnerDesign(did){
+    sbRemoveProduct(did);
+    sbRemoveLocalDesign(did);
+    renderOwner();
+    toast("Design removed from the shop.");
+  }
+  function buildOwnerCard(p){
+    var card = document.createElement("article");
+    card.className = "card"; card.setAttribute("data-cat", p.cat); card.setAttribute("data-pid", p.id);
+    card.innerHTML =
+      '<div class="ph"><img src="' + p.img + '" alt="' + escHtml(p.alt) + '" loading="lazy" /><span class="card-badge' + (p.gender === "Women" ? " women" : "") + '">' + (p.gender === "Women" ? "For Women" : "Unisex · Him &amp; Her") + "</span></div>" +
+      "<h4>" + escHtml(p.name) + "</h4>" +
+      '<p class="note">' + escHtml(p.note) + "</p>" +
+      '<p class="card-price">$' + PRODUCT_DETAILS[p.id].price + "</p>" +
+      '<div class="sizes" role="group" aria-label="Size for ' + escHtml(p.name) + '">' +
+        SIZES.map(function(s){ return '<button type="button" data-size="' + s + '"' + (s === "M" ? ' class="sel"' : "") + ">" + s + "</button>"; }).join("") +
+      "</div>" +
+      '<button class="add-btn" type="button">Add to bag</button>' +
+      '<button class="product-open-btn" type="button">View in Fitting Room</button>' +
+      '<button class="card-custom-btn" type="button">✎ Customize it — make it yours</button>';
+    $(".ph", card).addEventListener("click", function(){ openProduct(p.id); });
+    $("h4", card).addEventListener("click", function(){ openProduct(p.id); });
+    $(".product-open-btn", card).addEventListener("click", function(){ openProduct(p.id); });
+    $(".card-custom-btn", card).addEventListener("click", function(){ openStudio(p.id, "clothing"); });
+    $$(".sizes button", card).forEach(function(b){
+      b.addEventListener("click", function(){
+        selectedSize[p.id] = b.getAttribute("data-size");
+        $$(".sizes button", card).forEach(function(x){ x.classList.toggle("sel", x === b); });
+      });
+    });
+    $(".add-btn", card).addEventListener("click", function(){
+      addToBag(p);
+      var btn = this;
+      btn.classList.add("added"); btn.textContent = "Added ✓";
+      setTimeout(function(){ btn.classList.remove("added"); btn.textContent = "Add to bag"; }, 1400);
+    });
+    return card;
+  }
+  var OD_IMGS = {
+    clothing: ["assets/look-hoodie.jpg","assets/look-hoodie-washed.jpg","assets/look-tee-onyx.jpg","assets/look-tee-ivory.jpg","assets/look-sweat-stone.jpg","assets/look-sweat-sand.jpg","assets/look-hoodie-blush-women.jpg","assets/look-hoodie-cream-women.jpg","assets/look-tee-rose-women.jpg","assets/look-sweat-lilac-women.jpg"],
+    nail: ["assets/nails-blush-bloom.jpg","assets/nails-antique-rose.jpg","assets/nails-bisque-french.jpg","assets/nails-champagne-shine.jpg","assets/nails-velvet-nude.jpg","assets/nails-velvet-luxe.jpg","assets/nails-rose-gold.jpg","assets/nails-milky-white.jpg"]
+  };
+  var odUploadData = "";
+  function odFillImgs(){
+    var type = $("#odType").value;
+    var sel = $("#odImgSel");
+    sel.innerHTML = "";
+    OD_IMGS[type].forEach(function(src){
+      var o = document.createElement("option");
+      o.value = src; o.textContent = src.replace("assets/", "").replace(/[-]/g, " ").replace(/\.(jpg|png)$/, "");
+      sel.appendChild(o);
+    });
+  }
+  function odTypeSync(){
+    var isNailT = $("#odType").value === "nail";
+    $("#odCatWrap").hidden = isNailT;
+    $("#odGenderWrap").hidden = isNailT;
+    $("#odNailCatWrap").hidden = !isNailT;
+    $("#odShapeWrap").hidden = !isNailT;
+    $("#odCur").textContent = isNailT ? "₹" : "$";
+    odUploadData = "";
+    $("#odUpload").value = "";
+    odFillImgs();
+  }
+  $("#odType").addEventListener("change", odTypeSync);
+  $("#odUpload").addEventListener("change", function(){
+    var f = this.files && this.files[0];
+    if (!f) return;
+    var r = new FileReader();
+    r.onload = function(){ odUploadData = r.result; };
+    r.readAsDataURL(f);
+  });
+  $("#ownDesignForm").addEventListener("submit", function(e){
+    e.preventDefault();
+    var err = $("#odErr");
+    var name = $("#odName").value.trim();
+    var price = parseInt($("#odPrice").value, 10);
+    var note = $("#odNote").value.trim();
+    if (name.length < 3){ err.textContent = "Give the design a name (at least 3 characters)."; return; }
+    if (!(price > 0)){ err.textContent = "Add a price above zero."; return; }
+    err.textContent = "";
+    var img = odUploadData || $("#odImgSel").value;
+    ownerSeq++;
+    if ($("#odType").value === "nail"){
+      var nid = "owner-nail-" + ownerSeq;
+      var ncat = $("#odNailCat").value, nshape = $("#odShape").value;
+      NAIL_PRODUCTS.push({ id: nid, name: name, cat: ncat, price: price, was: Math.round(price * 1.3), shape: nshape, color: "Pink", img: img, alt: name + " — new VYSH nail set posted by the owner" });
+      searchIndex.push({ label: name + " Nail Set", meta: "Nails · " + ncat + " · " + nshape, img: img, kind: "nail", id: nid, cat: ncat, name: name,
+        hay: (name + " " + ncat + " nails nail extensions " + nshape + " Pink new design").toLowerCase() });
+      ownerDesigns.push(nid);
+      sbSaveProduct({ name: name, collection: "nails", price: price, original_price: Math.round(price * 1.3), stock: 0, sizes: [], colours: ["Pink"], image_url: sbImageUrl(img), description: ncat + " · " + nshape, customisable: true }, nid);
+      renderNails();
+      toast("“" + name + "” is live in the nail shop.");
+    } else {
+      var cid = "owner-" + ownerSeq;
+      var cat = $("#odCat").value, gender = $("#odGender").value;
+      var np2 = { id: cid, name: name, cat: cat, gender: gender, note: note || "New design — posted by the VYSH owner.", img: img, alt: name + " — new VYSH design posted by the owner" };
+      PRODUCTS.push(np2);
+      PRODUCT_DETAILS[cid] = { price: price, was: Math.round(price * 1.3), ref: "VYSH-OWN-" + ownerSeq,
+        fabric: note || "New design posted by the VYSH owner — full fabric details follow with the piece.",
+        care: "Machine wash cold, inside out.",
+        source: "Posted by the VYSH owner from the owner panel.",
+        fit: "Relaxed VYSH block — true to size.",
+        stock: [6, 10, 12, 8, 4],
+        colors: [
+          { name:"Onyx Black", hex:"#15171a", filter:"" },
+          { name:"Ivory", hex:"#efe9db", filter:"sepia(.14) saturate(.5) brightness(1.16)" },
+          { name:"Stone", hex:"#a9a294", filter:"grayscale(.4) sepia(.14) brightness(1.0)" },
+          { name:"Olive", hex:"#6d7256", filter:"hue-rotate(52deg) saturate(.6) brightness(.94)" }
+        ] };
+      CV_RATINGS[cid] = "New";
+      selectedSize[cid] = "M";
+      $("#productGrid").appendChild(buildOwnerCard(np2));
+      searchIndex.push({ label: name, meta: "Clothing · " + cat, img: img, kind: "clothing", id: cid,
+        hay: (name + " " + cat + " clothing " + np2.note + " " + gender + " women men her him new design").toLowerCase() });
+      ownerDesigns.push(cid);
+      sbSaveProduct({ name: name, collection: sbCollectionKey(cat), price: price, original_price: Math.round(price * 1.3), stock: 40, sizes: SIZES.slice(), colours: PRODUCT_DETAILS[cid].colors.map(function(c){ return c.name; }), image_url: sbImageUrl(img), description: note || "", customisable: true }, cid);
+      setFilter(currentFilter);
+      toast("“" + name + "” is live in the shop.");
+    }
+    $("#odName").value = ""; $("#odPrice").value = ""; $("#odNote").value = "";
+    odUploadData = ""; $("#odUpload").value = "";
+    renderOwner();
+  });
+  odTypeSync();
+
+  /* The owner panel is reached only through the owner's own #owner link —
+     no customer page links to it, and nothing in the shop mentions it. */
+  function checkOwnerRoute(){ if (window.location.hash === "#owner"){ renderOwner(); showView(ownerView); } }
+  window.addEventListener("hashchange", checkOwnerRoute);
+  setTimeout(checkOwnerRoute, 60);
+  $("#ownBackBtn").addEventListener("click", function(){ showView(storeView); });
+
+  /* live orders: when a checkout completes in the shop, the same order lands
+     in the owner panel (snapshot taken at click-time, order id read back
+     from the confirmation) */
+  var pendingOrder = null;
+  $("#payNowBtn").addEventListener("click", function(){
+    if (!bag.length || !validatePayment()){ pendingOrder = null; return; }
+    pendingOrder = {
+      items: bag.map(function(it){ return { name: it.name, size: it.size, color: it.color || "", custom: it.custom || "" }; }),
+      totals: bagTotals(), method: payMethodLabel(), customer: userName,
+      custom: bag.some(function(it){ return !!it.custom; })
+    };
+    setTimeout(function(){
+      if (!pendingOrder) return;
+      var oid = $("#coOrderId").textContent.trim();
+      var ok = !$("#checkoutSuccess").hidden && oid && !ownerOrders.some(function(o){ return o.id === oid; });
+      if (ok){
+        ownerOrders.unshift({ id: oid, customer: pendingOrder.customer, items: pendingOrder.items,
+          usd: pendingOrder.totals.usd, inr: pendingOrder.totals.inr, method: pendingOrder.method,
+          status: "New", when: "Just now", sample: false, custom: pendingOrder.custom });
+        sbSaveOrder(oid, pendingOrder);
+        renderOwner();
+      }
+      pendingOrder = null;
+    }, 1750);
+  });
+
+  /* ---------- GET THE APP (installable PWA — iOS Add to Home Screen + Android/desktop install prompt) ---------- */
+  var appSheet = $("#appSheet"), appScrim = $("#appSheetScrim"), appStepsEl = $("#appSheetSteps"),
+      appDoneEl = $("#appSheetDone"), appInstallBtn = $("#appSheetInstall"), deferredInstall = null;
+  var uaStr = navigator.userAgent || "";
+  var isIOSDevice = /iphone|ipad|ipod/i.test(uaStr) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+  var isAndroidDevice = /android/i.test(uaStr);
+  var isStandaloneApp = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || window.navigator.standalone === true;
+  var iosNeedsSafari = isIOSDevice && !(/safari/i.test(uaStr) && !/crios|fxios|edgios|opios|fbav|fban|instagram/i.test(uaStr));
+  var shareSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M12 14.5v-11M8.2 6 12 2.2 15.8 6"/><path d="M5.5 12.5v6.7A1.8 1.8 0 0 0 7.3 21h9.4a1.8 1.8 0 0 0 1.8-1.8v-6.7"/></svg>';
+  var plusSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8.5v7M8.5 12h7"/></svg>';
+  var dotsSvg = '<svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
+  var APP_STEPS = {
+    ios: [
+      "Tap the <strong>Share</strong> icon " + shareSvg + " in Safari’s toolbar — at the bottom on iPhone, at the top on iPad.",
+      "Scroll down the share sheet and tap <strong>Add to Home Screen</strong> " + plusSvg + ".",
+      "Tap <strong>Add</strong> in the top-right corner. The VYSH icon lands on your Home Screen.",
+      "Open VYSH from that icon — it runs full-screen like a real app, no browser bars."
+    ],
+    android: [
+      "Tap the <strong>menu</strong> " + dotsSvg + " at the top-right of Chrome.",
+      "Tap <strong>Install app</strong> (on some phones it says <strong>Add to Home screen</strong>).",
+      "Confirm <strong>Install</strong> — VYSH is added to your Home Screen and app drawer.",
+      "Open VYSH from its icon any time — full-screen, one tap away."
+    ],
+    desktop: [
+      "Open VYSH in <strong>Chrome</strong> or <strong>Edge</strong> on your computer.",
+      "Click the <strong>Install</strong> icon at the right end of the address bar — or open the browser menu and choose <strong>Install VYSH</strong>.",
+      "Click <strong>Install</strong>. VYSH opens in its own window and pins to your taskbar or dock like an app."
+    ]
+  };
+  if (iosNeedsSafari){
+    APP_STEPS.ios.unshift("You’re not in Safari right now — <strong>open this page in Safari first</strong> (tap the menu and choose “Open in Safari”), because Add to Home Screen only works there.");
+  }
+  function detectedAppTab(){ return isIOSDevice ? "ios" : (isAndroidDevice ? "android" : "desktop"); }
+  function renderAppSteps(tab){
+    $$("#appSheet [data-app-tab]").forEach(function(b){ b.classList.toggle("on", b.getAttribute("data-app-tab") === tab); });
+    appStepsEl.innerHTML = APP_STEPS[tab].map(function(s){ return "<li>" + s + "</li>"; }).join("");
+    appDoneEl.classList.toggle("show", isStandaloneApp);
+    appInstallBtn.hidden = !(deferredInstall && tab === detectedAppTab() && !isStandaloneApp);
+  }
+  function openAppSheet(){
+    renderAppSteps(detectedAppTab());
+    appSheet.hidden = false;
+    appScrim.classList.add("show");
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ appSheet.classList.add("open"); }); });
+  }
+  function closeAppSheet(){
+    appSheet.classList.remove("open");
+    appScrim.classList.remove("show");
+    setTimeout(function(){ appSheet.hidden = true; }, reduced ? 0 : 380);
+  }
+  function tryNativeInstall(){
+    if (!deferredInstall) return false;
+    deferredInstall.prompt();
+    deferredInstall.userChoice.then(function(){ deferredInstall = null; appInstallBtn.hidden = true; });
+    return true;
+  }
+  window.addEventListener("beforeinstallprompt", function(e){
+    e.preventDefault();
+    deferredInstall = e;
+    var bandBtn = $("#appBandInstall");
+    if (bandBtn && !isStandaloneApp) bandBtn.textContent = "Install the VYSH app";
+  });
+  window.addEventListener("appinstalled", function(){
+    deferredInstall = null;
+    isStandaloneApp = true;
+    renderAppSteps(detectedAppTab());
+  });
+  $$("[data-install-open]").forEach(function(btn){
+    btn.addEventListener("click", function(){
+      if (!isStandaloneApp && deferredInstall && tryNativeInstall()) return;
+      openAppSheet();
+    });
+  });
+  $$("#appSheet [data-app-tab]").forEach(function(b){
+    b.addEventListener("click", function(){ renderAppSteps(b.getAttribute("data-app-tab")); });
+  });
+  appInstallBtn.addEventListener("click", tryNativeInstall);
+  $("#appSheetClose").addEventListener("click", closeAppSheet);
+  appScrim.addEventListener("click", closeAppSheet);
+  document.addEventListener("keydown", function(e){ if (e.key === "Escape" && !appSheet.hidden) closeAppSheet(); });
+  var bandSteps = $("#appBandSteps"), bandNote = $("#appBandNote");
+  if (bandSteps) bandSteps.innerHTML = APP_STEPS[detectedAppTab()].map(function(s){ return "<li>" + s + "</li>"; }).join("");
+  if (isStandaloneApp && bandNote) bandNote.textContent = "Already installed on this device — open VYSH from your Home Screen.";
+
+  /* ---------- SUPABASE — the shared VYSH backend ----------
+     This site, the private owner app and the Flutter app all read and write
+     one Supabase project (tables: products, orders, queries). On load, live
+     products saved there join the shop across all 4 collections; designs
+     posted from this page's owner panel, orders placed at checkout and
+     questions asked in the Customize Studio are saved back. If the backend
+     can't be reached, the shop carries on with its built-in Season 01
+     catalogue and the panel shows the connection state honestly. */
+  var SUPABASE_CONFIG = {
+    url: "https://czxnfrmwmcmstucckaew.supabase.co",
+    publishableKey: "sb_publishable_pvYDzhW4osfpsG7XD_UunQ_EUnx4oQO"
+  };
+  var sbClient = null, sbReady = false, sbSeenProducts = {}, sbRowByLocalId = {}, sbLocalByRow = {}, sbRemoteIds = [];
+  var SB_CAT_TO_KEY = { "Hoodies": "hoodies", "T-Shirts": "tshirts", "Sweatshirts": "sweatshirts" };
+  var SB_KEY_TO_CAT = { hoodies: "Hoodies", tshirts: "T-Shirts", sweatshirts: "Sweatshirts" };
+  var SB_DEFAULT_IMG = { hoodies: "assets/look-hoodie.jpg", tshirts: "assets/look-tee-onyx.jpg", sweatshirts: "assets/look-sweat-stone.jpg", nails: "assets/nails-blush-bloom.jpg" };
+  function sbCollectionKey(cat){ return SB_CAT_TO_KEY[cat] || "hoodies"; }
+  /* every field that arrives from the shared catalogue is treated as
+     untrusted text before it can reach markup: strip anything that could
+     break out of an attribute or tag, and only allow plain https or
+     site-asset image URLs */
+  function sbCleanText(s, max){
+    return String(s == null ? "" : s).replace(/[<>"']/g, "").replace(/\s+/g, " ").trim().slice(0, max || 200);
+  }
+  function sbSafeImg(u){
+    if (!u) return null;
+    u = String(u).trim();
+    return /^(https:\/\/|assets\/)[^\s"'<>]+$/.test(u) ? u : null;
+  }
+  function sbSanitizeRow(row){
+    if (!row) return row;
+    row.name = sbCleanText(row.name, 120);
+    row.description = sbCleanText(row.description || "", 300);
+    row.image_url = sbSafeImg(row.image_url);
+    if (Array.isArray(row.colours)) row.colours = row.colours.map(function(c){ return sbCleanText(c, 40); }).filter(Boolean);
+    if (Array.isArray(row.sizes)) row.sizes = row.sizes.map(function(s){ return sbCleanText(s, 12); }).filter(Boolean);
+    return row;
+  }
+  function sbImageUrl(img){ if (!img || img.indexOf("data:") === 0) return null; return img; }
+  function sbSetStatus(msg){
+    var a = $("#sbStatusText"); if (a) a.textContent = msg;
+    var b = $("#sbStatusPublic"); if (b) b.textContent = msg;
+  }
+  function sbInit(){
+    try {
+      if (window.supabase && window.supabase.createClient){
+        sbClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.publishableKey);
+        sbReady = true;
+      }
+    } catch (e){ sbClient = null; }
+    if (!sbReady){ sbSetStatus("Couldn't load the backend library — the shop is running on its built-in catalogue for this visit."); return; }
+    sbSyncAll();
+    try {
+      sbClient.channel("vysh-live")
+        .on("postgres_changes", { event: "*", schema: "public", table: "products" }, function(){ sbSyncProducts(); })
+        .subscribe();
+    } catch (e){}
+  }
+  function sbWhen(iso){
+    try { return new Date(iso).toLocaleString([], { day: "numeric", month: "short", hour: "numeric", minute: "2-digit" }); }
+    catch (e){ return "Synced"; }
+  }
+  function sbAddRemoteProduct(row){
+    if (!row || sbSeenProducts[row.id]) return;
+    var nameKey = (row.name || "").trim().toLowerCase();
+    if (!nameKey) return;
+    var existing = PRODUCTS.filter(function(p){ return p.name.trim().toLowerCase() === nameKey; })[0] ||
+                   NAIL_PRODUCTS.filter(function(p){ return p.name.trim().toLowerCase() === nameKey; })[0];
+    sbSeenProducts[row.id] = true;
+    if (existing){
+      /* a catalogue row for a piece the site already carries: keep the local
+         copy, but let the shared row's price/stock/photo win */
+      sbLocalByRow[row.id] = existing.id;
+      sbRowByLocalId[existing.id] = row.id;
+      sbApplyRowToLocal(row, existing.id);
+      return;
+    }
+    var img = row.image_url || SB_DEFAULT_IMG[row.collection] || "assets/look-hoodie.jpg";
+    var price = Number(row.price) || 0;
+    var was = row.original_price ? Number(row.original_price) : Math.round(price * 1.3);
+    if (row.collection === "nails"){
+      var desc = row.description || "";
+      var ncat = "Floral";
+      NAIL_CATS.forEach(function(c){ if (c !== "All Nails" && desc.toLowerCase().indexOf(c.toLowerCase()) !== -1) ncat = c; });
+      var nshape = "Almond";
+      NAIL_SHAPES.forEach(function(s){ if (desc.toLowerCase().indexOf(s.toLowerCase()) !== -1) nshape = s; });
+      var nid = "sb-nail-" + row.id;
+      NAIL_PRODUCTS.push({ id: nid, name: row.name, cat: ncat, price: price, was: was, shape: nshape, color: "Pink", img: img, alt: row.name + " — VYSH nail set from the shared catalogue" });
+      searchIndex.push({ label: row.name + " Nail Set", meta: "Nails · " + ncat + " · " + nshape, img: img, kind: "nail", id: nid, cat: ncat, name: row.name,
+        hay: (row.name + " " + ncat + " nails nail extensions " + nshape + " Pink").toLowerCase() });
+      sbRowByLocalId[nid] = row.id;
+      sbLocalByRow[row.id] = nid;
+      sbRemoteIds.push(nid);
+      renderNails();
+      return;
+    }
+    var cat = SB_KEY_TO_CAT[row.collection] || "Hoodies";
+    var cid = "sb-" + row.id;
+    var colours = (row.colours && row.colours.length ? row.colours : ["Onyx Black", "Ivory"]).map(function(cn){
+      return { name: String(cn), hex: "#8a8378", filter: "" };
+    });
+    var total = Number(row.stock) || 0;
+    var per = total > 0 ? Math.max(1, Math.round(total / 5)) : 0;
+    var np = { id: cid, name: row.name, cat: cat, gender: "Unisex", note: row.description || "From the shared VYSH catalogue — posted by the owner.", img: img, alt: row.name + " — VYSH design from the shared catalogue" };
+    PRODUCTS.push(np);
+    PRODUCT_DETAILS[cid] = { price: price, was: was, ref: "VYSH-SB-" + String(row.id).slice(0, 8),
+      fabric: row.description || "Posted by the VYSH owner to the shared catalogue.",
+      care: "Machine wash cold, inside out.",
+      source: "Shared VYSH catalogue (Supabase) — posted from the owner panel, owner app or Flutter app.",
+      fit: "Relaxed VYSH block — true to size.",
+      stock: total > 0 ? [per, per, per, per, per] : [6, 10, 12, 8, 4],
+      colors: colours };
+    if (typeof CV_RATINGS !== "undefined") CV_RATINGS[cid] = "New";
+    selectedSize[cid] = "M";
+    sbRowByLocalId[cid] = row.id;
+    sbLocalByRow[row.id] = cid;
+    sbRemoteIds.push(cid);
+    $("#productGrid").appendChild(buildOwnerCard(np));
+    searchIndex.push({ label: row.name, meta: "Clothing · " + cat, img: img, kind: "clothing", id: cid,
+      hay: (row.name + " " + cat + " clothing " + (row.description || "") + " women men her him").toLowerCase() });
+    setFilter(currentFilter);
+  }
+  /* apply a changed shared row (price, stock, name, photo, description) to
+     the copy already in the shop — no reload needed */
+  function sbApplyRowToLocal(row, localId){
+    if (!row || !localId) return;
+    var price = Number(row.price) || 0;
+    var was = row.original_price ? Number(row.original_price) : Math.round(price * 1.3);
+    var nail = NAIL_PRODUCTS.filter(function(p){ return p.id === localId; })[0];
+    if (nail){
+      nail.name = row.name || nail.name;
+      if (price > 0){ nail.price = price; nail.was = was; }
+      if (row.image_url) nail.img = row.image_url;
+      if (localId.indexOf("sb-nail-") === 0){
+        var ndesc = row.description || "";
+        NAIL_CATS.forEach(function(c){ if (c !== "All Nails" && ndesc.toLowerCase().indexOf(c.toLowerCase()) !== -1) nail.cat = c; });
+        NAIL_SHAPES.forEach(function(s){ if (ndesc.toLowerCase().indexOf(s.toLowerCase()) !== -1) nail.shape = s; });
+      }
+      renderNails();
+      return;
+    }
+    var p = productById(localId), d = PRODUCT_DETAILS[localId];
+    if (!p || !d) return;
+    p.name = row.name || p.name;
+    if (row.description) p.note = row.description;
+    if (row.image_url) p.img = row.image_url;
+    if (price > 0){ d.price = price; d.was = was; }
+    var total = Number(row.stock) || 0;
+    if (total > 0){ var per = Math.max(1, Math.round(total / 5)); d.stock = [per, per, per, per, per]; }
+    var card = $('#productGrid [data-pid="' + localId + '"]');
+    if (card){
+      var h = $("h4", card); if (h) h.textContent = p.name;
+      var pr = $(".card-price", card); if (pr) pr.textContent = "$" + d.price;
+      var im = $(".ph img", card); if (im && row.image_url) im.src = p.img;
+    }
+  }
+  function sbUpsertRemoteProduct(row){
+    if (sbSeenProducts[row.id]){ sbApplyRowToLocal(row, sbLocalByRow[row.id]); return; }
+    sbAddRemoteProduct(row);
+  }
+  /* a row flipped to draft/hidden, or deleted outright: drop the synced copy
+     from the shop. A built-in Season 01 piece matched by name stays — it is
+     the site's own catalogue copy, not a synced one. */
+  function sbRemoveRemoteByRow(rowId){
+    var localId = sbLocalByRow[rowId];
+    delete sbSeenProducts[rowId];
+    delete sbLocalByRow[rowId];
+    if (!localId) return;
+    if (sbRowByLocalId[localId] === rowId) delete sbRowByLocalId[localId];
+    if (localId.indexOf("sb-") === 0) sbRemoveLocalDesign(localId);
+  }
+  function sbSyncProducts(){
+    if (!sbReady) return Promise.resolve(false);
+    return sbClient.from("products").select("*").order("created_at", { ascending: true })
+      .then(function(res){
+        if (res.error) throw res.error;
+        var rows = res.data || [];
+        var present = {};
+        rows.forEach(function(row){
+          present[row.id] = true;
+          sbSanitizeRow(row);
+          if (row.status === "live") sbUpsertRemoteProduct(row);
+          else sbRemoveRemoteByRow(row.id);
+        });
+        Object.keys(sbSeenProducts).forEach(function(rid){
+          if (!present[rid]) sbRemoveRemoteByRow(rid);
+        });
+        renderOwner();
+        return true;
+      })
+      .catch(function(){ return false; });
+  }
+  /* Orders and questions are write-only from this public page: a checkout
+     order or a Customize Studio question is saved to the owner's backend,
+     but this page never reads other customers' orders or questions back —
+     the owner reads those in the private owner app. The only table this
+     page reads is the public product catalogue. */
+  function sbSyncAll(){
+    if (!sbReady) return;
+    sbSetStatus("Connecting to the shared VYSH backend…");
+    sbSyncProducts().then(function(ok){
+      if (ok) sbSetStatus("Connected — live product sync is on across all 4 collections. Orders and questions placed here are saved to the owner's backend for the private owner app.");
+      else sbSetStatus("Couldn't reach the products table yet — if the setup SQL hasn't been run in the Supabase dashboard, run it there and reload. The shop is running on its built-in catalogue meanwhile.");
+    });
+  }
+  function sbSaveProduct(payload, localId){
+    if (!sbReady) return;
+    sbClient.from("products").insert(payload).select("id").single()
+      .then(function(res){
+        if (res.error) return;
+        if (res.data && localId){
+          sbSeenProducts[res.data.id] = true;
+          sbLocalByRow[res.data.id] = localId;
+          sbRowByLocalId[localId] = res.data.id;
+        }
+        sbSetStatus("Connected — your latest design was saved to the shared catalogue.");
+      })
+      .catch(function(){});
+  }
+  function sbSaveOrder(ref, pending){
+    if (!sbReady || !pending) return;
+    var t = pending.totals || { usd: 0, inr: 0 };
+    var items = pending.items.slice();
+    items.push({ __totals: { usd: t.usd || 0, inr: t.inr || 0 } });
+    sbClient.from("orders").insert({
+      ref: ref, customer_name: pending.customer, items: items,
+      total: (t.usd || 0) > 0 ? t.usd : (t.inr || 0),
+      payment_method: pending.method, status: "New"
+    }).then(function(){}).catch(function(){});
+  }
+  var sbQueryIds = {};
+  function sbSaveQuery(product, customer, msg){
+    if (!sbReady) return;
+    sbClient.from("queries").insert({ customer_name: customer, product_name: product, message: msg, status: "Open" }).select("id").single()
+      .then(function(res){ if (!res.error && res.data) sbQueryIds[msg + "|" + customer] = res.data.id; })
+      .catch(function(){});
+  }
+  function sbSaveQueryReply(q){
+    if (!sbReady || !q) return;
+    var id = q.sbId || sbQueryIds[q.msg + "|" + q.customer];
+    if (!id) return; /* only ever update the exact question row this visit created */
+    sbClient.from("queries").update({ reply: q.reply, status: "Answered" }).eq("id", id)
+      .then(function(){}).catch(function(){});
+  }
+  function sbSaveOrderStatus(ref, status){
+    if (!sbReady || !ref) return;
+    sbClient.from("orders").update({ status: status }).eq("ref", ref).then(function(){}).catch(function(){});
+  }
+  function sbRemoveProduct(localId){
+    if (!sbReady) return;
+    var rowId = sbRowByLocalId[localId];
+    if (rowId) sbClient.from("products").update({ status: "hidden" }).eq("id", rowId).then(function(){}).catch(function(){});
+  }
+  window.addEventListener("hashchange", function(){ if (window.location.hash === "#owner") sbSyncAll(); });
+  setTimeout(sbInit, 400);
 
   /* ---------- START ---------- */
   showView(loginView);
